@@ -1,0 +1,96 @@
+{
+  "title": "Font Roja 森林 & Alcoy 小城",
+  "subtitle": "两天一夜徒步计划",
+  "highlights": ["走进圣栎古林登顶 Menejador", "秃鹫峡谷 Barranc del Cint", "无车也能去"],
+  "theme": "forest",
+  "from": "Sant Joan d'Alacant",
+  "dates": null,
+  "length": 2,
+  "dest": "Alcoy",
+  "mode": "大巴 + 出租车",
+  "distance": "周边",
+  "types": ["徒步", "城市"],
+  "pinned": false,
+  "tz": "Europe/Madrid",
+  "updated": "2026-10-20",
+  "days": [
+    {
+      "title": "Font Roja 登顶日",
+      "mapLabel": "Day 1 登顶",
+      "route": ["alicante", "hotel", "santuari", "menejador", "mina", "hotel", "pont"],
+      "items": [
+        {"time": "08:30", "title": "从 San Juan 出发", "note": "坐 TRAM 或公交到 Alicante 汽车站"},
+        {"time": "09:15", "title": "大巴去 Alcoy", "note": "约 1 小时，到了先去酒店寄存行李", "pt": "hotel", "place": "Estación de autobuses de Alcoy"},
+        {"time": "11:00", "title": "打车上 Font Roja 教堂", "note": "约 15 分钟，记下司机电话，约好下午回程", "mark": "gold", "pt": "santuari", "place": "Santuari de la Font Roja"},
+        {"time": "11:15", "title": "Menejador 登顶环线", "note": "约 8–10 km，4 小时，山顶海拔约 1350 m，穿越圣栎古林", "mark": "green", "pt": "menejador", "place": "Menejador, Alcoy"},
+        {"time": "13:30", "title": "山顶野餐", "note": "山上没有商店，提前在 Alcoy 买好三明治和水", "mark": "green"},
+        {"time": "16:30", "title": "下山，打车回 Alcoy", "note": "可绕道 Pla de la Mina 观景台，回酒店办入住", "mark": "gold", "pt": "mina", "place": "Pla de la Mina Font Roja"},
+        {"time": "18:00", "title": "逛老城 · Sant Jordi 桥", "note": "傍晚灯光最美，老城步行即可", "pt": "pont", "place": "Pont de Sant Jordi, Alcoy"},
+        {"time": "20:30", "title": "晚餐", "note": "西班牙晚饭开得晚，下午饿了先去超市垫一下"}
+      ],
+      "stay": "Sercotel Ciutat d'Alcoi"
+    },
+    {
+      "title": "秃鹫峡谷 & 返程",
+      "mapLabel": "Day 2 峡谷",
+      "route": ["hotel", "cint", "buitres", "cint", "hotel", "alicante"],
+      "items": [
+        {"time": "08:30", "title": "酒店早餐", "note": "退房后行李寄存前台", "mark": "accent"},
+        {"time": "09:00", "title": "步行出发", "note": "起点在 Alcoy 城边，不用打车", "pt": "cint"},
+        {"time": "09:15", "title": "Barranc del Cint 环线", "note": "约 10 km，爬升约 500 m，3–4 小时，穿过石板窄峡 Estret del Cint", "place": "Barranc del Cint, Alcoy"},
+        {"time": "11:00", "title": "秃鹫观景台", "note": "天然悬崖，没有护栏，拍照别太靠前", "mark": "gold", "pt": "buitres"},
+        {"time": "13:30", "title": "Alcoy 午饭", "note": "回酒店取行李", "mark": "accent"},
+        {"time": "15:30", "title": "大巴返回 Alicante", "note": "再转车回 San Juan，约 1.5 小时", "mark": "accent"}
+      ],
+      "alt": {"title": "体力一般的替代方案", "text": "Day 1 只走 Barranc de l'Infern 小环线（约 4–5 km，2 小时），加上 Pla de la Mina 观景台。"}
+    }
+  ],
+  "map": {
+    "subtitle": "Alcoy 进山，两天两条线",
+    "bounds": [38.648, -0.552, 38.705, -0.445],
+    "points": {
+      "alicante": {"name": "Alicante", "offmap": true, "lat": 38.345, "lon": -0.49},
+      "hotel": {"name": "Alcoy · 酒店", "big": true, "lat": 38.6992, "lon": -0.4752, "anchor": "end", "q": "Sercotel Ciutat d'Alcoi"},
+      "pont": {"name": "Sant Jordi 桥", "lat": 38.6955, "lon": -0.4772, "anchor": "end", "dy": 18},
+      "santuari": {"name": "Font Roja 教堂", "lat": 38.6628, "lon": -0.5392, "anchor": "start"},
+      "menejador": {"name": "Menejador 1352 m", "lat": 38.6535, "lon": -0.5335, "anchor": "start"},
+      "mina": {"name": "Pla de la Mina 观景台", "lat": 38.6668, "lon": -0.5265, "anchor": "start"},
+      "cint": {"name": "Barranc del Cint", "lat": 38.6955, "lon": -0.4655, "anchor": "start"},
+      "buitres": {"name": "秃鹫观景台", "lat": 38.6875, "lon": -0.4575, "anchor": "end"}
+    },
+    "areas": [
+      {"name": "Font Roja 自然公园", "poly": [[38.6705, -0.562], [38.6735, -0.525], [38.666, -0.505], [38.651, -0.508], [38.6455, -0.535], [38.652, -0.56]], "labelAt": [38.6505, -0.5455], "rotate": 0}
+    ],
+    "lines": [
+      {"name": "出租车山路 约 8 km", "pts": [[38.6992, -0.4752], [38.692, -0.488], [38.684, -0.503], [38.674, -0.516], [38.6628, -0.5392]], "color": "gold", "dash": "2 6", "width": 3}
+    ],
+    "labels": [
+      {"text": "Alcoy", "lat": 38.7035, "lon": -0.468, "size": 18}
+    ]
+  },
+  "hikes": [
+    {"name": "Menejador 登顶环线", "shape": "环线", "distance": "8–10 km", "time": "约 4 小时", "difficulty": "中等", "note": "山顶海拔约 1350 m，穿越圣栎古林；起点 Font Roja 教堂", "search": "Font Roja Menejador circular"},
+    {"name": "Barranc del Cint 环线", "shape": "环线", "distance": "约 10 km", "time": "3–4 小时", "gain": "约 500 m", "difficulty": "中等", "note": "从 Alcoy 城边步行出发，穿过石板窄峡 Estret del Cint", "search": "Alcoi Barranc del Cint"}
+  ],
+  "transport": {
+    "title": "交通路线",
+    "chain": [
+      {"at": "San Juan"}, {"via": "TRAM / 公交 约 30 分钟"}, {"at": "Alicante 汽车站"}, {"via": "大巴 约 1 小时"},
+      {"at": "Alcoy"}, {"via": "出租车 约 15 分钟 · 8 km 山路"}, {"at": "Font Roja 教堂"}
+    ],
+    "note": "Barranc del Cint 从 Alcoy 城边步行出发，不用打车。周末大巴班次少，出发前查 Alsa / Subús 时刻表。"
+  },
+  "stay": {"name": "Sercotel Ciutat d'Alcoi", "text": "四星连锁，24 小时前台，市中心 Carrer Colón 1。近期参考价约 58–65 €/晚，工作日更便宜。订可免费取消的房价。", "q": "Sercotel Ciutat d'Alcoi"},
+  "budget": {
+    "rows": [
+      {"label": "大巴 Alicante ⇄ Alcoy", "est": "约 14 €"},
+      {"label": "TRAM / 公交往返", "est": "约 4 €"},
+      {"label": "出租车（上下 Font Roja）", "est": "约 40 €"},
+      {"label": "住宿一晚", "est": "58–65 €"},
+      {"label": "餐饮两天", "est": "35–50 €"}
+    ],
+    "total": "150–175 €"
+  },
+  "checklist": ["山上比海边冷 8–10 度，带外套", "登山鞋、2 升水、防晒", "回程出租车一定提前约好", "周末大巴少，先查时刻表", "山上信号差，离线下载地图", "告诉朋友你的路线和返回时间"],
+  "band": {"text": "森林、峡谷、秃鹫、老城夜景", "note": "山上信号弱 · 提前下载 Wikiloc 离线轨迹"}
+}

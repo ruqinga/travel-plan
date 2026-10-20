@@ -2,7 +2,6 @@
   "title": "里斯本跨年 · 示例行程",
   "emoji": "🇵🇹",
   "category": "假期长途",
-  "track": true,
   "kicker": "SAMPLE · 示例页面，用来展示模板效果",
   "dates": {
     "start": "2026-12-29",
@@ -759,5 +758,6 @@
       "text": "大部分地方能刷卡；小费不是必须，满意可留 5–10%。"
     }
   ],
-  "footer": "Travel Plan · ruqinga"
+  "footer": "Travel Plan · ruqinga",
+  "unlisted": true
 }

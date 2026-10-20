@@ -5,393 +5,421 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="robots" content="noindex">
 <title>__TRIP_TITLE__</title>
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧳</text></svg>">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧭</text></svg>">
 <style>
-:root{
-  --bg:#f6f2ea; --paper:#fffdf8; --ink:#2b2622; --muted:#7c7268; --line:#e7dfd2;
-  --accent:#c8402f; --accent-soft:#fbe6e1; --ok:#2f8a57; --ok-soft:#e3f3e8;
-  --warn:#b26a00; --warn-soft:#fdf0d8; --info:#2d6fb0; --info-soft:#e3eef9;
-  --map-water:#d6e5ec; --map-land:#f4efe4; --map-ink:#8b7f70;
-  --shadow:0 1px 2px rgba(60,40,20,.06),0 6px 20px rgba(60,40,20,.06);
+:root,.xp{
+  --bg:#f5efe3; --paper:#fffbf2; --ink:#2a2620; --muted:#7a6f60; --line:#eadcc0; --dash:#d9c7a0;
+  --sand:#f2deb0; --sand-ink:#5e4515; --gold:#d29a35; --accent:#bf5236; --green:#3d6b3a; --blue:#2d6a96;
+  --map-water:#bcd8e6; --map-land:#f4ead2; --map-ink:#8b7a5e; --map-park:#cfe0b8;
+  --main:var(--main-l,#3d6b3a);
+  --shadow:0 1px 2px rgba(80,60,20,.05);
   --mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
-  --hand:"Kaiti SC","STKaiti","KaiTi","BiauKai",cursive;
 }
 @media (prefers-color-scheme:dark){
   :root{
-    --bg:#191714; --paper:#23201c; --ink:#ece6dc; --muted:#a39888; --line:#37322b;
-    --accent:#ff7a63; --accent-soft:#3d2520; --ok:#6cc792; --ok-soft:#1f3328;
-    --warn:#f0b04a; --warn-soft:#3a2d17; --info:#7fb3e8; --info-soft:#1d2b3a;
-    --map-water:#17242b; --map-land:#24211c; --map-ink:#8f8576;
-    --shadow:0 1px 2px rgba(0,0,0,.3),0 6px 20px rgba(0,0,0,.25);
+    --bg:#171512; --paper:#221f1a; --ink:#eee6d8; --muted:#a69a88; --line:#3a332a; --dash:#5a4e3c;
+    --sand:#3d3220; --sand-ink:#ecc982; --gold:#e8b350; --accent:#f07a5c; --green:#86b780; --blue:#7fb0d8;
+    --map-water:#1c2c35; --map-land:#29251f; --map-ink:#9a8c74; --map-park:#2c3a26;
+    --main:var(--main-d,#86b780);
+    --shadow:none;
   }
 }
+.xp{--main:var(--main-l);color:var(--ink);font:15px/1.6 -apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","Noto Sans CJK SC",sans-serif}
 *{box-sizing:border-box}
-html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+html{-webkit-text-size-adjust:100%}
 body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.6 -apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","Noto Sans CJK SC",sans-serif}
 a{color:inherit}
-.wrap{max-width:760px;margin:0 auto;padding:20px 16px 60px}
-header h1{font-size:24px;line-height:1.3;margin:8px 0 4px;letter-spacing:.5px}
-.meta{color:var(--muted);font-size:13px}
-.chips{display:flex;flex-wrap:wrap;gap:6px;margin:12px 0 4px}
-.chip{display:inline-flex;align-items:center;gap:4px;font-size:12.5px;padding:3px 10px;border-radius:999px;background:var(--ok-soft);color:var(--ok);white-space:nowrap}
-.chip.pending{background:var(--accent-soft);color:var(--accent)}
-.chip.info{background:var(--info-soft);color:var(--info)}
+.wrap{max-width:1180px;margin:0 auto;padding:12px 16px 60px}
 
-.card{background:var(--paper);border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow);padding:16px}
-.now{margin:14px 0 6px;position:relative;overflow:hidden}
-.now .label{font-size:11px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;display:flex;align-items:center;gap:6px}
-.dot{width:7px;height:7px;border-radius:50%;background:var(--accent);animation:pulse 1.6s infinite}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:.25}}
-.now h2{margin:6px 0 2px;font-size:19px}
-.now .sub{color:var(--muted);font-size:12.5px}
-.count{font-family:var(--mono);font-size:30px;font-weight:700;color:var(--accent);margin:6px 0 2px;font-variant-numeric:tabular-nums;letter-spacing:1px}
-.count small{display:block;font-size:12.5px;color:var(--muted);font-weight:400;letter-spacing:0;margin-top:2px}
-.count .d{font-family:inherit}
-.todo-peek{display:flex;align-items:center;gap:8px;border-top:1px dashed var(--line);margin-top:12px;padding-top:10px;font-size:13px}
-.badge{font-size:11px;padding:1px 8px;border-radius:999px;background:var(--accent);color:#fff;white-space:nowrap}
-.todo-peek a{margin-left:auto;color:var(--accent);text-decoration:none;white-space:nowrap}
+/* top bar (web only) */
+.topbar{display:flex;align-items:center;gap:8px;font-size:13px;margin:4px 0 12px;flex-wrap:wrap}
+.topbar a.back{color:var(--muted);text-decoration:none}
+.st{font-size:12px;font-weight:600;padding:2px 10px;border-radius:999px;background:var(--sand);color:var(--sand-ink)}
+.st.on{background:var(--main);color:#fff}
+.st.gone{background:var(--line);color:var(--muted)}
+.btn{font:inherit;font-size:13px;font-weight:600;cursor:pointer;border:0;border-radius:999px;padding:7px 14px;background:var(--main);color:#fff;text-decoration:none;display:inline-flex;align-items:center;gap:5px}
+.btn.ghost{background:var(--paper);color:var(--ink);border:1.5px solid var(--line)}
+.topbar .btn{margin-left:auto}
 
-nav{position:sticky;top:0;z-index:5;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);margin:0 -16px;padding:10px 16px;display:flex;gap:8px;overflow-x:auto;scrollbar-width:none}
-nav::-webkit-scrollbar{display:none}
-nav a{flex:none;text-decoration:none;font-size:13px;padding:6px 12px;border-radius:999px;background:var(--paper);border:1px solid var(--line);box-shadow:var(--shadow)}
+/* poster */
+.poster{container-type:inline-size;background:var(--bg);display:flex;flex-direction:column;gap:16px}
+.xp .poster{padding:44px}
+.box{background:var(--paper);border:2px solid var(--line);border-radius:22px;padding:18px}
+.box.dashed{border-style:dashed;border-color:var(--dash)}
+.box h3{margin:0 0 10px;font-size:20px;color:var(--main);letter-spacing:.5px}
 
-section{margin-top:28px;scroll-margin-top:60px}
-section>h3{font-size:18px;margin:0 0 4px;display:flex;align-items:center;gap:6px}
-.lead{color:var(--muted);font-size:13.5px;margin:0 0 12px}
+.hero{display:flex;flex-direction:column;gap:12px}
+.hero h1{margin:0;font-size:clamp(26px,5.2cqi,60px);line-height:1.15;color:var(--main);font-weight:800;letter-spacing:.5px}
+.hero .sub{margin:4px 0 0;font-size:clamp(19px,3cqi,36px);font-weight:800;color:var(--accent);line-height:1.25}
+.hero .hl{margin-top:8px;color:var(--muted);font-size:clamp(13px,1.45cqi,17px)}
+.hero-r{display:flex;flex-wrap:wrap;gap:8px}
+.pill{display:inline-block;font-size:13.5px;font-weight:700;padding:5px 14px;border-radius:999px;background:var(--sand);color:var(--sand-ink);white-space:nowrap}
+.pill.main{background:var(--main);color:#fff}
+
+.stats{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+.stat{background:color-mix(in srgb,var(--main) 11%,var(--paper));border-radius:14px;padding:8px 6px;text-align:center}
+.stat span{display:block;font-size:12px;color:var(--muted)}
+.stat b{font-size:17px;color:var(--main)}
+
+.cols{display:grid;gap:16px}
+.dayhead{display:flex;align-items:center;gap:10px;margin-bottom:12px;flex-wrap:wrap}
+.badge{font-size:20px;font-weight:800;color:#fff;padding:3px 14px;border-radius:12px;white-space:nowrap}
+.dayhead h4{margin:0;font-size:20px;color:var(--main);font-weight:800;line-height:1.25}
+.dayhead .dt{font-size:12.5px;color:var(--muted);width:100%}
+.today{font-size:11.5px;padding:1px 8px;border-radius:999px;background:var(--accent);color:#fff;font-weight:700}
+.tl{list-style:none;margin:0;padding:0}
+.tl li{display:grid;grid-template-columns:34px 1fr;gap:10px;padding:6px 0}
+.num{width:30px;height:30px;border-radius:50%;color:#fff;font-weight:700;font-size:14px;display:flex;align-items:center;justify-content:center;margin-top:1px}
+.it .t1{font-weight:700;font-size:15.5px;line-height:1.4}
+.it .t1 i{font-style:normal;color:var(--accent);margin-right:6px;font-variant-numeric:tabular-nums}
+.it .nt{font-size:13px;color:var(--muted);margin-top:1px}
+.it a.pl{font-size:12px;color:var(--blue);text-decoration:none}
+.tl li.move{grid-template-columns:34px 1fr;padding:0}
+.tl li.move .ln{justify-self:center;width:0;border-left:2px dashed var(--dash);height:100%;min-height:22px}
+.tl li.move span{font-size:12.5px;color:var(--gold);font-weight:600;padding:2px 0}
+.alt{margin-top:12px;border-radius:14px;padding:10px 14px;background:color-mix(in srgb,var(--green) 12%,var(--paper));font-size:13.5px;color:var(--green)}
+.alt b{font-weight:700}
+.stay{margin-top:10px;font-size:13px;color:var(--muted)}
 
 /* map */
-.map{padding:8px}
-.map svg{display:block;width:100%;height:auto;border-radius:10px}
-.map text{font-family:var(--hand)}
-.legend{display:flex;flex-wrap:wrap;gap:6px 14px;padding:8px 8px 2px;font-size:12.5px;color:var(--muted)}
-.legend i{display:inline-block;width:18px;height:4px;border-radius:2px;vertical-align:middle;margin-right:5px}
+.mapbox h3 .s{font-size:14px;font-weight:600;color:var(--blue);margin-left:6px}
+.mapbox svg{display:block;width:100%;height:auto;border-radius:14px}
+.legend{display:flex;flex-wrap:wrap;gap:4px 14px;padding:8px 2px 0;font-size:12.5px;color:var(--muted)}
+.legend i{display:inline-block;width:20px;height:0;border-top:3px solid;vertical-align:middle;margin-right:5px}
 
-/* flights */
+/* transport chain */
+.chain{display:flex;flex-wrap:wrap;align-items:center;gap:8px 6px}
+.chain .node{font-size:14.5px;padding:5px 12px;border-radius:10px;background:var(--sand);color:var(--sand-ink);font-weight:600}
+.chain .node.end{background:var(--main);color:#fff}
+.chain .via{font-size:13.5px;color:var(--gold);font-weight:600}
+.note{font-size:13px;color:var(--muted);margin-top:10px}
+.lines p{margin:0 0 6px;font-size:14px}
+.lines b{color:var(--ink)}
+.lines .hot{color:var(--blue);font-weight:700}
+
+/* hikes */
+.hike+.hike{margin-top:14px;padding-top:14px;border-top:1.5px dashed var(--line)}
+.hike h4{margin:0 0 8px;font-size:16px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.hike .stats{grid-template-columns:repeat(2,1fr)}
+
+/* cards row */
+.kv{display:flex;justify-content:space-between;gap:10px;padding:7px 0;border-bottom:1.5px dotted var(--line);font-size:14px}
+.kv b{white-space:nowrap}
+.kv.total{border:0;color:var(--accent);font-weight:800;font-size:16px}
+.ck{list-style:none;margin:0;padding:0}
+.ck li{display:flex;gap:8px;font-size:14px;padding:3px 0}
+.ck li::before{content:"✓";color:var(--green);font-weight:800}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
+.chips span{font-size:13px;padding:3px 12px;border-radius:999px;background:var(--sand);color:var(--sand-ink);font-weight:600}
+.stayname{font-weight:800;font-size:16px;margin-bottom:6px}
+.box p.tx{margin:0;font-size:14px;color:var(--muted)}
+.box a.lk{color:var(--blue);text-decoration:none;font-size:13px;font-weight:600}
+
+/* legacy: flights, bookings, todos */
 .flight{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:8px}
-.flight+.flight{margin-top:10px}
-.ap b{font-size:22px;font-family:var(--mono);letter-spacing:1px;display:block;line-height:1.1}
-.ap .t{font-family:var(--mono);font-size:15px;font-weight:600}
-.ap .n{font-size:11.5px;color:var(--muted)}
+.flight+.flight{margin-top:12px;padding-top:12px;border-top:1.5px dashed var(--line)}
+.ap b{font-size:22px;font-family:var(--mono);display:block;line-height:1.1}
+.ap .t{font-family:var(--mono);font-weight:600}
+.ap .n{font-size:12px;color:var(--muted)}
 .ap.r{text-align:right}
-.mid{text-align:center;font-size:11.5px;color:var(--muted);min-width:80px}
-.mid .line{height:1px;background:repeating-linear-gradient(90deg,var(--muted) 0 4px,transparent 4px 8px);margin:12px 0 10px;position:relative}
-.mid .line span{position:absolute;left:50%;top:-10px;transform:translateX(-50%);background:var(--paper);padding:0 4px;color:var(--ink);font-size:13px}
-.topbar{display:flex;align-items:center;gap:8px;font-size:13px;margin-bottom:6px}
-.topbar a.back{color:var(--muted);text-decoration:none}
-.topbar .cat{font-size:12px;padding:1px 9px;border-radius:999px;background:var(--info-soft);color:var(--info)}
-.star{margin-left:auto;font:inherit;font-size:13px;cursor:pointer;border:1px solid var(--line);background:var(--paper);color:var(--muted);border-radius:999px;padding:4px 12px}
-.star.on{color:#b27a00;border-color:#e8c46a;background:var(--warn-soft)}
-.fmeta{grid-column:1/-1;font-size:12.5px;color:var(--muted);border-top:1px dashed var(--line);padding-top:8px;display:flex;flex-wrap:wrap;gap:4px 10px}
-.tz{font-size:10.5px;color:var(--muted);font-family:var(--mono);margin-left:3px;font-weight:400}
-
-/* bookings */
-.bk{display:flex;gap:12px}
-.bk+.bk{margin-top:12px;padding-top:12px;border-top:1px dashed var(--line)}
-.bk .ic{font-size:22px;line-height:1.2}
-.bk h4{margin:0;font-size:15px}
+.mid{text-align:center;font-size:12px;color:var(--muted)}
+.fmeta{grid-column:1/-1;font-size:12.5px;color:var(--muted)}
+.bk{display:flex;gap:10px;font-size:14px}
+.bk+.bk{margin-top:10px;padding-top:10px;border-top:1.5px dashed var(--line)}
+.bk .ic{font-size:20px}
 .bk .row{font-size:13px;color:var(--muted)}
-.bk .row a{color:var(--info);text-decoration:none}
-.tag{display:inline-block;font-size:11px;padding:0 7px;border-radius:999px;margin-left:6px;vertical-align:2px;background:var(--ok-soft);color:var(--ok);font-weight:500}
-.tag.warn{background:var(--warn-soft);color:var(--warn)}
-.tag.pending{background:var(--accent-soft);color:var(--accent)}
-.tag.info{background:var(--info-soft);color:var(--info)}
-
-/* days */
-.day{margin-top:14px;padding:0;overflow:hidden}
-.dayhead{display:flex;gap:12px;align-items:center;padding:14px 16px;cursor:pointer;user-select:none}
-.datebox{flex:none;width:54px;height:50px;border-radius:12px;color:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;line-height:1.05;font-weight:700}
-.datebox b{font-size:16px}.datebox span{font-size:10px;font-weight:500;opacity:.9}
-.dayhead h4{margin:0;font-size:16px}
-.dayhead .rs{font-size:12px;color:var(--muted)}
-.dayhead .chev{margin-left:auto;color:var(--muted);transition:transform .2s}
-.day.open .chev{transform:rotate(90deg)}
-.daytools{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:0 16px 10px;font-size:12px;color:var(--muted)}
-.daytools a{color:var(--info);text-decoration:none;white-space:nowrap;font-weight:600}
-.daybody{display:none;padding:0 16px 14px}
-.day.open .daybody{display:block}
-.tl{list-style:none;margin:0;padding:0}
-.tl li{display:grid;grid-template-columns:58px 1fr;gap:10px;padding:9px 0;border-top:1px solid var(--line)}
-.tl .tm{font-family:var(--mono);font-size:13px;font-weight:600;padding-top:1px}
-.tl .tm .tz{display:block;margin:0}
-.tl .tt{font-weight:600;font-size:14.5px}
-.tl .nt{font-size:13px;color:var(--muted);margin-top:2px}
-.tl a.pl{color:var(--info);text-decoration:none;font-size:12.5px;display:inline-block;margin-top:2px}
-.tl li.past{opacity:.5}
-.stay{margin-top:8px;font-size:13px;background:var(--bg);border-radius:10px;padding:8px 10px}
-.stay a{color:var(--info);text-decoration:none}
-
-/* todo */
-.prog{height:6px;border-radius:3px;background:var(--line);overflow:hidden;margin:4px 0 12px}
-.prog i{display:block;height:100%;background:var(--ok)}
+.bk .row a{color:var(--blue);text-decoration:none}
+.tag{font-size:11px;padding:0 7px;border-radius:999px;margin-left:6px;background:var(--sand);color:var(--sand-ink);font-weight:600;vertical-align:2px}
+.tag.no{background:var(--accent);color:#fff}
 .tdl{list-style:none;margin:0;padding:0}
-.tdl li{display:flex;gap:10px;padding:9px 0;border-top:1px solid var(--line);font-size:14px}
-.tdl li .b{flex:none;width:18px;text-align:center}
-.tdl li.done{color:var(--muted)}
-.tdl li.done .x{text-decoration:line-through}
-.tdl .nt{display:block;font-size:12.5px;color:var(--muted)}
-.tdh{font-size:12px;color:var(--muted);margin:14px 0 2px;letter-spacing:1px}
+.tdl li{display:flex;gap:8px;padding:5px 0;font-size:14px;border-bottom:1.5px dotted var(--line)}
+.tdl li.done{color:var(--muted);text-decoration:line-through}
 
-/* tips */
-.tips{display:grid;gap:10px}
-.tip{display:flex;gap:10px}
-.tip .ic{font-size:20px}
-.tip b{display:block;font-size:14px}
-.tip p{margin:2px 0 0;font-size:13.5px;color:var(--muted)}
-footer{margin-top:40px;text-align:center;font-size:12px;color:var(--muted)}
-@media (min-width:700px){ header h1{font-size:28px} .count{font-size:36px} }
+.band{background:var(--main);color:#fff;border-radius:22px;padding:16px 22px;display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:6px 16px}
+.band b{font-size:clamp(18px,2.2cqi,28px)}
+.band span{font-size:13.5px;opacity:.92}
+.upd{text-align:center;font-size:12px;color:var(--muted);margin-top:14px}
+
+@container (min-width:720px){
+  .box{padding:24px 28px}
+  .hero{flex-direction:row;justify-content:space-between;align-items:flex-end}
+  .hero-r{flex-direction:column;align-items:flex-end;flex:none}
+  .stats{grid-template-columns:repeat(4,1fr)}
+  .hike .stats{grid-template-columns:repeat(4,1fr)}
+  .cols.c2{grid-template-columns:1fr 1fr}
+  .cols.c3{grid-template-columns:repeat(3,1fr)}
+  .cols.c2.mapr{grid-template-columns:1fr 1.25fr}
+  .badge{font-size:24px}
+  .dayhead h4{font-size:24px}
+  .box h3{font-size:24px}
+  .dayhead .dt{width:auto}
+}
+
+/* export: hide web-only bits */
+.xp .noexp{display:none!important}
+
+/* export overlay */
+.ov{position:fixed;inset:0;z-index:50;background:rgba(20,16,10,.82);display:flex;flex-direction:column;align-items:center;padding:16px;gap:12px;overflow:auto}
+.ov img{max-width:min(100%,720px);border-radius:10px;box-shadow:0 10px 40px rgba(0,0,0,.4)}
+.ov .bar{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;position:sticky;top:0}
+.ov .hint{color:#f3ead8;font-size:13px}
 </style>
 </head>
 <body>
 <div class="wrap" id="app"></div>
 <script id="trip-data" type="application/json">__TRIP_JSON__</script>
+<script>__HTML_TO_IMAGE__</script>
 <script>
 (function(){
 const T = JSON.parse(document.getElementById('trip-data').textContent);
-const TZ = T.tz || 'UTC';
-const PALETTE = ['#d9534f','#e08a1e','#2f8a57','#2d6fb0','#7a4fb5','#c2477e','#14808a','#8a6d1e'];
-const modeIcon = f => ({train:'🚄',bus:'🚌',ferry:'⛴'})[f.mode] || '✈';
+const TZ = T.tz || 'Europe/Madrid';
+const THEMES = {forest:['#3d6b3a','#86b780'], sea:['#2d6a96','#7fb0d8'], terracotta:['#a8492c','#ef8f6c'], plum:['#6e4a8a','#b896d6'], olive:['#6b6a2a','#c2c06a']};
+const th = THEMES[T.theme] || (T.theme && T.theme[0]==='#' ? [T.theme,T.theme] : THEMES.forest);
+document.documentElement.style.setProperty('--main-l', th[0]);
+document.documentElement.style.setProperty('--main-d', th[1]);
+const MARK = {gold:'var(--gold)', accent:'var(--accent)', main:'var(--main)', green:'var(--green)', blue:'var(--blue)'};
 const WD = ['周日','周一','周二','周三','周四','周五','周六'];
-const $app = document.getElementById('app');
 const esc = s => String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const gmap = q => 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(q);
+const md = s => { const [Y,M,D]=s.split('-').map(Number); return {Y,M,D,wd:WD[new Date(Date.UTC(Y,M-1,D)).getUTCDay()]}; };
+const fd = s => { const x=md(s); return `${x.M}/${x.D}（${x.wd}）`; };
+const today = (()=>{ const p={}; new Intl.DateTimeFormat('en-CA',{timeZone:TZ,year:'numeric',month:'2-digit',day:'2-digit'}).formatToParts(new Date()).forEach(x=>p[x.type]=x.value); return `${p.year}-${p.month}-${p.day}`; })();
+const D0 = T.dates && T.dates.start, D1 = T.dates && (T.dates.end || T.dates.start);
+const status = !D0 ? 'plan' : (today < D0 ? 'plan' : (today <= D1 ? 'on' : 'gone'));
+const days = T.days || [];
+const dayColor = (d,i) => MARK[d.color] || d.color || (days.length===1 ? 'var(--main)' : (i%2 ? 'var(--main)' : 'var(--accent)'));
+// date of day i: explicit, or derived from trip start
+const dayDate = (d,i) => d.date || (D0 ? new Date(Date.UTC(...D0.split('-').map((v,k)=>k===1?v-1:+v)) + i*864e5).toISOString().slice(0,10) : null);
 
-/* ---------- time zone helpers ---------- */
-function tzOffset(ts, tz){
-  const p = {}; new Intl.DateTimeFormat('en-US',{timeZone:tz,hourCycle:'h23',year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',second:'2-digit'})
-    .formatToParts(new Date(ts)).forEach(x=>p[x.type]=x.value);
-  return Date.UTC(+p.year, p.month-1, +p.day, +p.hour%24, +p.minute, +p.second) - ts;
-}
-function epoch(local, tz){ // "2026-12-29T09:05" wall time in tz -> ms
-  const [d,t='00:00'] = local.split('T'); const [Y,M,D] = d.split('-').map(Number); const [h,m] = t.split(':').map(Number);
-  const base = Date.UTC(Y,M-1,D,h,m); let ts = base;
-  for(let i=0;i<3;i++) ts = base - tzOffset(ts, tz);
-  return ts;
-}
-function tzName(ts, tz){
-  try{
-    const n = new Intl.DateTimeFormat('en-GB',{timeZone:tz,timeZoneName:'short'}).formatToParts(new Date(ts)).find(x=>x.type==='timeZoneName').value;
-    if(/^GMT[+-]?\d*$/.test(n) || n==='UTC'){ const o = tzOffset(ts,tz)/36e5; return 'UTC' + (o===0?'':(o>0?'+':'') + o); }
-    return n;
-  }catch(e){ return tz; }
-}
-const hm = s => (s.split('T')[1]||'').slice(0,5);
-function md(dateStr){ const [Y,M,D]=dateStr.split('-').map(Number); return {Y,M,D,wd:WD[new Date(Date.UTC(Y,M-1,D)).getUTCDay()]}; }
-function fmtDate(dateStr){ const x=md(dateStr); return `${x.M}/${x.D}（${x.wd}）`; }
-
-/* ---------- build event list for countdown ---------- */
-const events = [];
-(T.flights||[]).forEach(f=>{
-  events.push({ts:epoch(f.depart, f.from.tz||TZ), tz:f.from.tz||TZ, title:`${f.from.code} ${modeIcon(f)} ${f.to.code} ${f.mode&&f.mode!=='flight'?'出发':'起飞'}`,
-    sub:[f.airline, f.number, f.duration, f.note].filter(Boolean).join(' · ')});
-});
-(T.days||[]).forEach((d,di)=>{
-  (d.items||[]).forEach(it=>{
-    if(!it.time || it.countdown===false || it.flight) return;
-    const tz = it.tz || d.tz || TZ;
-    events.push({ts:epoch(d.date+'T'+it.time, tz), tz, title:it.title, sub:[fmtDate(d.date), it.note].filter(Boolean).join(' · '), day:di});
-  });
-});
-events.sort((a,b)=>a.ts-b.ts);
-
-/* ---------- render ---------- */
 let h = '';
-const people = T.people ? ` · ${T.people} 人` : '';
-const dateRange = T.dates ? `${T.dates.start.replace(/-/g,'.')}（${md(T.dates.start).wd}）— ${T.dates.end.slice(5).replace('-','.')}（${md(T.dates.end).wd}）` : '';
-h += `<div class="topbar"><a class="back" href="../">← 全部行程</a>${T.category?`<span class="cat">${esc(T.category)}</span>`:''}<button class="star" id="star" type="button"></button></div>`;
-h += `<header><div class="meta">${esc(T.kicker||'TRAVEL BOOK')}</div>
-<h1>${esc(T.emoji||'🧳')} ${esc(T.title)}</h1>
-<div class="meta">${esc(dateRange)}${esc(people)}${T.route?' · '+esc(T.route):''}</div>
-${T.summaryLine?`<div class="meta">${esc(T.summaryLine)}</div>`:''}
-<div class="chips">${(T.status||[]).map(s=>`<span class="chip ${s.ok===false?'pending':(s.ok==='info'?'info':'')}">${esc(s.icon||'')} ${esc(s.text)}</span>`).join('')}</div></header>`;
+h += `<div class="topbar noexp"><a class="back" href="../">← 全部行程</a>
+  <span class="st ${status==='on'?'on':status==='gone'?'gone':''}">${status==='on'?'Ongoing':status==='gone'?'Gone':'Plan to go'}</span>
+  <button class="btn" id="exp" type="button">⤓ 导出图片</button></div>`;
+h += `<div class="poster" id="poster">`;
 
-const firstTodo = (T.todos||[]).find(t=>!t.done);
-h += `<div class="card now" id="now"><div class="label"><span class="dot"></span><span id="now-label">此刻关注 · NOW</span></div>
-<h2 id="now-title"></h2><div class="sub" id="now-sub"></div><div class="count" id="now-count"></div>
-${firstTodo?`<div class="todo-peek"><span class="badge">当前待办</span><span>${esc(firstTodo.text)}</span><a href="#todo">去清单 →</a></div>`:''}</div>`;
+/* hero */
+const dateTxt = D0 ? (D0===D1 ? fd(D0) : `${fd(D0)} – ${fd(D1)}`) : '日期待定';
+h += `<header class="box dashed hero"><div><h1>${esc(T.title)}</h1>${T.subtitle?`<div class="sub">${esc(T.subtitle)}</div>`:''}
+  ${(T.highlights||[]).length?`<div class="hl">${T.highlights.map(esc).join(' · ')}</div>`:''}</div>
+  <div class="hero-r">${T.from?`<span class="pill main">出发地 ${esc(T.from)}</span>`:''}<span class="pill">日期 ${esc(dateTxt)}</span>${T.people?`<span class="pill">${esc(T.people)} 人</span>`:''}</div></header>`;
 
-const navs = [['overview','🗺️ 总览'], T.flights&&T.flights.length&&['flights', T.flights.every(f=>!f.mode||f.mode==='flight')?'✈️ 航班':'🚆 交通'], T.bookings&&T.bookings.length&&['bookings','🏨 预订'],
-  ['days','📅 每日行程'], T.todos&&T.todos.length&&['todo','✅ 待办清单'], T.tips&&T.tips.length&&['tips','💡 贴士']].filter(Boolean);
-h += `<nav>${navs.map(([id,t])=>`<a href="#${id}">${t}</a>`).join('')}</nav>`;
+/* stats */
+const stats = T.stats || autoStats();
+if(stats.length) h += `<div class="stats">${stats.map(s=>`<div class="stat"><span>${esc(s.k)}</span><b>${esc(s.v)}</b></div>`).join('')}</div>`;
 
-/* overview + map */
-h += `<section id="overview"><h3>🗺️ 行程总览</h3>${T.overview?`<p class="lead">${esc(T.overview)}</p>`:''}`;
-if(T.map && T.map.points) h += `<div class="card map">${renderMap()}</div>`;
-h += `</section>`;
-
-/* flights */
-if(T.flights && T.flights.length){
-  h += `<section id="flights"><h3>✈️ 航班 / 长途交通</h3><p class="lead">时间均为出发地 / 到达地当地时间。</p><div class="card">`;
-  T.flights.forEach(f=>{
-    const tz1=f.from.tz||TZ, tz2=f.to.tz||TZ, t1=epoch(f.depart,tz1), t2=epoch(f.arrive,tz2);
-    const dd = f.depart.split('T')[0], ad = f.arrive.split('T')[0];
-    h += `<div class="flight">
-      <div class="ap"><b>${esc(f.from.code)}</b><span class="t">${hm(f.depart)}</span><span class="tz">${tzName(t1,tz1)}</span><div class="n">${esc(f.from.name||'')} · ${fmtDate(dd)}</div></div>
-      <div class="mid">${esc(f.duration||'')}<div class="line"><span>${modeIcon(f)}</span></div>${esc(f.stops||'直飞')}</div>
-      <div class="ap r"><b>${esc(f.to.code)}</b><span class="t">${hm(f.arrive)}</span><span class="tz">${tzName(t2,tz2)}</span><div class="n">${esc(f.to.name||'')}${ad!==dd?' · '+fmtDate(ad):''}</div></div>
-      <div class="fmeta"><span>${esc([f.airline,f.number].filter(Boolean).join(' '))}</span>${f.status?`<span class="tag ${f.status.includes('待')?'pending':''}">${esc(f.status)}</span>`:''}${f.note?`<span>${esc(f.note)}</span>`:''}</div>
-    </div>`;
-  });
-  h += `</div></section>`;
+/* days (+ map beside when one day) */
+const hasMap = T.map && T.map.points;
+const dayCards = days.map((d,i)=>dayCard(d,i)).join('');
+if(days.length===1 && hasMap) h += `<div class="cols c2 mapr">${dayCards}${mapCard()}</div>`;
+else {
+  if(days.length) h += `<div class="cols ${days.length>1?'c2':''}">${dayCards}</div>`;
+  if(hasMap) h += mapCard();
 }
 
-/* bookings */
-if(T.bookings && T.bookings.length){
-  h += `<section id="bookings"><h3>🏨 已确认的预订</h3><p class="lead">租车、住宿、门票。点地址直接打开 Google 地图。</p><div class="card">`;
-  T.bookings.forEach(b=>{
-    h += `<div class="bk"><div class="ic">${esc(b.icon||'📌')}</div><div><h4>${esc(b.title)}${b.status?`<span class="tag ${tagKind(b.status)}">${esc(b.status)}</span>`:''}</h4>
-      ${b.time?`<div class="row">🕒 ${esc(b.time)}</div>`:''}
-      ${b.address?`<div class="row">📍 <a href="${gmap(b.q||b.address)}" target="_blank" rel="noopener">${esc(b.address)}</a></div>`:''}
-      ${b.phone?`<div class="row">📞 <a href="tel:${esc(b.phone.replace(/[^+\d]/g,''))}">${esc(b.phone)}</a></div>`:''}
-      ${b.note?`<div class="row">${esc(b.note)}</div>`:''}</div></div>`;
-  });
-  h += `</div></section>`;
+/* hikes */
+if((T.hikes||[]).length){
+  h += `<section class="box"><h3>🥾 徒步路线</h3>${T.hikes.map(k=>{
+    const st = [['全程',k.distance],['用时',k.time],['爬升',k.gain],['难度',k.difficulty]].filter(x=>x[1]);
+    const url = k.wikiloc || ('https://www.google.com/search?q=' + encodeURIComponent('wikiloc ' + (k.search||k.name)));
+    return `<div class="hike"><h4>${esc(k.name)}${k.shape?`<span class="tag">${esc(k.shape)}</span>`:''}</h4>
+      <div class="stats">${st.map(s=>`<div class="stat"><span>${s[0]}</span><b>${esc(s[1])}</b></div>`).join('')}</div>
+      ${k.note?`<div class="note">${esc(k.note)}</div>`:''}
+      <div class="noexp" style="margin-top:10px"><a class="btn ghost" href="${esc(url)}" target="_blank" rel="noopener">Wikiloc 轨迹 ↗</a></div></div>`;
+  }).join('')}</section>`;
 }
 
-/* days */
-h += `<section id="days"><h3>📅 每日行程</h3><p class="lead">点日期展开/收起。地点可点击直接唤起 Google 地图；“全天路线”一键打开多点导航。</p>`;
-(T.days||[]).forEach((d,i)=>{
-  const c = d.color || PALETTE[i%PALETTE.length]; const x = md(d.date); const tz = d.tz||TZ;
-  const pts = (d.route||[]).map(id=>T.map&&T.map.points[id]).filter(p=>p&&!p.offmap&&(p.q||p.name));
-  let dir = '';
-  if(pts.length>=2){
-    const q = p=>encodeURIComponent(p.q||p.name);
-    dir = `https://www.google.com/maps/dir/?api=1&origin=${q(pts[0])}&destination=${q(pts[pts.length-1])}` +
-      (pts.length>2?`&waypoints=${pts.slice(1,-1).map(q).join('%7C')}`:'') + `&travelmode=${d.travelmode||'driving'}`;
-  }
-  h += `<div class="card day" id="day${i+1}" data-date="${d.date}"><div class="dayhead">
-    <div class="datebox" style="background:${c}"><b>${x.M}.${x.D}</b><span>${x.wd}</span></div>
-    <div><h4>${esc(d.title)}</h4><div class="rs">${esc(d.subtitle||'')}</div></div><span class="chev">›</span></div>
-    <div class="daytools"><span>时间为当地时间 · ${esc(tzName(epoch(d.date+'T12:00',tz),tz))}</span>${dir?`<a href="${dir}" target="_blank" rel="noopener">🧭 全天路线 ↗</a>`:''}</div>
-    <div class="daybody"><ul class="tl">`;
+/* transport chain (full width) */
+const TR = T.transport || {};
+if((TR.chain||[]).length){
+  h += `<section class="box dashed"><h3>${esc(TR.title||'交通路线')}</h3><div class="chain">${TR.chain.map((c,i)=>
+    c.via ? `<span class="via">→ ${esc(c.via)} →</span>` : `<span class="node ${i===TR.chain.length-1?'end':''}">${esc(c.at)}</span>`).join('')}</div>
+    ${TR.note?`<div class="note">${esc(TR.note)}</div>`:''}</section>`;
+}
+
+/* legacy flights + bookings */
+if((T.flights||[]).length){
+  h += `<section class="box"><h3>🚆 长途交通</h3>${T.flights.map(f=>`<div class="flight">
+    <div class="ap"><b>${esc(f.from.code)}</b><span class="t">${esc((f.depart||'').slice(11,16))}</span><div class="n">${esc(f.from.name||'')} · ${fd(f.depart.slice(0,10))}</div></div>
+    <div class="mid">${esc(f.duration||'')}<br>${({train:'🚄',bus:'🚌',ferry:'⛴'})[f.mode]||'✈'}<br>${esc(f.stops||'')}</div>
+    <div class="ap r"><b>${esc(f.to.code)}</b><span class="t">${esc((f.arrive||'').slice(11,16))}</span><div class="n">${esc(f.to.name||'')}</div></div>
+    <div class="fmeta">${esc([f.airline,f.number,f.status,f.note].filter(Boolean).join(' · '))}</div></div>`).join('')}</section>`;
+}
+if((T.bookings||[]).length){
+  h += `<section class="box"><h3>🎟️ 预订</h3>${T.bookings.map(b=>`<div class="bk"><div class="ic">${esc(b.icon||'📌')}</div><div>
+    <b>${esc(b.title)}</b>${b.status?`<span class="tag ${/待|未/.test(b.status)?'no':''}">${esc(b.status)}</span>`:''}
+    ${b.time?`<div class="row">🕒 ${esc(b.time)}</div>`:''}
+    ${b.address?`<div class="row">📍 <a href="${gmap(b.q||b.address)}" target="_blank" rel="noopener">${esc(b.address)}</a></div>`:''}
+    ${b.note?`<div class="row">${esc(b.note)}</div>`:''}</div></div>`).join('')}</section>`;
+}
+
+/* bottom trio: stay / transport text / budget / tips */
+const trio = [];
+if(T.stay) trio.push(`<section class="box"><h3>住宿</h3><div class="stayname">${esc(T.stay.name)}</div><p class="tx">${esc(T.stay.text||'')}</p>
+  ${T.stay.q?`<div class="noexp" style="margin-top:8px"><a class="lk" href="${gmap(T.stay.q)}" target="_blank" rel="noopener">📍 在地图中打开</a></div>`:''}</section>`);
+if((TR.lines||[]).length) trio.push(`<section class="box"><h3>${esc(TR.title||'交通')}</h3><div class="lines">${TR.lines.map(l=>`<p class="${l.hot?'hot':''}">${l.label?`<b>${esc(l.label)}：</b>`:''}${esc(l.text)}</p>`).join('')}</div>
+  ${(T.packing||[]).length?`<div class="chips">${T.packing.map(p=>`<span>${esc(p)}</span>`).join('')}</div>`:''}</section>`);
+if(T.budget) trio.push(`<section class="box"><h3>${esc(T.budget.title||'预算参考（一人）')}</h3>${(T.budget.rows||[]).map(r=>`<div class="kv"><span>${esc(r.label)}</span><b>${esc(r.actual||r.est)}</b></div>`).join('')}
+  ${T.budget.total?`<div class="kv total"><span>合计约</span><span>${esc(T.budget.total)}</span></div>`:''}${T.budget.note?`<div class="note">${esc(T.budget.note)}</div>`:''}</section>`);
+const tipList = T.checklist || [];
+if(tipList.length || (!(TR.lines||[]).length && (T.packing||[]).length)) trio.push(`<section class="box"><h3>${esc(T.checklistTitle||'行前小贴士')}</h3><ul class="ck">${tipList.map(t=>`<li>${esc(t)}</li>`).join('')}</ul>
+  ${!(TR.lines||[]).length && (T.packing||[]).length?`<div class="chips">${T.packing.map(p=>`<span>${esc(p)}</span>`).join('')}</div>`:''}</section>`);
+if(trio.length) h += `<div class="cols ${trio.length>=3?'c3':trio.length===2?'c2':''}">${trio.join('')}</div>`;
+
+/* legacy todos + tips */
+if((T.todos||[]).length){
+  h += `<section class="box"><h3>✅ 待办</h3><ul class="tdl">${T.todos.map(t=>`<li class="${t.done?'done':''}">${t.done?'✅':(t.urgent?'🔴':'⬜')} ${esc(t.text)}${t.due&&!t.done?`<span class="tag">${esc(t.due)}</span>`:''}</li>`).join('')}</ul></section>`;
+}
+if((T.tips||[]).length){
+  h += `<section class="box"><h3>💡 贴士</h3><ul class="ck">${T.tips.map(t=>`<li><span><b>${esc(t.title)}</b> ${esc(t.text)}</span></li>`).join('')}</ul></section>`;
+}
+
+if(T.band) h += `<div class="band"><b>${esc(T.band.text||'')}</b>${T.band.note?`<span>${esc(T.band.note)}</span>`:''}</div>`;
+h += `</div>`; // poster
+if(T.updated) h += `<div class="upd">最后更新 ${esc(T.updated)} · <a href="../">Travel Plan</a></div>`;
+document.getElementById('app').innerHTML = h;
+
+/* ---------- pieces ---------- */
+function autoStats(){
+  const n = D0 ? Math.round((Date.parse(D1)-Date.parse(D0))/864e5)+1 : (T.length || days.length);
+  const s = [];
+  if(n) s.push({k:'天数', v: n===1?'一日':`${n} 天 ${n-1} 晚`});
+  if(T.dest) s.push({k:'目的地', v:T.dest});
+  if(T.mode) s.push({k:'主要交通', v:T.mode});
+  if(T.budget && T.budget.total) s.push({k:'预算（一人）', v:T.budget.total});
+  return s;
+}
+function dayCard(d,i){
+  const c = dayColor(d,i), dt = dayDate(d,i);
+  let n = 0;
+  let s = `<section class="box"><div class="dayhead"><span class="badge" style="background:${c}">${esc(d.badge || (days.length===1?'一日行程':'Day '+(i+1)))}</span><h4>${esc(d.title||'')}</h4>
+    ${dt?`<span class="dt">${fd(dt)}</span>`:''}${dt===today?'<span class="today noexp">今天</span>':''}</div><ul class="tl">`;
   (d.items||[]).forEach(it=>{
-    const itz = it.tz||tz;
-    const ts = it.time ? epoch(d.date+'T'+it.time, itz) : null;
-    h += `<li data-ts="${ts||''}"><div class="tm">${esc(it.time||'')}${it.time?`<span class="tz">${tzName(ts,itz)}</span>`:''}</div><div>
-      <div class="tt">${esc(it.title)}${it.tag?`<span class="tag ${tagKind(it.tag)}">${esc(it.tag)}</span>`:''}</div>
+    if(it.move){ s += `<li class="move"><span class="ln"></span><span>↓ ${esc(it.move)}</span></li>`; return; }
+    n++; it._n = n;
+    s += `<li><span class="num" style="background:${MARK[it.mark]||c}">${n}</span><div class="it">
+      <div class="t1">${it.time?`<i>${esc(it.time)}</i>`:''}${esc(it.title)}</div>
       ${it.note?`<div class="nt">${esc(it.note)}</div>`:''}
-      ${it.place?`<a class="pl" href="${gmap(it.place)}" target="_blank" rel="noopener">📍 ${esc(it.placeLabel||it.place)}</a>`:''}
-    </div></li>`;
+      ${it.place?`<a class="pl noexp" href="${gmap(it.place)}" target="_blank" rel="noopener">📍 ${esc(it.placeLabel||it.place)}</a>`:''}</div></li>`;
   });
-  h += `</ul>${d.stay?`<div class="stay">🛏️ 今晚住：${d.stayQ?`<a href="${gmap(d.stayQ)}" target="_blank" rel="noopener">${esc(d.stay)}</a>`:esc(d.stay)}</div>`:''}</div></div>`;
-});
-h += `</section>`;
-
-/* todos */
-if(T.todos && T.todos.length){
-  const done = T.todos.filter(t=>t.done).length;
-  h += `<section id="todo"><h3>✅ 待办清单</h3><p class="lead">由行程负责人统一更新——办完一项告诉 Claude，页面会同步给所有人。${T.updated?' 最后更新：'+esc(T.updated):''}</p>
-  <div class="card"><div style="display:flex;justify-content:space-between;font-size:13px"><span>进度</span><span>${done} / ${T.todos.length}</span></div>
-  <div class="prog"><i style="width:${Math.round(done/T.todos.length*100)}%"></i></div>`;
-  const todo = T.todos.filter(t=>!t.done), dn = T.todos.filter(t=>t.done);
-  const li = t => `<li class="${t.done?'done':''}"><span class="b">${t.done?'✅':(t.urgent?'🔴':'⬜')}</span><span><span class="x">${esc(t.text)}</span>${t.due?` <span class="tag ${t.done?'':'warn'}">${esc(t.due)}</span>`:''}${t.note?`<span class="nt">${esc(t.note)}</span>`:''}</span></li>`;
-  if(todo.length) h += `<div class="tdh">待完成</div><ul class="tdl">${todo.map(li).join('')}</ul>`;
-  if(dn.length) h += `<div class="tdh">已搞定</div><ul class="tdl">${dn.map(li).join('')}</ul>`;
-  h += `</div></section>`;
+  s += `</ul>`;
+  if(d.stay) s += `<div class="stay">🛏️ 今晚住 ${esc(d.stay)}</div>`;
+  if(d.alt) s += `<div class="alt"><b>${esc(d.alt.title||'替代方案')}：</b>${esc(d.alt.text)}</div>`;
+  return s + `</section>`;
 }
-
-/* tips */
-if(T.tips && T.tips.length){
-  h += `<section id="tips"><h3>💡 实用贴士</h3><div class="card tips">${T.tips.map(t=>`<div class="tip"><div class="ic">${esc(t.icon||'•')}</div><div><b>${esc(t.title)}</b><p>${esc(t.text)}</p></div></div>`).join('')}</div></section>`;
+function mapCard(){
+  return `<section class="box mapbox"><h3>路线地图${T.map.subtitle?`<span class="s">${esc(T.map.subtitle)}</span>`:''}</h3>${renderMap()}</section>`;
 }
-h += `<footer>${esc(T.footer||'Travel Book')} · ${esc(T.title)}</footer>`;
-$app.innerHTML = h;
-
-function tagKind(s){ s=String(s); if(/待|未|需|必须|尽快/.test(s)) return /需|提前/.test(s)?'warn':'pending'; if(/已|✓|确认/.test(s)) return ''; return 'info'; }
-
-/* ---------- map ---------- */
 function renderMap(){
   const M = T.map, P = M.points, ids = Object.keys(P);
-  const inPts = ids.filter(k=>!P[k].offmap).map(k=>P[k]);
   let la0=Infinity,la1=-Infinity,lo0=Infinity,lo1=-Infinity;
-  inPts.forEach(p=>{la0=Math.min(la0,p.lat);la1=Math.max(la1,p.lat);lo0=Math.min(lo0,p.lon);lo1=Math.max(lo1,p.lon);});
-  if(M.bounds){[la0,lo0,la1,lo1]=M.bounds;}
-  const k = Math.cos((la0+la1)/2*Math.PI/180);
-  let w = (lo1-lo0)*k, hgt = (la1-la0);
-  const W = 640, pad = 60;
-  const sc = Math.min((W-2*pad)/(w||1e-3), 420/(hgt||1e-3));
-  const H = Math.max(260, Math.round(hgt*sc + 2*pad));
-  const ox = (W - w*sc)/2, oy = (H - hgt*sc)/2;
-  const X = lon => ox + (lon-lo0)*k*sc, Y = lat => oy + (la1-lat)*sc;
-  let s = `<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="行程地图">
-  <defs><filter id="rough"><feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="2" seed="3"/><feDisplacementMap in="SourceGraphic" scale="3.5"/></filter>
-  <pattern id="grid" width="24" height="24" patternUnits="userSpaceOnUse"><path d="M24 0H0V24" fill="none" stroke="var(--line)" stroke-width=".6"/></pattern></defs>
-  <rect width="${W}" height="${H}" fill="${(M.coast||M.land)?'var(--map-water)':'var(--map-land)'}"/>`;
-  (M.land||[]).forEach(poly=>{ s += `<path d="${poly.map((p,i)=>(i?'L':'M')+X(p[1]).toFixed(1)+' '+Y(p[0]).toFixed(1)).join('')}Z" fill="var(--map-land)" stroke="var(--map-ink)" stroke-width="1.3" filter="url(#rough)"/>`; });
-  (M.coast||[]).forEach(line=>{ s += `<path d="${line.map((p,i)=>(i?'L':'M')+X(p[1]).toFixed(1)+' '+Y(p[0]).toFixed(1)).join('')}" fill="none" stroke="var(--map-ink)" stroke-width="1.3" stroke-linejoin="round" filter="url(#rough)"/>`; });
-  s += `<rect width="${W}" height="${H}" fill="url(#grid)" opacity=".5"/>`;
-  (M.labels||[]).forEach(l=>{ s += `<text x="${X(l.lon)}" y="${Y(l.lat)}" fill="var(--map-ink)" font-size="15" font-style="italic" text-anchor="middle" opacity=".8" letter-spacing="3">${esc(l.text)}</text>`; });
+  ids.filter(k=>!P[k].offmap).forEach(k=>{const p=P[k];la0=Math.min(la0,p.lat);la1=Math.max(la1,p.lat);lo0=Math.min(lo0,p.lon);lo1=Math.max(lo1,p.lon);});
+  if(M.bounds) [la0,lo0,la1,lo1] = M.bounds;
+  const k = Math.cos((la0+la1)/2*Math.PI/180), w=(lo1-lo0)*k, hg=la1-la0;
+  const W=640, pad=46, sc=Math.min((W-2*pad)/(w||1e-3), (M.maxH||560)/(hg||1e-3));
+  const H=Math.max(300, Math.round(hg*sc+2*pad)), ox=(W-w*sc)/2, oy=(H-hg*sc)/2;
+  const X=lon=>ox+(lon-lo0)*k*sc, Y=lat=>oy+(la1-lat)*sc;
+  const path = (pts,close) => pts.map((p,i)=>(i?'L':'M')+X(p[1]).toFixed(1)+' '+Y(p[0]).toFixed(1)).join('') + (close?'Z':'');
+  const uid = 'm'+Math.random().toString(36).slice(2,7);
+  let s = `<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="路线地图">
+  <defs><filter id="${uid}r"><feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="2" seed="4"/><feDisplacementMap in="SourceGraphic" scale="3"/></filter>
+  <pattern id="${uid}w" width="34" height="18" patternUnits="userSpaceOnUse"><path d="M2 10q6-6 12 0t12 0" fill="none" stroke="#fff" stroke-opacity=".45" stroke-width="1.2"/></pattern>
+  <pattern id="${uid}d" width="14" height="14" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r=".9" fill="var(--map-ink)" opacity=".25"/></pattern></defs>
+  <rect width="${W}" height="${H}" fill="${M.land?'var(--map-water)':'var(--map-land)'}"/>`;
+  if(M.land) s += `<rect width="${W}" height="${H}" fill="url(#${uid}w)"/>`;
+  (M.land||[]).forEach(p=>{ s += `<path d="${path(p,1)}" fill="var(--map-land)" stroke="var(--map-ink)" stroke-width="1.2" filter="url(#${uid}r)"/>`; });
+  s += `<rect width="${W}" height="${H}" fill="url(#${uid}d)"/>`;
+  (M.areas||[]).forEach(a=>{
+    s += `<path d="${path(a.poly,1)}" fill="var(--map-park)" stroke="var(--green)" stroke-width="1.3" stroke-dasharray="5 4" opacity=".95" filter="url(#${uid}r)"/>`;
+    if(a.name){ const c=a.labelAt||a.poly.reduce((m,p)=>[m[0]+p[0]/a.poly.length,m[1]+p[1]/a.poly.length],[0,0]);
+      s += `<text x="${X(c[1])}" y="${Y(c[0])}" fill="var(--green)" font-size="15" font-weight="700" text-anchor="middle" transform="rotate(${a.rotate||0} ${X(c[1])} ${Y(c[0])})" opacity=".85">${esc(a.name)}</text>`; }
+  });
+  (M.labels||[]).forEach(l=>{ s += `<text x="${X(l.lon)}" y="${Y(l.lat)}" fill="${l.sea?'var(--blue)':'var(--map-ink)'}" font-size="${l.size||14}" font-weight="700" text-anchor="middle" opacity=".85">${esc(l.text)}</text>`; });
+  const legend = [];
+  (M.lines||[]).forEach(L=>{
+    s += `<path d="${path(L.pts)}" fill="none" stroke="${MARK[L.color]||L.color||'var(--map-ink)'}" stroke-width="${L.width||3}" stroke-linecap="round" ${L.dash?`stroke-dasharray="${L.dash}"`:''} opacity=".85"/>`;
+    if(L.name) legend.push([MARK[L.color]||L.color||'var(--map-ink)', L.name, L.dash]);
+  });
   // day routes
-  const legend = []; const offLabeled = new Set();
-  (T.days||[]).forEach((d,i)=>{
-    const c = d.color || PALETTE[i%PALETTE.length]; const r = (d.route||[]).map(id=>Object.assign({id},P[id])).filter(p=>p.lat!=null);
-    if(r.length<2) return; legend.push([c, `${md(d.date).M}/${md(d.date).D} ${d.mapLabel||d.title}`]);
-    const jitter = (i%2?1:-1)*1.5;
+  days.forEach((d,i)=>{
+    const c = dayColor(d,i);
+    const r = (d.route||[]).map(id=>P[id]&&Object.assign({id},P[id])).filter(Boolean);
+    if(r.length<2) return;
+    if(!d.noLegend) legend.push([c, d.mapLabel || (days.length>1?`Day ${i+1}`:'步行路线'), '7 6']);
     for(let j=0;j<r.length-1;j++){
-      let a=r[j], b=r[j+1]; let ax=X(a.lon)+jitter, ay=Y(a.lat)+jitter, bx=X(b.lon)+jitter, by=Y(b.lat)+jitter;
-      const off = a.offmap||b.offmap; const fly = off || (d.flightSegs||[]).includes(j);
-      if(off){ // clip to short arrow from edge toward in-map point
-        const inn = a.offmap? [bx,by]:[ax,ay], out = a.offmap? [ax,ay]:[bx,by];
-        const dx=out[0]-inn[0], dy=out[1]-inn[1], L=Math.hypot(dx,dy)||1, len=Math.min(110, L);
+      let a=r[j], b=r[j+1], ax=X(a.lon), ay=Y(a.lat), bx=X(b.lon), by=Y(b.lat);
+      if(a.offmap||b.offmap){
+        const inn=a.offmap?[bx,by]:[ax,ay], out=a.offmap?[ax,ay]:[bx,by];
+        const dx=out[0]-inn[0], dy=out[1]-inn[1], L=Math.hypot(dx,dy)||1, len=Math.min(90,L);
         const ex=inn[0]+dx/L*len, ey=inn[1]+dy/L*len;
         if(a.offmap){ax=ex;ay=ey}else{bx=ex;by=ey}
-        const lx=ex, ly=ey;
-        const offId = a.offmap? a.id : b.id, offName = a.offmap? a.name : b.name;
-        if(!offLabeled.has(offId)){ offLabeled.add(offId); s += `<text x="${lx}" y="${ly-8}" fill="var(--map-ink)" font-size="13" text-anchor="${dx<0?'start':'end'}" paint-order="stroke" stroke="var(--paper)" stroke-width="3">${esc(offName)} 方向 ↗</text>`; }
+        s += `<text x="${ex}" y="${ey+(dy>0?16:-8)}" font-size="12.5" fill="var(--map-ink)" text-anchor="middle" paint-order="stroke" stroke="var(--paper)" stroke-width="3">${esc(a.offmap?a.name:b.name)} 方向</text>`;
       }
-      const mx=(ax+bx)/2+(by-ay)*.12, my=(ay+by)/2-(bx-ax)*.12;
-      s += `<path d="M${ax} ${ay}Q${mx} ${my} ${bx} ${by}" fill="none" stroke="${c}" stroke-width="${fly?2:3}" stroke-linecap="round" ${fly?'stroke-dasharray="6 6"':''} opacity=".9" filter="url(#rough)"/>`;
+      const mx=(ax+bx)/2+(by-ay)*.1, my=(ay+by)/2-(bx-ax)*.1;
+      s += `<path d="M${ax} ${ay}Q${mx} ${my} ${bx} ${by}" fill="none" stroke="${c}" stroke-width="3.2" stroke-linecap="round" stroke-dasharray="${(d.dashed||[]).includes(j)?'2 7':'7 6'}"/>`;
     }
   });
-  // points
-  const stays = new Set((T.days||[]).map(d=>d.stayPoint).filter(Boolean));
+  // plain points
+  const pinned = {};
+  days.forEach((d,i)=>(d.items||[]).forEach(it=>{ if(it.pt && P[it.pt] && !P[it.pt].offmap){ (pinned[it.pt]=pinned[it.pt]||[]).push({n:it._n, c:MARK[it.mark]||dayColor(d,i), time:it.time}); } }));
   ids.forEach(id=>{
-    const p=P[id]; if(p.offmap) return; const x=X(p.lon), y=Y(p.lat);
-    const isStay = stays.has(id);
-    s += isStay ? `<g transform="translate(${x},${y})"><rect x="-9" y="-9" width="18" height="18" rx="4" fill="var(--paper)" stroke="var(--ink)" stroke-width="1.4"/><text y="4.5" font-size="12" text-anchor="middle" fill="var(--ink)" font-weight="700">住</text></g>`
-      : `<circle cx="${x}" cy="${y}" r="${p.kind==='minor'?3:4.5}" fill="var(--paper)" stroke="var(--ink)" stroke-width="1.6"/>`;
+    const p=P[id]; if(p.offmap) return; const x=X(p.lon), y=Y(p.lat), pins=pinned[id];
+    if(pins){
+      const f = pins[0];
+      s += `<g transform="translate(${x},${y})"><path d="M0 0C-4-8-13-12-13-22a13 13 0 0 1 26 0C13-12 4-8 0 0Z" fill="${f.c}" stroke="#fff" stroke-width="1.6"/><text y="-17" font-size="13" font-weight="700" fill="#fff" text-anchor="middle">${pins.map(q=>q.n).join('·')}</text></g>`;
+    } else {
+      s += `<circle cx="${x}" cy="${y}" r="${p.kind==='minor'?3:4.5}" fill="var(--paper)" stroke="var(--ink)" stroke-width="1.5"/>`;
+    }
     if(p.label!==false){
-      const anc = p.anchor || (x > W*0.62 ? 'end' : 'start'); const dx = anc==='end'?-11:(anc==='middle'?0:11);
-      s += `<text x="${x+dx}" y="${y+(p.dy||4)}" font-size="${p.big?15:13}" fill="var(--ink)" text-anchor="${anc}" paint-order="stroke" stroke="var(--paper)" stroke-width="3" stroke-linejoin="round">${esc(p.name)}</text>`;
+      const anc = p.anchor || (x > W*0.62 ? 'end' : 'start'), dx = anc==='end'?-16:(anc==='middle'?0:16);
+      const ty = y + (p.dy!=null ? p.dy : (pins?-14:4));
+      const t = (pins && p.time!==false && pins[0].time) ? `<tspan font-size="11.5" fill="var(--accent)" font-weight="700">${esc(pins[0].time)} </tspan>` : '';
+      s += `<text x="${x+dx}" y="${ty}" font-size="${p.big?15:13}" font-weight="${p.big?800:600}" fill="${p.big?'var(--accent)':'var(--ink)'}" text-anchor="${anc}" paint-order="stroke" stroke="var(--paper)" stroke-width="3.5" stroke-linejoin="round">${t}${esc(p.name)}</text>`;
     }
   });
   // compass + scale
-  s += `<g transform="translate(28,34)" fill="var(--map-ink)" stroke="var(--map-ink)"><path d="M0 18V-8" stroke-width="1.5"/><path d="M-5 -2L0 -12L5 -2Z" stroke="none"/><text y="-16" font-size="12" text-anchor="middle" stroke="none">北</text></g>`;
-  const kmPerPx = 111.32/sc; const nice=[1,2,5,10,20,50,100,200,500,1000]; const km = nice.find(n=>n/kmPerPx>60)||1000; const px = km/kmPerPx;
-  s += `<g transform="translate(${W-24-px},${H-20})" stroke="var(--map-ink)" fill="var(--map-ink)"><path d="M0 -4V0H${px}V-4" fill="none" stroke-width="1.4"/><text x="${px/2}" y="-8" font-size="11" text-anchor="middle" stroke="none">${km} km</text></g>`;
-  s += `</svg>`;
-  return s + `<div class="legend">${legend.map(([c,t])=>`<span><i style="background:${c}"></i>${esc(t)}</span>`).join('')}${stays.size?'<span><b style="border:1.3px solid var(--ink);border-radius:3px;padding:0 2px;font-size:10px;color:var(--ink)">住</b> 住宿</span>':''}</div>`;
+  s += `<g transform="translate(${W-36},40)"><circle r="20" fill="var(--paper)" stroke="var(--map-ink)" stroke-width="1.2"/><path d="M0-14L5 2L0-2L-5 2Z" fill="var(--accent)"/><text y="14" font-size="10" text-anchor="middle" fill="var(--map-ink)">N</text></g>`;
+  const kmpx = 111.32/sc, nice=[.5,1,2,5,10,20,50,100], km = nice.find(n=>n/kmpx>55)||100, px=km/kmpx;
+  s += `<g transform="translate(18,${H-18})" stroke="var(--map-ink)" fill="var(--map-ink)"><path d="M0 -4V0H${px}V-4" fill="none" stroke-width="1.4"/><text x="${px/2}" y="-8" font-size="11" text-anchor="middle" stroke="none">${km} km</text></g>`;
+  s += `<text x="${W-14}" y="${H-12}" font-size="10.5" fill="var(--map-ink)" text-anchor="end">示意图，非实际比例</text></svg>`;
+  return s + (legend.length?`<div class="legend">${legend.map(([c,t,dash])=>`<span><i style="border-color:${c};${dash?'border-top-style:dashed':''}"></i>${esc(t)}</span>`).join('')}</div>`:'');
 }
 
-/* ---------- interactions ---------- */
-document.querySelectorAll('.dayhead').forEach(el=>el.addEventListener('click',()=>el.parentElement.classList.toggle('open')));
-// open today's day (or first day before trip)
-const todayStr = (()=>{ const p={}; new Intl.DateTimeFormat('en-CA',{timeZone:TZ,year:'numeric',month:'2-digit',day:'2-digit'}).formatToParts(new Date()).forEach(x=>p[x.type]=x.value); return `${p.year}-${p.month}-${p.day}`; })();
-const dayEls=[...document.querySelectorAll('.day')];
-const cur = dayEls.find(e=>e.dataset.date===todayStr);
-if(cur) cur.classList.add('open'); else if(dayEls[0] && (!T.dates || todayStr < T.dates.start)) dayEls[0].classList.add('open');
-else dayEls.forEach(e=>e.classList.add('open'));
-
-/* ---------- countdown ---------- */
-const $t=document.getElementById('now-title'), $s=document.getElementById('now-sub'), $c=document.getElementById('now-count'), $l=document.getElementById('now-label');
-function tick(){
-  const now = Date.now();
-  document.querySelectorAll('.tl li[data-ts]').forEach(li=>{ const ts=+li.dataset.ts; if(ts) li.classList.toggle('past', ts < now - 3600e3); });
-  const e = events.find(e=>e.ts > now);
-  if(!e){ $l.textContent='旅程结束'; $t.textContent=T.endMessage||'平安到家，旅途愉快 🎉'; $s.textContent=''; $c.textContent=''; return; }
-  let d = Math.floor((e.ts-now)/1000); const D=Math.floor(d/86400); d%=86400;
-  const p = n=>String(n).padStart(2,'0');
-  $t.textContent = e.title; $s.textContent = e.sub || '';
-  $c.innerHTML = `${D?`<span class="d">${D}天</span> `:''}${p(Math.floor(d/3600))}:${p(Math.floor(d%3600/60))}:${p(d%60)}<small>后 · 当地 ${hm(new Date(e.ts+tzOffset(e.ts,e.tz)).toISOString().replace('Z',''))} ${tzName(e.ts,e.tz)}</small>`;
+/* ---------- export to image ---------- */
+const $exp = document.getElementById('exp');
+$exp.addEventListener('click', async ()=>{
+  if(!window.htmlToImage){ alert('导出组件没有加载成功，请刷新后再试。'); return; }
+  const old = $exp.textContent; $exp.textContent = '生成中…'; $exp.disabled = true;
+  const box = document.createElement('div');
+  box.className = 'xp';
+  box.style.cssText = 'position:absolute;left:-20000px;top:0;width:1240px;background:#f5efe3';
+  box.appendChild(document.getElementById('poster').cloneNode(true));
+  document.body.appendChild(box);
+  try{
+    if(document.fonts && document.fonts.ready) await document.fonts.ready;
+    const node = box.firstChild, H = node.scrollHeight;
+    const pr = Math.max(1, Math.min(2, Math.sqrt(16e6/(1240*H))));
+    const opt = {pixelRatio:pr, backgroundColor:'#f5efe3', cacheBust:true};
+    await htmlToImage.toBlob(node, opt); // Safari needs a warm-up pass before it paints SVG/foreignObject reliably
+    const blob = await htmlToImage.toBlob(node, opt);
+    showResult(blob);
+  }catch(e){ alert('导出失败：' + (e && e.message || e)); }
+  finally{ box.remove(); $exp.textContent = old; $exp.disabled = false; }
+});
+function showResult(blob){
+  const name = (T._slug || 'trip') + '.png', url = URL.createObjectURL(blob);
+  const file = new File([blob], name, {type:'image/png'});
+  const canShare = navigator.canShare && navigator.canShare({files:[file]});
+  const ov = document.createElement('div'); ov.className = 'ov';
+  ov.innerHTML = `<div class="bar">${canShare?'<button class="btn" data-a="share" type="button">分享 / 存到相册</button>':''}
+    <a class="btn ${canShare?'ghost':''}" href="${url}" download="${name}">下载 PNG</a><button class="btn ghost" data-a="close" type="button">关闭</button></div>
+    <div class="hint">手机上也可以长按图片保存</div><img alt="${esc(T.title)}" src="${url}">`;
+  ov.addEventListener('click', async e=>{
+    const a = e.target.closest('[data-a]'); if(!a) return;
+    if(a.dataset.a==='close'){ ov.remove(); URL.revokeObjectURL(url); }
+    if(a.dataset.a==='share'){ try{ await navigator.share({files:[file], title:T.title}); }catch(err){} }
+  });
+  document.body.appendChild(ov);
 }
-tick(); setInterval(tick,1000);
-
-/* ---------- track toggle (shared with home page, per browser) ---------- */
-const KEY='travelplan.tracked', $star=document.getElementById('star');
-function readTrack(){ try{ return JSON.parse(localStorage.getItem(KEY)||'{}'); }catch(e){ return {}; } }
-function isTracked(){ const m=readTrack(); return T._slug in m ? !!m[T._slug] : !!T.track; }
-function paintStar(){ const on=isTracked(); $star.classList.toggle('on',on); $star.textContent = on?'★ 追踪中':'☆ 追踪'; }
-$star.addEventListener('click',()=>{ const m=readTrack(); m[T._slug]=!isTracked(); try{ localStorage.setItem(KEY,JSON.stringify(m)); }catch(e){} paintStar(); });
-paintStar();
 })();
 </script>
 </body>

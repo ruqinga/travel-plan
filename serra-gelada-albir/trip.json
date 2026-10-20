@@ -1,0 +1,493 @@
+{
+  "title": "Benidorm → 翻越 Serra Gelada → L'Albir",
+  "subtitle": "海崖山脊一日徒步",
+  "highlights": [
+    "十字架观景台",
+    "Punta del Cavall 瞭望塔",
+    "天线山脊",
+    "Albir 灯塔",
+    "单向走完坐 TRAM 回家"
+  ],
+  "theme": "sea",
+  "from": "Sant Joan d'Alacant",
+  "dates": null,
+  "length": 1,
+  "dest": "Benidorm · L'Albir",
+  "mode": "TRAM",
+  "distance": "近郊",
+  "types": [
+    "徒步",
+    "海边"
+  ],
+  "pinned": false,
+  "tz": "Europe/Madrid",
+  "updated": "2026-10-20",
+  "days": [
+    {
+      "badge": "一日行程",
+      "title": "海边 + 山脊 + 灯塔",
+      "mapLabel": "山路徒步 约 8.4 km",
+      "route": [
+        "levante",
+        "creu",
+        "cavall",
+        "governador",
+        "dinar",
+        "faro",
+        "albir",
+        "tram"
+      ],
+      "dashed": [
+        5,
+        6
+      ],
+      "items": [
+        {
+          "time": "08:30",
+          "title": "从 San Juan 出发",
+          "note": "TRAM L1 往 Benidorm，约 1 小时，坐到 Benidorm 站"
+        },
+        {
+          "time": "09:35",
+          "title": "步行去 Levante 海滩尽头",
+          "note": "沿海滩散步约 30 分钟到 Rincón de Loix，起点在 Benikaktus 酒店旁的上坡路",
+          "pt": "levante",
+          "place": "Rincón de Loix, Benidorm"
+        },
+        {
+          "time": "10:15",
+          "title": "Creu de Benidorm 十字架观景台",
+          "note": "俯瞰整片 Benidorm 天际线和海湾，拍照首选",
+          "mark": "gold",
+          "pt": "creu",
+          "place": "Creu de Benidorm"
+        },
+        {
+          "time": "11:00",
+          "title": "Punta del Cavall 瞭望塔",
+          "note": "17 世纪防海盗塔，正对 Serra Gelada 悬崖和 Illa Mitjana 小岛",
+          "mark": "gold",
+          "pt": "cavall",
+          "place": "Torre del Cavall, Benidorm"
+        },
+        {
+          "time": "11:45",
+          "title": "翻越 Alt del Governador",
+          "note": "“天线”山脊，全程最陡最晒的一段，碎石路，慢慢走",
+          "mark": "green",
+          "pt": "governador"
+        },
+        {
+          "time": "13:00",
+          "title": "山脊午餐",
+          "note": "找块平地歇脚，一边是悬崖大海，一边是 Puig Campana",
+          "mark": "green",
+          "pt": "dinar"
+        },
+        {
+          "time": "14:00",
+          "title": "下山到 Faro de l'Albir",
+          "note": "陡下坡要用手扶，灯塔里有免费的解说中心",
+          "mark": "green",
+          "pt": "faro",
+          "place": "Faro de l'Albir"
+        },
+        {
+          "time": "15:00",
+          "title": "灯塔步道 → Albir 海滩",
+          "note": "2.5 km 铺装路，经过 Cala del Metge，可以下海泡脚、吃冰淇淋",
+          "pt": "albir",
+          "place": "Playa del Albir"
+        },
+        {
+          "time": "16:30",
+          "title": "L'Albir 站坐 TRAM 回家",
+          "note": "L9 到 Benidorm 换 L1，约 1.5 小时。L9 一小时一班，先查好时刻",
+          "mark": "accent",
+          "pt": "tram",
+          "place": "Parada TRAM L'Albir"
+        }
+      ],
+      "alt": {
+        "title": "想轻松一点",
+        "text": "只走 Benidorm 这头到 Punta del Cavall 往返（柏油路，单程约 2 km），或者直接坐 TRAM 到 Albir 只走灯塔步道（往返约 5 km）。"
+      }
+    }
+  ],
+  "map": {
+    "subtitle": "从南往北，一路沿悬崖走",
+    "bounds": [
+      38.531,
+      -0.132,
+      38.586,
+      -0.04
+    ],
+    "maxH": 520,
+    "points": {
+      "levante": {
+        "name": "Levante 海滩尽头",
+        "lat": 38.5388,
+        "lon": -0.1088,
+        "anchor": "start",
+        "dy": 22
+      },
+      "creu": {
+        "name": "Creu de Benidorm",
+        "lat": 38.5418,
+        "lon": -0.1052,
+        "anchor": "end",
+        "dy": -18
+      },
+      "cavall": {
+        "name": "Punta del Cavall",
+        "lat": 38.5418,
+        "lon": -0.0985,
+        "anchor": "start",
+        "dy": 14
+      },
+      "governador": {
+        "name": "Alt del Governador",
+        "lat": 38.5525,
+        "lon": -0.0815,
+        "anchor": "start",
+        "dy": 12
+      },
+      "dinar": {
+        "name": "山脊午餐",
+        "lat": 38.5568,
+        "lon": -0.0705,
+        "anchor": "start",
+        "dy": 12
+      },
+      "faro": {
+        "name": "Faro de l'Albir",
+        "lat": 38.5628,
+        "lon": -0.0478,
+        "anchor": "end",
+        "dy": 16
+      },
+      "albir": {
+        "name": "Albir 海滩",
+        "lat": 38.5728,
+        "lon": -0.0628,
+        "anchor": "start",
+        "dy": -16
+      },
+      "tram": {
+        "name": "L'Albir TRAM 站",
+        "lat": 38.5782,
+        "lon": -0.0712,
+        "anchor": "end",
+        "dy": -14
+      }
+    },
+    "land": [
+      [
+        [
+          38.534,
+          -0.14
+        ],
+        [
+          38.5345,
+          -0.125
+        ],
+        [
+          38.5362,
+          -0.115
+        ],
+        [
+          38.5378,
+          -0.1095
+        ],
+        [
+          38.5395,
+          -0.1035
+        ],
+        [
+          38.5405,
+          -0.0985
+        ],
+        [
+          38.5432,
+          -0.0935
+        ],
+        [
+          38.5475,
+          -0.0855
+        ],
+        [
+          38.552,
+          -0.076
+        ],
+        [
+          38.5565,
+          -0.064
+        ],
+        [
+          38.5595,
+          -0.0535
+        ],
+        [
+          38.5612,
+          -0.046
+        ],
+        [
+          38.5636,
+          -0.0432
+        ],
+        [
+          38.5662,
+          -0.0498
+        ],
+        [
+          38.569,
+          -0.056
+        ],
+        [
+          38.5712,
+          -0.0605
+        ],
+        [
+          38.5735,
+          -0.0648
+        ],
+        [
+          38.5775,
+          -0.0632
+        ],
+        [
+          38.5825,
+          -0.0598
+        ],
+        [
+          38.589,
+          -0.055
+        ],
+        [
+          38.6,
+          -0.05
+        ],
+        [
+          38.61,
+          -0.04
+        ],
+        [
+          38.61,
+          -0.15
+        ],
+        [
+          38.534,
+          -0.15
+        ]
+      ]
+    ],
+    "areas": [
+      {
+        "name": "Serra Gelada 自然公园",
+        "poly": [
+          [
+            38.5408,
+            -0.1045
+          ],
+          [
+            38.545,
+            -0.093
+          ],
+          [
+            38.5505,
+            -0.0805
+          ],
+          [
+            38.5555,
+            -0.066
+          ],
+          [
+            38.5605,
+            -0.0485
+          ],
+          [
+            38.5632,
+            -0.0452
+          ],
+          [
+            38.5665,
+            -0.0525
+          ],
+          [
+            38.5645,
+            -0.0635
+          ],
+          [
+            38.5585,
+            -0.0775
+          ],
+          [
+            38.5515,
+            -0.0925
+          ],
+          [
+            38.5455,
+            -0.1025
+          ]
+        ],
+        "labelAt": [
+          38.5525,
+          -0.0745
+        ],
+        "rotate": -33
+      }
+    ],
+    "lines": [
+      {
+        "name": "TRAM 线路",
+        "pts": [
+          [
+            38.5395,
+            -0.13
+          ],
+          [
+            38.548,
+            -0.1205
+          ],
+          [
+            38.5585,
+            -0.104
+          ],
+          [
+            38.5685,
+            -0.088
+          ],
+          [
+            38.5782,
+            -0.0712
+          ]
+        ],
+        "color": "#8a96a3",
+        "width": 3.5
+      },
+      {
+        "name": "回程步行去 TRAM 站",
+        "pts": [
+          [
+            38.5728,
+            -0.0628
+          ],
+          [
+            38.5752,
+            -0.0668
+          ],
+          [
+            38.5782,
+            -0.0712
+          ]
+        ],
+        "color": "accent",
+        "dash": "8 6",
+        "width": 3
+      }
+    ],
+    "labels": [
+      {
+        "text": "Benidorm",
+        "lat": 38.5405,
+        "lon": -0.1225,
+        "size": 17
+      },
+      {
+        "text": "L'Albir",
+        "lat": 38.5835,
+        "lon": -0.0925,
+        "size": 16
+      },
+      {
+        "text": "地中海",
+        "lat": 38.543,
+        "lon": -0.068,
+        "size": 18,
+        "sea": true
+      },
+      {
+        "text": "Altea 湾",
+        "lat": 38.5805,
+        "lon": -0.049,
+        "size": 14,
+        "sea": true
+      }
+    ]
+  },
+  "hikes": [
+    {
+      "name": "Benidorm → Serra Gelada → L'Albir",
+      "shape": "单程",
+      "distance": "约 8.4 km",
+      "time": "4–5 小时",
+      "gain": "约 500 m",
+      "difficulty": "中等",
+      "note": "全程几乎没有遮阴和水源；单向走完从 Albir 坐 TRAM 回",
+      "search": "Benidorm Albir Serra Gelada"
+    }
+  ],
+  "transport": {
+    "title": "交通",
+    "lines": [
+      {
+        "label": "去程",
+        "text": "San Juan 坐 TRAM L1 到 Benidorm 站（约 1 小时），步行约 30 分钟到 Levante 海滩尽头。"
+      },
+      {
+        "label": "回程",
+        "text": "L'Albir 站坐 L9 到 Benidorm（约 10 分钟），换 L1 回 San Juan，全程约 1.5 小时。"
+      },
+      {
+        "text": "L9 大约一小时一班，出发前用 TRAM 官方 App 查好 Albir 的回程时刻。",
+        "hot": true
+      }
+    ]
+  },
+  "packing": [
+    "水 2 L",
+    "三明治 / 坚果",
+    "帽子 + 防晒",
+    "薄外套",
+    "泳衣（可选）",
+    "TRAM 卡 / 零钱",
+    "充电宝",
+    "Wikiloc 离线轨迹"
+  ],
+  "budget": {
+    "rows": [
+      {
+        "label": "TRAM 去程（San Juan → Benidorm）",
+        "est": "约 3–4 €"
+      },
+      {
+        "label": "TRAM 回程（Albir → San Juan）",
+        "est": "约 4–5 €"
+      },
+      {
+        "label": "午餐（自带三明治）",
+        "est": "约 6–10 €"
+      },
+      {
+        "label": "Albir 冰淇淋 / 饮料",
+        "est": "约 5–8 €"
+      }
+    ],
+    "total": "20–30 €",
+    "note": "TRAM 票价按区段计，以实际购票为准"
+  },
+  "checklistTitle": "安全 & 小贴士",
+  "checklist": [
+    "山脊上完全没有遮阴和水源，至少带 2 升水",
+    "帽子、防晒、墨镜，十月中午也很晒",
+    "穿抓地好的运动鞋，下坡碎石容易滑",
+    "山脊风大，带一件薄外套",
+    "悬崖边没有护栏，拍照别靠太前",
+    "下雨或大风天不要走，改走灯塔短线",
+    "周末灯塔步道人很多，早出发避开人流"
+  ],
+  "band": {
+    "text": "悬崖、海岛、灯塔、两座海湾",
+    "note": "Wikiloc 搜 “Benidorm Albir Serra Gelada” 下载离线轨迹"
+  }
+}

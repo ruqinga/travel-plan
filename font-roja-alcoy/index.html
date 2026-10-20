@@ -1,0 +1,804 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex">
+<title>Font Roja 森林 &amp; Alcoy 小城</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧭</text></svg>">
+<style>
+:root,.xp{
+  --bg:#f5efe3; --paper:#fffbf2; --ink:#2a2620; --muted:#7a6f60; --line:#eadcc0; --dash:#d9c7a0;
+  --sand:#f2deb0; --sand-ink:#5e4515; --gold:#d29a35; --accent:#bf5236; --green:#3d6b3a; --blue:#2d6a96;
+  --map-water:#bcd8e6; --map-land:#f4ead2; --map-ink:#8b7a5e; --map-park:#cfe0b8;
+  --main:var(--main-l,#3d6b3a);
+  --shadow:0 1px 2px rgba(80,60,20,.05);
+  --mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme:dark){
+  :root{
+    --bg:#171512; --paper:#221f1a; --ink:#eee6d8; --muted:#a69a88; --line:#3a332a; --dash:#5a4e3c;
+    --sand:#3d3220; --sand-ink:#ecc982; --gold:#e8b350; --accent:#f07a5c; --green:#86b780; --blue:#7fb0d8;
+    --map-water:#1c2c35; --map-land:#29251f; --map-ink:#9a8c74; --map-park:#2c3a26;
+    --main:var(--main-d,#86b780);
+    --shadow:none;
+  }
+}
+.xp{--main:var(--main-l);color:var(--ink);font:15px/1.6 -apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","Noto Sans CJK SC",sans-serif}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.6 -apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","Noto Sans CJK SC",sans-serif}
+a{color:inherit}
+.wrap{max-width:1180px;margin:0 auto;padding:12px 16px 60px}
+
+/* top bar (web only) */
+.topbar{display:flex;align-items:center;gap:8px;font-size:13px;margin:4px 0 12px;flex-wrap:wrap}
+.topbar a.back{color:var(--muted);text-decoration:none}
+.st{font-size:12px;font-weight:600;padding:2px 10px;border-radius:999px;background:var(--sand);color:var(--sand-ink)}
+.st.on{background:var(--main);color:#fff}
+.st.gone{background:var(--line);color:var(--muted)}
+.btn{font:inherit;font-size:13px;font-weight:600;cursor:pointer;border:0;border-radius:999px;padding:7px 14px;background:var(--main);color:#fff;text-decoration:none;display:inline-flex;align-items:center;gap:5px}
+.btn.ghost{background:var(--paper);color:var(--ink);border:1.5px solid var(--line)}
+.topbar .btn{margin-left:auto}
+
+/* poster */
+.poster{container-type:inline-size;background:var(--bg);display:flex;flex-direction:column;gap:16px}
+.xp .poster{padding:44px}
+.box{background:var(--paper);border:2px solid var(--line);border-radius:22px;padding:18px}
+.box.dashed{border-style:dashed;border-color:var(--dash)}
+.box h3{margin:0 0 10px;font-size:20px;color:var(--main);letter-spacing:.5px}
+
+.hero{display:flex;flex-direction:column;gap:12px}
+.hero h1{margin:0;font-size:clamp(26px,5.2cqi,60px);line-height:1.15;color:var(--main);font-weight:800;letter-spacing:.5px}
+.hero .sub{margin:4px 0 0;font-size:clamp(19px,3cqi,36px);font-weight:800;color:var(--accent);line-height:1.25}
+.hero .hl{margin-top:8px;color:var(--muted);font-size:clamp(13px,1.45cqi,17px)}
+.hero-r{display:flex;flex-wrap:wrap;gap:8px}
+.pill{display:inline-block;font-size:13.5px;font-weight:700;padding:5px 14px;border-radius:999px;background:var(--sand);color:var(--sand-ink);white-space:nowrap}
+.pill.main{background:var(--main);color:#fff}
+
+.stats{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+.stat{background:color-mix(in srgb,var(--main) 11%,var(--paper));border-radius:14px;padding:8px 6px;text-align:center}
+.stat span{display:block;font-size:12px;color:var(--muted)}
+.stat b{font-size:17px;color:var(--main)}
+
+.cols{display:grid;gap:16px}
+.dayhead{display:flex;align-items:center;gap:10px;margin-bottom:12px;flex-wrap:wrap}
+.badge{font-size:20px;font-weight:800;color:#fff;padding:3px 14px;border-radius:12px;white-space:nowrap}
+.dayhead h4{margin:0;font-size:20px;color:var(--main);font-weight:800;line-height:1.25}
+.dayhead .dt{font-size:12.5px;color:var(--muted);width:100%}
+.today{font-size:11.5px;padding:1px 8px;border-radius:999px;background:var(--accent);color:#fff;font-weight:700}
+.tl{list-style:none;margin:0;padding:0}
+.tl li{display:grid;grid-template-columns:34px 1fr;gap:10px;padding:6px 0}
+.num{width:30px;height:30px;border-radius:50%;color:#fff;font-weight:700;font-size:14px;display:flex;align-items:center;justify-content:center;margin-top:1px}
+.it .t1{font-weight:700;font-size:15.5px;line-height:1.4}
+.it .t1 i{font-style:normal;color:var(--accent);margin-right:6px;font-variant-numeric:tabular-nums}
+.it .nt{font-size:13px;color:var(--muted);margin-top:1px}
+.it a.pl{font-size:12px;color:var(--blue);text-decoration:none}
+.tl li.move{grid-template-columns:34px 1fr;padding:0}
+.tl li.move .ln{justify-self:center;width:0;border-left:2px dashed var(--dash);height:100%;min-height:22px}
+.tl li.move span{font-size:12.5px;color:var(--gold);font-weight:600;padding:2px 0}
+.alt{margin-top:12px;border-radius:14px;padding:10px 14px;background:color-mix(in srgb,var(--green) 12%,var(--paper));font-size:13.5px;color:var(--green)}
+.alt b{font-weight:700}
+.stay{margin-top:10px;font-size:13px;color:var(--muted)}
+
+/* map */
+.mapbox h3 .s{font-size:14px;font-weight:600;color:var(--blue);margin-left:6px}
+.mapbox svg{display:block;width:100%;height:auto;border-radius:14px}
+.legend{display:flex;flex-wrap:wrap;gap:4px 14px;padding:8px 2px 0;font-size:12.5px;color:var(--muted)}
+.legend i{display:inline-block;width:20px;height:0;border-top:3px solid;vertical-align:middle;margin-right:5px}
+
+/* transport chain */
+.chain{display:flex;flex-wrap:wrap;align-items:center;gap:8px 6px}
+.chain .node{font-size:14.5px;padding:5px 12px;border-radius:10px;background:var(--sand);color:var(--sand-ink);font-weight:600}
+.chain .node.end{background:var(--main);color:#fff}
+.chain .via{font-size:13.5px;color:var(--gold);font-weight:600}
+.note{font-size:13px;color:var(--muted);margin-top:10px}
+.lines p{margin:0 0 6px;font-size:14px}
+.lines b{color:var(--ink)}
+.lines .hot{color:var(--blue);font-weight:700}
+
+/* hikes */
+.hike+.hike{margin-top:14px;padding-top:14px;border-top:1.5px dashed var(--line)}
+.hike h4{margin:0 0 8px;font-size:16px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.hike .stats{grid-template-columns:repeat(2,1fr)}
+
+/* cards row */
+.kv{display:flex;justify-content:space-between;gap:10px;padding:7px 0;border-bottom:1.5px dotted var(--line);font-size:14px}
+.kv b{white-space:nowrap}
+.kv.total{border:0;color:var(--accent);font-weight:800;font-size:16px}
+.ck{list-style:none;margin:0;padding:0}
+.ck li{display:flex;gap:8px;font-size:14px;padding:3px 0}
+.ck li::before{content:"✓";color:var(--green);font-weight:800}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
+.chips span{font-size:13px;padding:3px 12px;border-radius:999px;background:var(--sand);color:var(--sand-ink);font-weight:600}
+.stayname{font-weight:800;font-size:16px;margin-bottom:6px}
+.box p.tx{margin:0;font-size:14px;color:var(--muted)}
+.box a.lk{color:var(--blue);text-decoration:none;font-size:13px;font-weight:600}
+
+/* legacy: flights, bookings, todos */
+.flight{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:8px}
+.flight+.flight{margin-top:12px;padding-top:12px;border-top:1.5px dashed var(--line)}
+.ap b{font-size:22px;font-family:var(--mono);display:block;line-height:1.1}
+.ap .t{font-family:var(--mono);font-weight:600}
+.ap .n{font-size:12px;color:var(--muted)}
+.ap.r{text-align:right}
+.mid{text-align:center;font-size:12px;color:var(--muted)}
+.fmeta{grid-column:1/-1;font-size:12.5px;color:var(--muted)}
+.bk{display:flex;gap:10px;font-size:14px}
+.bk+.bk{margin-top:10px;padding-top:10px;border-top:1.5px dashed var(--line)}
+.bk .ic{font-size:20px}
+.bk .row{font-size:13px;color:var(--muted)}
+.bk .row a{color:var(--blue);text-decoration:none}
+.tag{font-size:11px;padding:0 7px;border-radius:999px;margin-left:6px;background:var(--sand);color:var(--sand-ink);font-weight:600;vertical-align:2px}
+.tag.no{background:var(--accent);color:#fff}
+.tdl{list-style:none;margin:0;padding:0}
+.tdl li{display:flex;gap:8px;padding:5px 0;font-size:14px;border-bottom:1.5px dotted var(--line)}
+.tdl li.done{color:var(--muted);text-decoration:line-through}
+
+.band{background:var(--main);color:#fff;border-radius:22px;padding:16px 22px;display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:6px 16px}
+.band b{font-size:clamp(18px,2.2cqi,28px)}
+.band span{font-size:13.5px;opacity:.92}
+.upd{text-align:center;font-size:12px;color:var(--muted);margin-top:14px}
+
+@container (min-width:720px){
+  .box{padding:24px 28px}
+  .hero{flex-direction:row;justify-content:space-between;align-items:flex-end}
+  .hero-r{flex-direction:column;align-items:flex-end;flex:none}
+  .stats{grid-template-columns:repeat(4,1fr)}
+  .hike .stats{grid-template-columns:repeat(4,1fr)}
+  .cols.c2{grid-template-columns:1fr 1fr}
+  .cols.c3{grid-template-columns:repeat(3,1fr)}
+  .cols.c2.mapr{grid-template-columns:1fr 1.25fr}
+  .badge{font-size:24px}
+  .dayhead h4{font-size:24px}
+  .box h3{font-size:24px}
+  .dayhead .dt{width:auto}
+}
+
+/* export: hide web-only bits */
+.xp .noexp{display:none!important}
+
+/* export overlay */
+.ov{position:fixed;inset:0;z-index:50;background:rgba(20,16,10,.82);display:flex;flex-direction:column;align-items:center;padding:16px;gap:12px;overflow:auto}
+.ov img{max-width:min(100%,720px);border-radius:10px;box-shadow:0 10px 40px rgba(0,0,0,.4)}
+.ov .bar{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;position:sticky;top:0}
+.ov .hint{color:#f3ead8;font-size:13px}
+</style>
+</head>
+<body>
+<div class="wrap" id="app"></div>
+<script id="trip-data" type="application/json">{
+ "title": "Font Roja 森林 & Alcoy 小城",
+ "subtitle": "两天一夜徒步计划",
+ "highlights": [
+  "走进圣栎古林登顶 Menejador",
+  "秃鹫峡谷 Barranc del Cint",
+  "无车也能去"
+ ],
+ "theme": "forest",
+ "from": "Sant Joan d'Alacant",
+ "dates": null,
+ "length": 2,
+ "dest": "Alcoy",
+ "mode": "大巴 + 出租车",
+ "distance": "周边",
+ "types": [
+  "徒步",
+  "城市"
+ ],
+ "pinned": false,
+ "tz": "Europe/Madrid",
+ "updated": "2026-10-20",
+ "days": [
+  {
+   "title": "Font Roja 登顶日",
+   "mapLabel": "Day 1 登顶",
+   "route": [
+    "alicante",
+    "hotel",
+    "santuari",
+    "menejador",
+    "mina",
+    "hotel",
+    "pont"
+   ],
+   "items": [
+    {
+     "time": "08:30",
+     "title": "从 San Juan 出发",
+     "note": "坐 TRAM 或公交到 Alicante 汽车站"
+    },
+    {
+     "time": "09:15",
+     "title": "大巴去 Alcoy",
+     "note": "约 1 小时，到了先去酒店寄存行李",
+     "pt": "hotel",
+     "place": "Estación de autobuses de Alcoy"
+    },
+    {
+     "time": "11:00",
+     "title": "打车上 Font Roja 教堂",
+     "note": "约 15 分钟，记下司机电话，约好下午回程",
+     "mark": "gold",
+     "pt": "santuari",
+     "place": "Santuari de la Font Roja"
+    },
+    {
+     "time": "11:15",
+     "title": "Menejador 登顶环线",
+     "note": "约 8–10 km，4 小时，山顶海拔约 1350 m，穿越圣栎古林",
+     "mark": "green",
+     "pt": "menejador",
+     "place": "Menejador, Alcoy"
+    },
+    {
+     "time": "13:30",
+     "title": "山顶野餐",
+     "note": "山上没有商店，提前在 Alcoy 买好三明治和水",
+     "mark": "green"
+    },
+    {
+     "time": "16:30",
+     "title": "下山，打车回 Alcoy",
+     "note": "可绕道 Pla de la Mina 观景台，回酒店办入住",
+     "mark": "gold",
+     "pt": "mina",
+     "place": "Pla de la Mina Font Roja"
+    },
+    {
+     "time": "18:00",
+     "title": "逛老城 · Sant Jordi 桥",
+     "note": "傍晚灯光最美，老城步行即可",
+     "pt": "pont",
+     "place": "Pont de Sant Jordi, Alcoy"
+    },
+    {
+     "time": "20:30",
+     "title": "晚餐",
+     "note": "西班牙晚饭开得晚，下午饿了先去超市垫一下"
+    }
+   ],
+   "stay": "Sercotel Ciutat d'Alcoi"
+  },
+  {
+   "title": "秃鹫峡谷 & 返程",
+   "mapLabel": "Day 2 峡谷",
+   "route": [
+    "hotel",
+    "cint",
+    "buitres",
+    "cint",
+    "hotel",
+    "alicante"
+   ],
+   "items": [
+    {
+     "time": "08:30",
+     "title": "酒店早餐",
+     "note": "退房后行李寄存前台",
+     "mark": "accent"
+    },
+    {
+     "time": "09:00",
+     "title": "步行出发",
+     "note": "起点在 Alcoy 城边，不用打车",
+     "pt": "cint"
+    },
+    {
+     "time": "09:15",
+     "title": "Barranc del Cint 环线",
+     "note": "约 10 km，爬升约 500 m，3–4 小时，穿过石板窄峡 Estret del Cint",
+     "place": "Barranc del Cint, Alcoy"
+    },
+    {
+     "time": "11:00",
+     "title": "秃鹫观景台",
+     "note": "天然悬崖，没有护栏，拍照别太靠前",
+     "mark": "gold",
+     "pt": "buitres"
+    },
+    {
+     "time": "13:30",
+     "title": "Alcoy 午饭",
+     "note": "回酒店取行李",
+     "mark": "accent"
+    },
+    {
+     "time": "15:30",
+     "title": "大巴返回 Alicante",
+     "note": "再转车回 San Juan，约 1.5 小时",
+     "mark": "accent"
+    }
+   ],
+   "alt": {
+    "title": "体力一般的替代方案",
+    "text": "Day 1 只走 Barranc de l'Infern 小环线（约 4–5 km，2 小时），加上 Pla de la Mina 观景台。"
+   }
+  }
+ ],
+ "map": {
+  "subtitle": "Alcoy 进山，两天两条线",
+  "bounds": [
+   38.648,
+   -0.552,
+   38.705,
+   -0.445
+  ],
+  "points": {
+   "alicante": {
+    "name": "Alicante",
+    "offmap": true,
+    "lat": 38.345,
+    "lon": -0.49
+   },
+   "hotel": {
+    "name": "Alcoy · 酒店",
+    "big": true,
+    "lat": 38.6992,
+    "lon": -0.4752,
+    "anchor": "end",
+    "q": "Sercotel Ciutat d'Alcoi"
+   },
+   "pont": {
+    "name": "Sant Jordi 桥",
+    "lat": 38.6955,
+    "lon": -0.4772,
+    "anchor": "end",
+    "dy": 18
+   },
+   "santuari": {
+    "name": "Font Roja 教堂",
+    "lat": 38.6628,
+    "lon": -0.5392,
+    "anchor": "start"
+   },
+   "menejador": {
+    "name": "Menejador 1352 m",
+    "lat": 38.6535,
+    "lon": -0.5335,
+    "anchor": "start"
+   },
+   "mina": {
+    "name": "Pla de la Mina 观景台",
+    "lat": 38.6668,
+    "lon": -0.5265,
+    "anchor": "start"
+   },
+   "cint": {
+    "name": "Barranc del Cint",
+    "lat": 38.6955,
+    "lon": -0.4655,
+    "anchor": "start"
+   },
+   "buitres": {
+    "name": "秃鹫观景台",
+    "lat": 38.6875,
+    "lon": -0.4575,
+    "anchor": "end"
+   }
+  },
+  "areas": [
+   {
+    "name": "Font Roja 自然公园",
+    "poly": [
+     [
+      38.6705,
+      -0.562
+     ],
+     [
+      38.6735,
+      -0.525
+     ],
+     [
+      38.666,
+      -0.505
+     ],
+     [
+      38.651,
+      -0.508
+     ],
+     [
+      38.6455,
+      -0.535
+     ],
+     [
+      38.652,
+      -0.56
+     ]
+    ],
+    "labelAt": [
+     38.6505,
+     -0.5455
+    ],
+    "rotate": 0
+   }
+  ],
+  "lines": [
+   {
+    "name": "出租车山路 约 8 km",
+    "pts": [
+     [
+      38.6992,
+      -0.4752
+     ],
+     [
+      38.692,
+      -0.488
+     ],
+     [
+      38.684,
+      -0.503
+     ],
+     [
+      38.674,
+      -0.516
+     ],
+     [
+      38.6628,
+      -0.5392
+     ]
+    ],
+    "color": "gold",
+    "dash": "2 6",
+    "width": 3
+   }
+  ],
+  "labels": [
+   {
+    "text": "Alcoy",
+    "lat": 38.7035,
+    "lon": -0.468,
+    "size": 18
+   }
+  ]
+ },
+ "hikes": [
+  {
+   "name": "Menejador 登顶环线",
+   "shape": "环线",
+   "distance": "8–10 km",
+   "time": "约 4 小时",
+   "difficulty": "中等",
+   "note": "山顶海拔约 1350 m，穿越圣栎古林；起点 Font Roja 教堂",
+   "search": "Font Roja Menejador circular"
+  },
+  {
+   "name": "Barranc del Cint 环线",
+   "shape": "环线",
+   "distance": "约 10 km",
+   "time": "3–4 小时",
+   "gain": "约 500 m",
+   "difficulty": "中等",
+   "note": "从 Alcoy 城边步行出发，穿过石板窄峡 Estret del Cint",
+   "search": "Alcoi Barranc del Cint"
+  }
+ ],
+ "transport": {
+  "title": "交通路线",
+  "chain": [
+   {
+    "at": "San Juan"
+   },
+   {
+    "via": "TRAM / 公交 约 30 分钟"
+   },
+   {
+    "at": "Alicante 汽车站"
+   },
+   {
+    "via": "大巴 约 1 小时"
+   },
+   {
+    "at": "Alcoy"
+   },
+   {
+    "via": "出租车 约 15 分钟 · 8 km 山路"
+   },
+   {
+    "at": "Font Roja 教堂"
+   }
+  ],
+  "note": "Barranc del Cint 从 Alcoy 城边步行出发，不用打车。周末大巴班次少，出发前查 Alsa / Subús 时刻表。"
+ },
+ "stay": {
+  "name": "Sercotel Ciutat d'Alcoi",
+  "text": "四星连锁，24 小时前台，市中心 Carrer Colón 1。近期参考价约 58–65 €/晚，工作日更便宜。订可免费取消的房价。",
+  "q": "Sercotel Ciutat d'Alcoi"
+ },
+ "budget": {
+  "rows": [
+   {
+    "label": "大巴 Alicante ⇄ Alcoy",
+    "est": "约 14 €"
+   },
+   {
+    "label": "TRAM / 公交往返",
+    "est": "约 4 €"
+   },
+   {
+    "label": "出租车（上下 Font Roja）",
+    "est": "约 40 €"
+   },
+   {
+    "label": "住宿一晚",
+    "est": "58–65 €"
+   },
+   {
+    "label": "餐饮两天",
+    "est": "35–50 €"
+   }
+  ],
+  "total": "150–175 €"
+ },
+ "checklist": [
+  "山上比海边冷 8–10 度，带外套",
+  "登山鞋、2 升水、防晒",
+  "回程出租车一定提前约好",
+  "周末大巴少，先查时刻表",
+  "山上信号差，离线下载地图",
+  "告诉朋友你的路线和返回时间"
+ ],
+ "band": {
+  "text": "森林、峡谷、秃鹫、老城夜景",
+  "note": "山上信号弱 · 提前下载 Wikiloc 离线轨迹"
+ },
+ "_slug": "font-roja-alcoy"
+}</script>
+<script>!function(t,e){"object"==typeof exports&&"undefined"!=typeof module?e(exports):"function"==typeof define&&define.amd?define(["exports"],e):e((t="undefined"!=typeof globalThis?globalThis:t||self).htmlToImage={})}(this,(function(t){"use strict";function e(t,e,n,r){return new(n||(n=Promise))((function(i,o){function u(t){try{a(r.next(t))}catch(t){o(t)}}function c(t){try{a(r.throw(t))}catch(t){o(t)}}function a(t){var e;t.done?i(t.value):(e=t.value,e instanceof n?e:new n((function(t){t(e)}))).then(u,c)}a((r=r.apply(t,e||[])).next())}))}function n(t,e){var n,r,i,o,u={label:0,sent:function(){if(1&i[0])throw i[1];return i[1]},trys:[],ops:[]};return o={next:c(0),throw:c(1),return:c(2)},"function"==typeof Symbol&&(o[Symbol.iterator]=function(){return this}),o;function c(c){return function(a){return function(c){if(n)throw new TypeError("Generator is already executing.");for(;o&&(o=0,c[0]&&(u=0)),u;)try{if(n=1,r&&(i=2&c[0]?r.return:c[0]?r.throw||((i=r.return)&&i.call(r),0):r.next)&&!(i=i.call(r,c[1])).done)return i;switch(r=0,i&&(c=[2&c[0],i.value]),c[0]){case 0:case 1:i=c;break;case 4:return u.label++,{value:c[1],done:!1};case 5:u.label++,r=c[1],c=[0];continue;case 7:c=u.ops.pop(),u.trys.pop();continue;default:if(!(i=u.trys,(i=i.length>0&&i[i.length-1])||6!==c[0]&&2!==c[0])){u=0;continue}if(3===c[0]&&(!i||c[1]>i[0]&&c[1]<i[3])){u.label=c[1];break}if(6===c[0]&&u.label<i[1]){u.label=i[1],i=c;break}if(i&&u.label<i[2]){u.label=i[2],u.ops.push(c);break}i[2]&&u.ops.pop(),u.trys.pop();continue}c=e.call(t,u)}catch(t){c=[6,t],r=0}finally{n=i=0}if(5&c[0])throw c[1];return{value:c[0]?c[1]:void 0,done:!0}}([c,a])}}}var r,i=(r=0,function(){return r+=1,"u".concat("0000".concat((Math.random()*Math.pow(36,4)<<0).toString(36)).slice(-4)).concat(r)});function o(t){for(var e=[],n=0,r=t.length;n<r;n++)e.push(t[n]);return e}function u(t,e){var n=(t.ownerDocument.defaultView||window).getComputedStyle(t).getPropertyValue(e);return n?parseFloat(n.replace("px","")):0}function c(t,e){void 0===e&&(e={});var n,r,i,o=e.width||(r=u(n=t,"border-left-width"),i=u(n,"border-right-width"),n.clientWidth+r+i),c=e.height||function(t){var e=u(t,"border-top-width"),n=u(t,"border-bottom-width");return t.clientHeight+e+n}(t);return{width:o,height:c}}var a=16384;function s(t,e){return void 0===e&&(e={}),t.toBlob?new Promise((function(n){t.toBlob(n,e.type?e.type:"image/png",e.quality?e.quality:1)})):new Promise((function(n){for(var r=window.atob(t.toDataURL(e.type?e.type:void 0,e.quality?e.quality:void 0).split(",")[1]),i=r.length,o=new Uint8Array(i),u=0;u<i;u+=1)o[u]=r.charCodeAt(u);n(new Blob([o],{type:e.type?e.type:"image/png"}))}))}function l(t){return new Promise((function(e,n){var r=new Image;r.decode=function(){return e(r)},r.onload=function(){return e(r)},r.onerror=n,r.crossOrigin="anonymous",r.decoding="async",r.src=t}))}function f(t){return e(this,void 0,void 0,(function(){return n(this,(function(e){return[2,Promise.resolve().then((function(){return(new XMLSerializer).serializeToString(t)})).then(encodeURIComponent).then((function(t){return"data:image/svg+xml;charset=utf-8,".concat(t)}))]}))}))}function h(t,r,i){return e(this,void 0,void 0,(function(){var e,o,u;return n(this,(function(n){return e="http://www.w3.org/2000/svg",o=document.createElementNS(e,"svg"),u=document.createElementNS(e,"foreignObject"),o.setAttribute("width","".concat(r)),o.setAttribute("height","".concat(i)),o.setAttribute("viewBox","0 0 ".concat(r," ").concat(i)),u.setAttribute("width","100%"),u.setAttribute("height","100%"),u.setAttribute("x","0"),u.setAttribute("y","0"),u.setAttribute("externalResourcesRequired","true"),o.appendChild(u),u.appendChild(t),[2,f(o)]}))}))}var d=function(t,e){if(t instanceof e)return!0;var n=Object.getPrototypeOf(t);return null!==n&&(n.constructor.name===e.name||d(n,e))};function v(t,e,n){var r=".".concat(t,":").concat(e),i=n.cssText?function(t){var e=t.getPropertyValue("content");return"".concat(t.cssText," content: '").concat(e.replace(/'|"/g,""),"';")}(n):function(t){return o(t).map((function(e){var n=t.getPropertyValue(e),r=t.getPropertyPriority(e);return"".concat(e,": ").concat(n).concat(r?" !important":"",";")})).join(" ")}(n);return document.createTextNode("".concat(r,"{").concat(i,"}"))}function p(t,e,n){var r=window.getComputedStyle(t,n),o=r.getPropertyValue("content");if(""!==o&&"none"!==o){var u=i();try{e.className="".concat(e.className," ").concat(u)}catch(t){return}var c=document.createElement("style");c.appendChild(v(u,n,r)),e.appendChild(c)}}var g="application/font-woff",m="image/jpeg",w={woff:g,woff2:g,ttf:"application/font-truetype",eot:"application/vnd.ms-fontobject",png:"image/png",jpg:m,jpeg:m,gif:"image/gif",tiff:"image/tiff",svg:"image/svg+xml",webp:"image/webp"};function b(t){var e=function(t){var e=/\.([^./]*?)$/g.exec(t);return e?e[1]:""}(t).toLowerCase();return w[e]||""}function y(t){return-1!==t.search(/^(data:)/)}function x(t,e){return"data:".concat(e,";base64,").concat(t)}function S(t,r,i){return e(this,void 0,void 0,(function(){var e,o;return n(this,(function(n){switch(n.label){case 0:return[4,fetch(t,r)];case 1:if(404===(e=n.sent()).status)throw new Error('Resource "'.concat(e.url,'" not found'));return[4,e.blob()];case 2:return o=n.sent(),[2,new Promise((function(t,n){var r=new FileReader;r.onerror=n,r.onloadend=function(){try{t(i({res:e,result:r.result}))}catch(t){n(t)}},r.readAsDataURL(o)}))]}}))}))}var E={};function C(t,r,i){return e(this,void 0,void 0,(function(){var e,o,u,c,a;return n(this,(function(n){switch(n.label){case 0:if(e=function(t,e,n){var r=t.replace(/\?.*/,"");return n&&(r=t),/ttf|otf|eot|woff2?/i.test(r)&&(r=r.replace(/.*\//,"")),e?"[".concat(e,"]").concat(r):r}(t,r,i.includeQueryParams),null!=E[e])return[2,E[e]];i.cacheBust&&(t+=(/\?/.test(t)?"&":"?")+(new Date).getTime()),n.label=1;case 1:return n.trys.push([1,3,,4]),[4,S(t,i.fetchRequestInit,(function(t){var e=t.res,n=t.result;return r||(r=e.headers.get("Content-Type")||""),function(t){return t.split(/,/)[1]}(n)}))];case 2:return u=n.sent(),o=x(u,r),[3,4];case 3:return c=n.sent(),o=i.imagePlaceholder||"",a="Failed to fetch resource: ".concat(t),c&&(a="string"==typeof c?c:c.message),a&&console.warn(a),[3,4];case 4:return E[e]=o,[2,o]}}))}))}function P(t){return e(this,void 0,void 0,(function(){var e;return n(this,(function(n){return"data:,"===(e=t.toDataURL())?[2,t.cloneNode(!1)]:[2,l(e)]}))}))}function R(t,r){return e(this,void 0,void 0,(function(){var e,i,o,u;return n(this,(function(n){switch(n.label){case 0:return t.currentSrc?(e=document.createElement("canvas"),i=e.getContext("2d"),e.width=t.clientWidth,e.height=t.clientHeight,null==i||i.drawImage(t,0,0,e.width,e.height),[2,l(e.toDataURL())]):(o=t.poster,u=b(o),[4,C(o,u,r)]);case 1:return[2,l(n.sent())]}}))}))}function T(t){var r;return e(this,void 0,void 0,(function(){return n(this,(function(e){switch(e.label){case 0:return e.trys.push([0,3,,4]),(null===(r=null==t?void 0:t.contentDocument)||void 0===r?void 0:r.body)?[4,L(t.contentDocument.body,{},!0)]:[3,2];case 1:return[2,e.sent()];case 2:return[3,4];case 3:return e.sent(),[3,4];case 4:return[2,t.cloneNode(!1)]}}))}))}function A(t,e){return d(e,Element)&&(function(t,e){var n=e.style;if(n){var r=window.getComputedStyle(t);r.cssText?(n.cssText=r.cssText,n.transformOrigin=r.transformOrigin):o(r).forEach((function(i){var o=r.getPropertyValue(i);if("font-size"===i&&o.endsWith("px")){var u=Math.floor(parseFloat(o.substring(0,o.length-2)))-.1;o="".concat(u,"px")}d(t,HTMLIFrameElement)&&"display"===i&&"inline"===o&&(o="block"),"d"===i&&e.getAttribute("d")&&(o="path(".concat(e.getAttribute("d"),")")),n.setProperty(i,o,r.getPropertyPriority(i))}))}}(t,e),function(t,e){p(t,e,":before"),p(t,e,":after")}(t,e),function(t,e){d(t,HTMLTextAreaElement)&&(e.innerHTML=t.value),d(t,HTMLInputElement)&&e.setAttribute("value",t.value)}(t,e),function(t,e){if(d(t,HTMLSelectElement)){var n=e,r=Array.from(n.children).find((function(e){return t.value===e.getAttribute("value")}));r&&r.setAttribute("selected","")}}(t,e)),e}function L(t,r,i){return e(this,void 0,void 0,(function(){return n(this,(function(u){return i||!r.filter||r.filter(t)?[2,Promise.resolve(t).then((function(t){return function(t,r){return e(this,void 0,void 0,(function(){return n(this,(function(e){return d(t,HTMLCanvasElement)?[2,P(t)]:d(t,HTMLVideoElement)?[2,R(t,r)]:d(t,HTMLIFrameElement)?[2,T(t)]:[2,t.cloneNode(!1)]}))}))}(t,r)})).then((function(i){return function(t,r,i){var u,c;return e(this,void 0,void 0,(function(){var e;return n(this,(function(n){switch(n.label){case 0:return e=[],0===(e=null!=(a=t).tagName&&"SLOT"===a.tagName.toUpperCase()&&t.assignedNodes?o(t.assignedNodes()):d(t,HTMLIFrameElement)&&(null===(u=t.contentDocument)||void 0===u?void 0:u.body)?o(t.contentDocument.body.childNodes):o((null!==(c=t.shadowRoot)&&void 0!==c?c:t).childNodes)).length||d(t,HTMLVideoElement)?[2,r]:[4,e.reduce((function(t,e){return t.then((function(){return L(e,i)})).then((function(t){t&&r.appendChild(t)}))}),Promise.resolve())];case 1:return n.sent(),[2,r]}var a}))}))}(t,i,r)})).then((function(e){return A(t,e)})).then((function(t){return function(t,r){return e(this,void 0,void 0,(function(){var e,i,o,u,c,a,s,l,f,h,d,v,p;return n(this,(function(n){switch(n.label){case 0:if(0===(e=t.querySelectorAll?t.querySelectorAll("use"):[]).length)return[2,t];i={},p=0,n.label=1;case 1:return p<e.length?(o=e[p],(u=o.getAttribute("xlink:href"))?(c=t.querySelector(u),a=document.querySelector(u),c||!a||i[u]?[3,3]:(s=i,l=u,[4,L(a,r,!0)])):[3,3]):[3,4];case 2:s[l]=n.sent(),n.label=3;case 3:return p++,[3,1];case 4:if((f=Object.values(i)).length){for(h="http://www.w3.org/1999/xhtml",(d=document.createElementNS(h,"svg")).setAttribute("xmlns",h),d.style.position="absolute",d.style.width="0",d.style.height="0",d.style.overflow="hidden",d.style.display="none",v=document.createElementNS(h,"defs"),d.appendChild(v),p=0;p<f.length;p++)v.appendChild(f[p]);t.appendChild(d)}return[2,t]}}))}))}(t,r)}))]:[2,null]}))}))}var N=/url\((['"]?)([^'"]+?)\1\)/g,k=/url\([^)]+\)\s*format\((["']?)([^"']+)\1\)/g,I=/src:\s*(?:url\([^)]+\)\s*format\([^)]+\)[,;]\s*)+/g;function D(t,r,i,o,u){return e(this,void 0,void 0,(function(){var e,c,a,s;return n(this,(function(n){switch(n.label){case 0:return n.trys.push([0,5,,6]),e=i?function(t,e){if(t.match(/^[a-z]+:\/\//i))return t;if(t.match(/^\/\//))return window.location.protocol+t;if(t.match(/^[a-z]+:/i))return t;var n=document.implementation.createHTMLDocument(),r=n.createElement("base"),i=n.createElement("a");return n.head.appendChild(r),n.body.appendChild(i),e&&(r.href=e),i.href=t,i.href}(r,i):r,c=b(r),a=void 0,u?[4,u(e)]:[3,2];case 1:return s=n.sent(),a=x(s,c),[3,4];case 2:return[4,C(e,c,o)];case 3:a=n.sent(),n.label=4;case 4:return[2,t.replace((l=r,f=l.replace(/([.*+?^${}()|\[\]\/\\])/g,"\\$1"),new RegExp("(url\\(['\"]?)(".concat(f,")(['\"]?\\))"),"g")),"$1".concat(a,"$3"))];case 5:return n.sent(),[3,6];case 6:return[2,t]}var l,f}))}))}function M(t){return-1!==t.search(N)}function H(t,r,i){return e(this,void 0,void 0,(function(){var e,o;return n(this,(function(n){return M(t)?(e=function(t,e){var n=e.preferredFontFormat;return n?t.replace(I,(function(t){for(;;){var e=k.exec(t)||[],r=e[0],i=e[2];if(!i)return"";if(i===n)return"src: ".concat(r,";")}})):t}(t,i),o=function(t){var e=[];return t.replace(N,(function(t,n,r){return e.push(r),t})),e.filter((function(t){return!y(t)}))}(e),[2,o.reduce((function(t,e){return t.then((function(t){return D(t,e,r,i)}))}),Promise.resolve(e))]):[2,t]}))}))}function V(t,r,i){var o;return e(this,void 0,void 0,(function(){var e,u;return n(this,(function(n){switch(n.label){case 0:return(e=null===(o=r.style)||void 0===o?void 0:o.getPropertyValue(t))?[4,H(e,null,i)]:[3,2];case 1:return u=n.sent(),r.style.setProperty(t,u,r.style.getPropertyPriority(t)),[2,!0];case 2:return[2,!1]}}))}))}function F(t,r){return e(this,void 0,void 0,(function(){return n(this,(function(e){switch(e.label){case 0:return[4,V("background",t,r)];case 1:return e.sent()?[3,3]:[4,V("background-image",t,r)];case 2:e.sent(),e.label=3;case 3:return[4,V("mask",t,r)];case 4:return e.sent()?[3,6]:[4,V("mask-image",t,r)];case 5:e.sent(),e.label=6;case 6:return[2]}}))}))}function j(t,r){return e(this,void 0,void 0,(function(){var e,i,o;return n(this,(function(n){switch(n.label){case 0:return(e=d(t,HTMLImageElement))&&!y(t.src)||d(t,SVGImageElement)&&!y(t.href.baseVal)?[4,C(i=e?t.src:t.href.baseVal,b(i),r)]:[2];case 1:return o=n.sent(),[4,new Promise((function(n,r){t.onload=n,t.onerror=r;var i=t;i.decode&&(i.decode=n),"lazy"===i.loading&&(i.loading="eager"),e?(t.srcset="",t.src=o):t.href.baseVal=o}))];case 2:return n.sent(),[2]}}))}))}function q(t,r){return e(this,void 0,void 0,(function(){var e,i;return n(this,(function(n){switch(n.label){case 0:return e=o(t.childNodes),i=e.map((function(t){return U(t,r)})),[4,Promise.all(i).then((function(){return t}))];case 1:return n.sent(),[2]}}))}))}function U(t,r){return e(this,void 0,void 0,(function(){return n(this,(function(e){switch(e.label){case 0:return d(t,Element)?[4,F(t,r)]:[3,4];case 1:return e.sent(),[4,j(t,r)];case 2:return e.sent(),[4,q(t,r)];case 3:e.sent(),e.label=4;case 4:return[2]}}))}))}var O={};function B(t){return e(this,void 0,void 0,(function(){var e,r;return n(this,(function(n){switch(n.label){case 0:return null!=(e=O[t])?[2,e]:[4,fetch(t)];case 1:return[4,n.sent().text()];case 2:return r=n.sent(),e={url:t,cssText:r},O[t]=e,[2,e]}}))}))}function z(t,r){return e(this,void 0,void 0,(function(){var i,o,u,c,a=this;return n(this,(function(s){return i=t.cssText,o=/url\(["']?([^"')]+)["']?\)/g,u=i.match(/url\([^)]+\)/g)||[],c=u.map((function(u){return e(a,void 0,void 0,(function(){var e;return n(this,(function(n){return(e=u.replace(o,"$1")).startsWith("https://")||(e=new URL(e,t.url).href),[2,S(e,r.fetchRequestInit,(function(t){var e=t.result;return i=i.replace(u,"url(".concat(e,")")),[u,e]}))]}))}))})),[2,Promise.all(c).then((function(){return i}))]}))}))}function W(t){if(null==t)return[];for(var e=[],n=t.replace(/(\/\*[\s\S]*?\*\/)/gi,""),r=new RegExp("((@.*?keyframes [\\s\\S]*?){([\\s\\S]*?}\\s*?)})","gi");;){if(null===(u=r.exec(n)))break;e.push(u[0])}n=n.replace(r,"");for(var i=/@import[\s\S]*?url\([^)]*\)[\s\S]*?;/gi,o=new RegExp("((\\s*?(?:\\/\\*[\\s\\S]*?\\*\\/)?\\s*?@media[\\s\\S]*?){([\\s\\S]*?)}\\s*?})|(([\\s\\S]*?){([\\s\\S]*?)})","gi");;){var u;if(null===(u=i.exec(n))){if(null===(u=o.exec(n)))break;i.lastIndex=o.lastIndex}else o.lastIndex=i.lastIndex;e.push(u[0])}return e}function $(t,r){return e(this,void 0,void 0,(function(){var e,i;return n(this,(function(n){return e=[],i=[],t.forEach((function(e){if("cssRules"in e)try{o(e.cssRules||[]).forEach((function(t,n){if(t.type===CSSRule.IMPORT_RULE){var o=n+1,u=B(t.href).then((function(t){return z(t,r)})).then((function(t){return W(t).forEach((function(t){try{e.insertRule(t,t.startsWith("@import")?o+=1:e.cssRules.length)}catch(e){console.error("Error inserting rule from remote css",{rule:t,error:e})}}))})).catch((function(t){console.error("Error loading remote css",t.toString())}));i.push(u)}}))}catch(o){var n=t.find((function(t){return null==t.href}))||document.styleSheets[0];null!=e.href&&i.push(B(e.href).then((function(t){return z(t,r)})).then((function(t){return W(t).forEach((function(t){n.insertRule(t,e.cssRules.length)}))})).catch((function(t){console.error("Error loading remote stylesheet",t)}))),console.error("Error inlining remote css file",o)}})),[2,Promise.all(i).then((function(){return t.forEach((function(t){if("cssRules"in t)try{o(t.cssRules||[]).forEach((function(t){e.push(t)}))}catch(e){console.error("Error while reading CSS rules from ".concat(t.href),e)}})),e}))]}))}))}function _(t){return t.filter((function(t){return t.type===CSSRule.FONT_FACE_RULE})).filter((function(t){return M(t.style.getPropertyValue("src"))}))}function G(t,r){return e(this,void 0,void 0,(function(){return n(this,(function(e){switch(e.label){case 0:if(null==t.ownerDocument)throw new Error("Provided element is not within a Document");return[4,$(o(t.ownerDocument.styleSheets),r)];case 1:return[2,_(e.sent())]}}))}))}function J(t,r){return e(this,void 0,void 0,(function(){var e;return n(this,(function(n){switch(n.label){case 0:return[4,G(t,r)];case 1:return e=n.sent(),[4,Promise.all(e.map((function(t){var e=t.parentStyleSheet?t.parentStyleSheet.href:null;return H(t.cssText,e,r)})))];case 2:return[2,n.sent().join("\n")]}}))}))}function Q(t,r){return e(this,void 0,void 0,(function(){var e,i,o,u,c;return n(this,(function(n){switch(n.label){case 0:return null==r.fontEmbedCSS?[3,1]:(i=r.fontEmbedCSS,[3,5]);case 1:return r.skipFonts?(o=null,[3,4]):[3,2];case 2:return[4,J(t,r)];case 3:o=n.sent(),n.label=4;case 4:i=o,n.label=5;case 5:return(e=i)&&(u=document.createElement("style"),c=document.createTextNode(e),u.appendChild(c),t.firstChild?t.insertBefore(u,t.firstChild):t.appendChild(u)),[2]}}))}))}function X(t,r){return void 0===r&&(r={}),e(this,void 0,void 0,(function(){var e,i,o,u;return n(this,(function(n){switch(n.label){case 0:return e=c(t,r),i=e.width,o=e.height,[4,L(t,r,!0)];case 1:return[4,Q(u=n.sent(),r)];case 2:return n.sent(),[4,U(u,r)];case 3:return n.sent(),function(t,e){var n=t.style;e.backgroundColor&&(n.backgroundColor=e.backgroundColor),e.width&&(n.width="".concat(e.width,"px")),e.height&&(n.height="".concat(e.height,"px"));var r=e.style;null!=r&&Object.keys(r).forEach((function(t){n[t]=r[t]}))}(u,r),[4,h(u,i,o)];case 4:return[2,n.sent()]}}))}))}function K(t,r){return void 0===r&&(r={}),e(this,void 0,void 0,(function(){var e,i,o,u,s,f,h,d,v;return n(this,(function(n){switch(n.label){case 0:return e=c(t,r),i=e.width,o=e.height,[4,X(t,r)];case 1:return[4,l(n.sent())];case 2:return u=n.sent(),s=document.createElement("canvas"),f=s.getContext("2d"),h=r.pixelRatio||function(){var t,e;try{e=process}catch(t){}var n=e&&e.env?e.env.devicePixelRatio:null;return n&&(t=parseInt(n,10),Number.isNaN(t)&&(t=1)),t||window.devicePixelRatio||1}(),d=r.canvasWidth||i,v=r.canvasHeight||o,s.width=d*h,s.height=v*h,r.skipAutoScale||function(t){(t.width>a||t.height>a)&&(t.width>a&&t.height>a?t.width>t.height?(t.height*=a/t.width,t.width=a):(t.width*=a/t.height,t.height=a):t.width>a?(t.height*=a/t.width,t.width=a):(t.width*=a/t.height,t.height=a))}(s),s.style.width="".concat(d),s.style.height="".concat(v),r.backgroundColor&&(f.fillStyle=r.backgroundColor,f.fillRect(0,0,s.width,s.height)),f.drawImage(u,0,0,s.width,s.height),[2,s]}}))}))}t.getFontEmbedCSS=function(t,r){return void 0===r&&(r={}),e(this,void 0,void 0,(function(){return n(this,(function(e){return[2,J(t,r)]}))}))},t.toBlob=function(t,r){return void 0===r&&(r={}),e(this,void 0,void 0,(function(){return n(this,(function(e){switch(e.label){case 0:return[4,K(t,r)];case 1:return[4,s(e.sent())];case 2:return[2,e.sent()]}}))}))},t.toCanvas=K,t.toJpeg=function(t,r){return void 0===r&&(r={}),e(this,void 0,void 0,(function(){return n(this,(function(e){switch(e.label){case 0:return[4,K(t,r)];case 1:return[2,e.sent().toDataURL("image/jpeg",r.quality||1)]}}))}))},t.toPixelData=function(t,r){return void 0===r&&(r={}),e(this,void 0,void 0,(function(){var e,i,o,u;return n(this,(function(n){switch(n.label){case 0:return e=c(t,r),i=e.width,o=e.height,[4,K(t,r)];case 1:return u=n.sent(),[2,u.getContext("2d").getImageData(0,0,i,o).data]}}))}))},t.toPng=function(t,r){return void 0===r&&(r={}),e(this,void 0,void 0,(function(){return n(this,(function(e){switch(e.label){case 0:return[4,K(t,r)];case 1:return[2,e.sent().toDataURL()]}}))}))},t.toSvg=X}));
+
+</script>
+<script>
+(function(){
+const T = JSON.parse(document.getElementById('trip-data').textContent);
+const TZ = T.tz || 'Europe/Madrid';
+const THEMES = {forest:['#3d6b3a','#86b780'], sea:['#2d6a96','#7fb0d8'], terracotta:['#a8492c','#ef8f6c'], plum:['#6e4a8a','#b896d6'], olive:['#6b6a2a','#c2c06a']};
+const th = THEMES[T.theme] || (T.theme && T.theme[0]==='#' ? [T.theme,T.theme] : THEMES.forest);
+document.documentElement.style.setProperty('--main-l', th[0]);
+document.documentElement.style.setProperty('--main-d', th[1]);
+const MARK = {gold:'var(--gold)', accent:'var(--accent)', main:'var(--main)', green:'var(--green)', blue:'var(--blue)'};
+const WD = ['周日','周一','周二','周三','周四','周五','周六'];
+const esc = s => String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const gmap = q => 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(q);
+const md = s => { const [Y,M,D]=s.split('-').map(Number); return {Y,M,D,wd:WD[new Date(Date.UTC(Y,M-1,D)).getUTCDay()]}; };
+const fd = s => { const x=md(s); return `${x.M}/${x.D}（${x.wd}）`; };
+const today = (()=>{ const p={}; new Intl.DateTimeFormat('en-CA',{timeZone:TZ,year:'numeric',month:'2-digit',day:'2-digit'}).formatToParts(new Date()).forEach(x=>p[x.type]=x.value); return `${p.year}-${p.month}-${p.day}`; })();
+const D0 = T.dates && T.dates.start, D1 = T.dates && (T.dates.end || T.dates.start);
+const status = !D0 ? 'plan' : (today < D0 ? 'plan' : (today <= D1 ? 'on' : 'gone'));
+const days = T.days || [];
+const dayColor = (d,i) => MARK[d.color] || d.color || (days.length===1 ? 'var(--main)' : (i%2 ? 'var(--main)' : 'var(--accent)'));
+// date of day i: explicit, or derived from trip start
+const dayDate = (d,i) => d.date || (D0 ? new Date(Date.UTC(...D0.split('-').map((v,k)=>k===1?v-1:+v)) + i*864e5).toISOString().slice(0,10) : null);
+
+let h = '';
+h += `<div class="topbar noexp"><a class="back" href="../">← 全部行程</a>
+  <span class="st ${status==='on'?'on':status==='gone'?'gone':''}">${status==='on'?'Ongoing':status==='gone'?'Gone':'Plan to go'}</span>
+  <button class="btn" id="exp" type="button">⤓ 导出图片</button></div>`;
+h += `<div class="poster" id="poster">`;
+
+/* hero */
+const dateTxt = D0 ? (D0===D1 ? fd(D0) : `${fd(D0)} – ${fd(D1)}`) : '日期待定';
+h += `<header class="box dashed hero"><div><h1>${esc(T.title)}</h1>${T.subtitle?`<div class="sub">${esc(T.subtitle)}</div>`:''}
+  ${(T.highlights||[]).length?`<div class="hl">${T.highlights.map(esc).join(' · ')}</div>`:''}</div>
+  <div class="hero-r">${T.from?`<span class="pill main">出发地 ${esc(T.from)}</span>`:''}<span class="pill">日期 ${esc(dateTxt)}</span>${T.people?`<span class="pill">${esc(T.people)} 人</span>`:''}</div></header>`;
+
+/* stats */
+const stats = T.stats || autoStats();
+if(stats.length) h += `<div class="stats">${stats.map(s=>`<div class="stat"><span>${esc(s.k)}</span><b>${esc(s.v)}</b></div>`).join('')}</div>`;
+
+/* days (+ map beside when one day) */
+const hasMap = T.map && T.map.points;
+const dayCards = days.map((d,i)=>dayCard(d,i)).join('');
+if(days.length===1 && hasMap) h += `<div class="cols c2 mapr">${dayCards}${mapCard()}</div>`;
+else {
+  if(days.length) h += `<div class="cols ${days.length>1?'c2':''}">${dayCards}</div>`;
+  if(hasMap) h += mapCard();
+}
+
+/* hikes */
+if((T.hikes||[]).length){
+  h += `<section class="box"><h3>🥾 徒步路线</h3>${T.hikes.map(k=>{
+    const st = [['全程',k.distance],['用时',k.time],['爬升',k.gain],['难度',k.difficulty]].filter(x=>x[1]);
+    const url = k.wikiloc || ('https://www.google.com/search?q=' + encodeURIComponent('wikiloc ' + (k.search||k.name)));
+    return `<div class="hike"><h4>${esc(k.name)}${k.shape?`<span class="tag">${esc(k.shape)}</span>`:''}</h4>
+      <div class="stats">${st.map(s=>`<div class="stat"><span>${s[0]}</span><b>${esc(s[1])}</b></div>`).join('')}</div>
+      ${k.note?`<div class="note">${esc(k.note)}</div>`:''}
+      <div class="noexp" style="margin-top:10px"><a class="btn ghost" href="${esc(url)}" target="_blank" rel="noopener">Wikiloc 轨迹 ↗</a></div></div>`;
+  }).join('')}</section>`;
+}
+
+/* transport chain (full width) */
+const TR = T.transport || {};
+if((TR.chain||[]).length){
+  h += `<section class="box dashed"><h3>${esc(TR.title||'交通路线')}</h3><div class="chain">${TR.chain.map((c,i)=>
+    c.via ? `<span class="via">→ ${esc(c.via)} →</span>` : `<span class="node ${i===TR.chain.length-1?'end':''}">${esc(c.at)}</span>`).join('')}</div>
+    ${TR.note?`<div class="note">${esc(TR.note)}</div>`:''}</section>`;
+}
+
+/* legacy flights + bookings */
+if((T.flights||[]).length){
+  h += `<section class="box"><h3>🚆 长途交通</h3>${T.flights.map(f=>`<div class="flight">
+    <div class="ap"><b>${esc(f.from.code)}</b><span class="t">${esc((f.depart||'').slice(11,16))}</span><div class="n">${esc(f.from.name||'')} · ${fd(f.depart.slice(0,10))}</div></div>
+    <div class="mid">${esc(f.duration||'')}<br>${({train:'🚄',bus:'🚌',ferry:'⛴'})[f.mode]||'✈'}<br>${esc(f.stops||'')}</div>
+    <div class="ap r"><b>${esc(f.to.code)}</b><span class="t">${esc((f.arrive||'').slice(11,16))}</span><div class="n">${esc(f.to.name||'')}</div></div>
+    <div class="fmeta">${esc([f.airline,f.number,f.status,f.note].filter(Boolean).join(' · '))}</div></div>`).join('')}</section>`;
+}
+if((T.bookings||[]).length){
+  h += `<section class="box"><h3>🎟️ 预订</h3>${T.bookings.map(b=>`<div class="bk"><div class="ic">${esc(b.icon||'📌')}</div><div>
+    <b>${esc(b.title)}</b>${b.status?`<span class="tag ${/待|未/.test(b.status)?'no':''}">${esc(b.status)}</span>`:''}
+    ${b.time?`<div class="row">🕒 ${esc(b.time)}</div>`:''}
+    ${b.address?`<div class="row">📍 <a href="${gmap(b.q||b.address)}" target="_blank" rel="noopener">${esc(b.address)}</a></div>`:''}
+    ${b.note?`<div class="row">${esc(b.note)}</div>`:''}</div></div>`).join('')}</section>`;
+}
+
+/* bottom trio: stay / transport text / budget / tips */
+const trio = [];
+if(T.stay) trio.push(`<section class="box"><h3>住宿</h3><div class="stayname">${esc(T.stay.name)}</div><p class="tx">${esc(T.stay.text||'')}</p>
+  ${T.stay.q?`<div class="noexp" style="margin-top:8px"><a class="lk" href="${gmap(T.stay.q)}" target="_blank" rel="noopener">📍 在地图中打开</a></div>`:''}</section>`);
+if((TR.lines||[]).length) trio.push(`<section class="box"><h3>${esc(TR.title||'交通')}</h3><div class="lines">${TR.lines.map(l=>`<p class="${l.hot?'hot':''}">${l.label?`<b>${esc(l.label)}：</b>`:''}${esc(l.text)}</p>`).join('')}</div>
+  ${(T.packing||[]).length?`<div class="chips">${T.packing.map(p=>`<span>${esc(p)}</span>`).join('')}</div>`:''}</section>`);
+if(T.budget) trio.push(`<section class="box"><h3>${esc(T.budget.title||'预算参考（一人）')}</h3>${(T.budget.rows||[]).map(r=>`<div class="kv"><span>${esc(r.label)}</span><b>${esc(r.actual||r.est)}</b></div>`).join('')}
+  ${T.budget.total?`<div class="kv total"><span>合计约</span><span>${esc(T.budget.total)}</span></div>`:''}${T.budget.note?`<div class="note">${esc(T.budget.note)}</div>`:''}</section>`);
+const tipList = T.checklist || [];
+if(tipList.length || (!(TR.lines||[]).length && (T.packing||[]).length)) trio.push(`<section class="box"><h3>${esc(T.checklistTitle||'行前小贴士')}</h3><ul class="ck">${tipList.map(t=>`<li>${esc(t)}</li>`).join('')}</ul>
+  ${!(TR.lines||[]).length && (T.packing||[]).length?`<div class="chips">${T.packing.map(p=>`<span>${esc(p)}</span>`).join('')}</div>`:''}</section>`);
+if(trio.length) h += `<div class="cols ${trio.length>=3?'c3':trio.length===2?'c2':''}">${trio.join('')}</div>`;
+
+/* legacy todos + tips */
+if((T.todos||[]).length){
+  h += `<section class="box"><h3>✅ 待办</h3><ul class="tdl">${T.todos.map(t=>`<li class="${t.done?'done':''}">${t.done?'✅':(t.urgent?'🔴':'⬜')} ${esc(t.text)}${t.due&&!t.done?`<span class="tag">${esc(t.due)}</span>`:''}</li>`).join('')}</ul></section>`;
+}
+if((T.tips||[]).length){
+  h += `<section class="box"><h3>💡 贴士</h3><ul class="ck">${T.tips.map(t=>`<li><span><b>${esc(t.title)}</b> ${esc(t.text)}</span></li>`).join('')}</ul></section>`;
+}
+
+if(T.band) h += `<div class="band"><b>${esc(T.band.text||'')}</b>${T.band.note?`<span>${esc(T.band.note)}</span>`:''}</div>`;
+h += `</div>`; // poster
+if(T.updated) h += `<div class="upd">最后更新 ${esc(T.updated)} · <a href="../">Travel Plan</a></div>`;
+document.getElementById('app').innerHTML = h;
+
+/* ---------- pieces ---------- */
+function autoStats(){
+  const n = D0 ? Math.round((Date.parse(D1)-Date.parse(D0))/864e5)+1 : (T.length || days.length);
+  const s = [];
+  if(n) s.push({k:'天数', v: n===1?'一日':`${n} 天 ${n-1} 晚`});
+  if(T.dest) s.push({k:'目的地', v:T.dest});
+  if(T.mode) s.push({k:'主要交通', v:T.mode});
+  if(T.budget && T.budget.total) s.push({k:'预算（一人）', v:T.budget.total});
+  return s;
+}
+function dayCard(d,i){
+  const c = dayColor(d,i), dt = dayDate(d,i);
+  let n = 0;
+  let s = `<section class="box"><div class="dayhead"><span class="badge" style="background:${c}">${esc(d.badge || (days.length===1?'一日行程':'Day '+(i+1)))}</span><h4>${esc(d.title||'')}</h4>
+    ${dt?`<span class="dt">${fd(dt)}</span>`:''}${dt===today?'<span class="today noexp">今天</span>':''}</div><ul class="tl">`;
+  (d.items||[]).forEach(it=>{
+    if(it.move){ s += `<li class="move"><span class="ln"></span><span>↓ ${esc(it.move)}</span></li>`; return; }
+    n++; it._n = n;
+    s += `<li><span class="num" style="background:${MARK[it.mark]||c}">${n}</span><div class="it">
+      <div class="t1">${it.time?`<i>${esc(it.time)}</i>`:''}${esc(it.title)}</div>
+      ${it.note?`<div class="nt">${esc(it.note)}</div>`:''}
+      ${it.place?`<a class="pl noexp" href="${gmap(it.place)}" target="_blank" rel="noopener">📍 ${esc(it.placeLabel||it.place)}</a>`:''}</div></li>`;
+  });
+  s += `</ul>`;
+  if(d.stay) s += `<div class="stay">🛏️ 今晚住 ${esc(d.stay)}</div>`;
+  if(d.alt) s += `<div class="alt"><b>${esc(d.alt.title||'替代方案')}：</b>${esc(d.alt.text)}</div>`;
+  return s + `</section>`;
+}
+function mapCard(){
+  return `<section class="box mapbox"><h3>路线地图${T.map.subtitle?`<span class="s">${esc(T.map.subtitle)}</span>`:''}</h3>${renderMap()}</section>`;
+}
+function renderMap(){
+  const M = T.map, P = M.points, ids = Object.keys(P);
+  let la0=Infinity,la1=-Infinity,lo0=Infinity,lo1=-Infinity;
+  ids.filter(k=>!P[k].offmap).forEach(k=>{const p=P[k];la0=Math.min(la0,p.lat);la1=Math.max(la1,p.lat);lo0=Math.min(lo0,p.lon);lo1=Math.max(lo1,p.lon);});
+  if(M.bounds) [la0,lo0,la1,lo1] = M.bounds;
+  const k = Math.cos((la0+la1)/2*Math.PI/180), w=(lo1-lo0)*k, hg=la1-la0;
+  const W=640, pad=46, sc=Math.min((W-2*pad)/(w||1e-3), (M.maxH||560)/(hg||1e-3));
+  const H=Math.max(300, Math.round(hg*sc+2*pad)), ox=(W-w*sc)/2, oy=(H-hg*sc)/2;
+  const X=lon=>ox+(lon-lo0)*k*sc, Y=lat=>oy+(la1-lat)*sc;
+  const path = (pts,close) => pts.map((p,i)=>(i?'L':'M')+X(p[1]).toFixed(1)+' '+Y(p[0]).toFixed(1)).join('') + (close?'Z':'');
+  const uid = 'm'+Math.random().toString(36).slice(2,7);
+  let s = `<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="路线地图">
+  <defs><filter id="${uid}r"><feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="2" seed="4"/><feDisplacementMap in="SourceGraphic" scale="3"/></filter>
+  <pattern id="${uid}w" width="34" height="18" patternUnits="userSpaceOnUse"><path d="M2 10q6-6 12 0t12 0" fill="none" stroke="#fff" stroke-opacity=".45" stroke-width="1.2"/></pattern>
+  <pattern id="${uid}d" width="14" height="14" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r=".9" fill="var(--map-ink)" opacity=".25"/></pattern></defs>
+  <rect width="${W}" height="${H}" fill="${M.land?'var(--map-water)':'var(--map-land)'}"/>`;
+  if(M.land) s += `<rect width="${W}" height="${H}" fill="url(#${uid}w)"/>`;
+  (M.land||[]).forEach(p=>{ s += `<path d="${path(p,1)}" fill="var(--map-land)" stroke="var(--map-ink)" stroke-width="1.2" filter="url(#${uid}r)"/>`; });
+  s += `<rect width="${W}" height="${H}" fill="url(#${uid}d)"/>`;
+  (M.areas||[]).forEach(a=>{
+    s += `<path d="${path(a.poly,1)}" fill="var(--map-park)" stroke="var(--green)" stroke-width="1.3" stroke-dasharray="5 4" opacity=".95" filter="url(#${uid}r)"/>`;
+    if(a.name){ const c=a.labelAt||a.poly.reduce((m,p)=>[m[0]+p[0]/a.poly.length,m[1]+p[1]/a.poly.length],[0,0]);
+      s += `<text x="${X(c[1])}" y="${Y(c[0])}" fill="var(--green)" font-size="15" font-weight="700" text-anchor="middle" transform="rotate(${a.rotate||0} ${X(c[1])} ${Y(c[0])})" opacity=".85">${esc(a.name)}</text>`; }
+  });
+  (M.labels||[]).forEach(l=>{ s += `<text x="${X(l.lon)}" y="${Y(l.lat)}" fill="${l.sea?'var(--blue)':'var(--map-ink)'}" font-size="${l.size||14}" font-weight="700" text-anchor="middle" opacity=".85">${esc(l.text)}</text>`; });
+  const legend = [];
+  (M.lines||[]).forEach(L=>{
+    s += `<path d="${path(L.pts)}" fill="none" stroke="${MARK[L.color]||L.color||'var(--map-ink)'}" stroke-width="${L.width||3}" stroke-linecap="round" ${L.dash?`stroke-dasharray="${L.dash}"`:''} opacity=".85"/>`;
+    if(L.name) legend.push([MARK[L.color]||L.color||'var(--map-ink)', L.name, L.dash]);
+  });
+  // day routes
+  days.forEach((d,i)=>{
+    const c = dayColor(d,i);
+    const r = (d.route||[]).map(id=>P[id]&&Object.assign({id},P[id])).filter(Boolean);
+    if(r.length<2) return;
+    if(!d.noLegend) legend.push([c, d.mapLabel || (days.length>1?`Day ${i+1}`:'步行路线'), '7 6']);
+    for(let j=0;j<r.length-1;j++){
+      let a=r[j], b=r[j+1], ax=X(a.lon), ay=Y(a.lat), bx=X(b.lon), by=Y(b.lat);
+      if(a.offmap||b.offmap){
+        const inn=a.offmap?[bx,by]:[ax,ay], out=a.offmap?[ax,ay]:[bx,by];
+        const dx=out[0]-inn[0], dy=out[1]-inn[1], L=Math.hypot(dx,dy)||1, len=Math.min(90,L);
+        const ex=inn[0]+dx/L*len, ey=inn[1]+dy/L*len;
+        if(a.offmap){ax=ex;ay=ey}else{bx=ex;by=ey}
+        s += `<text x="${ex}" y="${ey+(dy>0?16:-8)}" font-size="12.5" fill="var(--map-ink)" text-anchor="middle" paint-order="stroke" stroke="var(--paper)" stroke-width="3">${esc(a.offmap?a.name:b.name)} 方向</text>`;
+      }
+      const mx=(ax+bx)/2+(by-ay)*.1, my=(ay+by)/2-(bx-ax)*.1;
+      s += `<path d="M${ax} ${ay}Q${mx} ${my} ${bx} ${by}" fill="none" stroke="${c}" stroke-width="3.2" stroke-linecap="round" stroke-dasharray="${(d.dashed||[]).includes(j)?'2 7':'7 6'}"/>`;
+    }
+  });
+  // plain points
+  const pinned = {};
+  days.forEach((d,i)=>(d.items||[]).forEach(it=>{ if(it.pt && P[it.pt] && !P[it.pt].offmap){ (pinned[it.pt]=pinned[it.pt]||[]).push({n:it._n, c:MARK[it.mark]||dayColor(d,i), time:it.time}); } }));
+  ids.forEach(id=>{
+    const p=P[id]; if(p.offmap) return; const x=X(p.lon), y=Y(p.lat), pins=pinned[id];
+    if(pins){
+      const f = pins[0];
+      s += `<g transform="translate(${x},${y})"><path d="M0 0C-4-8-13-12-13-22a13 13 0 0 1 26 0C13-12 4-8 0 0Z" fill="${f.c}" stroke="#fff" stroke-width="1.6"/><text y="-17" font-size="13" font-weight="700" fill="#fff" text-anchor="middle">${pins.map(q=>q.n).join('·')}</text></g>`;
+    } else {
+      s += `<circle cx="${x}" cy="${y}" r="${p.kind==='minor'?3:4.5}" fill="var(--paper)" stroke="var(--ink)" stroke-width="1.5"/>`;
+    }
+    if(p.label!==false){
+      const anc = p.anchor || (x > W*0.62 ? 'end' : 'start'), dx = anc==='end'?-16:(anc==='middle'?0:16);
+      const ty = y + (p.dy!=null ? p.dy : (pins?-14:4));
+      const t = (pins && p.time!==false && pins[0].time) ? `<tspan font-size="11.5" fill="var(--accent)" font-weight="700">${esc(pins[0].time)} </tspan>` : '';
+      s += `<text x="${x+dx}" y="${ty}" font-size="${p.big?15:13}" font-weight="${p.big?800:600}" fill="${p.big?'var(--accent)':'var(--ink)'}" text-anchor="${anc}" paint-order="stroke" stroke="var(--paper)" stroke-width="3.5" stroke-linejoin="round">${t}${esc(p.name)}</text>`;
+    }
+  });
+  // compass + scale
+  s += `<g transform="translate(${W-36},40)"><circle r="20" fill="var(--paper)" stroke="var(--map-ink)" stroke-width="1.2"/><path d="M0-14L5 2L0-2L-5 2Z" fill="var(--accent)"/><text y="14" font-size="10" text-anchor="middle" fill="var(--map-ink)">N</text></g>`;
+  const kmpx = 111.32/sc, nice=[.5,1,2,5,10,20,50,100], km = nice.find(n=>n/kmpx>55)||100, px=km/kmpx;
+  s += `<g transform="translate(18,${H-18})" stroke="var(--map-ink)" fill="var(--map-ink)"><path d="M0 -4V0H${px}V-4" fill="none" stroke-width="1.4"/><text x="${px/2}" y="-8" font-size="11" text-anchor="middle" stroke="none">${km} km</text></g>`;
+  s += `<text x="${W-14}" y="${H-12}" font-size="10.5" fill="var(--map-ink)" text-anchor="end">示意图，非实际比例</text></svg>`;
+  return s + (legend.length?`<div class="legend">${legend.map(([c,t,dash])=>`<span><i style="border-color:${c};${dash?'border-top-style:dashed':''}"></i>${esc(t)}</span>`).join('')}</div>`:'');
+}
+
+/* ---------- export to image ---------- */
+const $exp = document.getElementById('exp');
+$exp.addEventListener('click', async ()=>{
+  if(!window.htmlToImage){ alert('导出组件没有加载成功，请刷新后再试。'); return; }
+  const old = $exp.textContent; $exp.textContent = '生成中…'; $exp.disabled = true;
+  const box = document.createElement('div');
+  box.className = 'xp';
+  box.style.cssText = 'position:absolute;left:-20000px;top:0;width:1240px;background:#f5efe3';
+  box.appendChild(document.getElementById('poster').cloneNode(true));
+  document.body.appendChild(box);
+  try{
+    if(document.fonts && document.fonts.ready) await document.fonts.ready;
+    const node = box.firstChild, H = node.scrollHeight;
+    const pr = Math.max(1, Math.min(2, Math.sqrt(16e6/(1240*H))));
+    const opt = {pixelRatio:pr, backgroundColor:'#f5efe3', cacheBust:true};
+    await htmlToImage.toBlob(node, opt); // Safari needs a warm-up pass before it paints SVG/foreignObject reliably
+    const blob = await htmlToImage.toBlob(node, opt);
+    showResult(blob);
+  }catch(e){ alert('导出失败：' + (e && e.message || e)); }
+  finally{ box.remove(); $exp.textContent = old; $exp.disabled = false; }
+});
+function showResult(blob){
+  const name = (T._slug || 'trip') + '.png', url = URL.createObjectURL(blob);
+  const file = new File([blob], name, {type:'image/png'});
+  const canShare = navigator.canShare && navigator.canShare({files:[file]});
+  const ov = document.createElement('div'); ov.className = 'ov';
+  ov.innerHTML = `<div class="bar">${canShare?'<button class="btn" data-a="share" type="button">分享 / 存到相册</button>':''}
+    <a class="btn ${canShare?'ghost':''}" href="${url}" download="${name}">下载 PNG</a><button class="btn ghost" data-a="close" type="button">关闭</button></div>
+    <div class="hint">手机上也可以长按图片保存</div><img alt="${esc(T.title)}" src="${url}">`;
+  ov.addEventListener('click', async e=>{
+    const a = e.target.closest('[data-a]'); if(!a) return;
+    if(a.dataset.a==='close'){ ov.remove(); URL.revokeObjectURL(url); }
+    if(a.dataset.a==='share'){ try{ await navigator.share({files:[file], title:T.title}); }catch(err){} }
+  });
+  document.body.appendChild(ov);
+}
+})();
+</script>
+</body>
+</html>
