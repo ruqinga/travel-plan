@@ -1,0 +1,783 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex">
+<title>巴塞罗那周末 · 示例行程</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧳</text></svg>">
+<style>
+:root{
+  --bg:#f6f2ea; --paper:#fffdf8; --ink:#2b2622; --muted:#7c7268; --line:#e7dfd2;
+  --accent:#c8402f; --accent-soft:#fbe6e1; --ok:#2f8a57; --ok-soft:#e3f3e8;
+  --warn:#b26a00; --warn-soft:#fdf0d8; --info:#2d6fb0; --info-soft:#e3eef9;
+  --map-water:#d6e5ec; --map-land:#f4efe4; --map-ink:#8b7f70;
+  --shadow:0 1px 2px rgba(60,40,20,.06),0 6px 20px rgba(60,40,20,.06);
+  --mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+  --hand:"Kaiti SC","STKaiti","KaiTi","BiauKai",cursive;
+}
+@media (prefers-color-scheme:dark){
+  :root{
+    --bg:#191714; --paper:#23201c; --ink:#ece6dc; --muted:#a39888; --line:#37322b;
+    --accent:#ff7a63; --accent-soft:#3d2520; --ok:#6cc792; --ok-soft:#1f3328;
+    --warn:#f0b04a; --warn-soft:#3a2d17; --info:#7fb3e8; --info-soft:#1d2b3a;
+    --map-water:#17242b; --map-land:#24211c; --map-ink:#8f8576;
+    --shadow:0 1px 2px rgba(0,0,0,.3),0 6px 20px rgba(0,0,0,.25);
+  }
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.6 -apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","Noto Sans CJK SC",sans-serif}
+a{color:inherit}
+.wrap{max-width:760px;margin:0 auto;padding:20px 16px 60px}
+header h1{font-size:24px;line-height:1.3;margin:8px 0 4px;letter-spacing:.5px}
+.meta{color:var(--muted);font-size:13px}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin:12px 0 4px}
+.chip{display:inline-flex;align-items:center;gap:4px;font-size:12.5px;padding:3px 10px;border-radius:999px;background:var(--ok-soft);color:var(--ok);white-space:nowrap}
+.chip.pending{background:var(--accent-soft);color:var(--accent)}
+.chip.info{background:var(--info-soft);color:var(--info)}
+
+.card{background:var(--paper);border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow);padding:16px}
+.now{margin:14px 0 6px;position:relative;overflow:hidden}
+.now .label{font-size:11px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;display:flex;align-items:center;gap:6px}
+.dot{width:7px;height:7px;border-radius:50%;background:var(--accent);animation:pulse 1.6s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.25}}
+.now h2{margin:6px 0 2px;font-size:19px}
+.now .sub{color:var(--muted);font-size:12.5px}
+.count{font-family:var(--mono);font-size:30px;font-weight:700;color:var(--accent);margin:6px 0 2px;font-variant-numeric:tabular-nums;letter-spacing:1px}
+.count small{display:block;font-size:12.5px;color:var(--muted);font-weight:400;letter-spacing:0;margin-top:2px}
+.count .d{font-family:inherit}
+.todo-peek{display:flex;align-items:center;gap:8px;border-top:1px dashed var(--line);margin-top:12px;padding-top:10px;font-size:13px}
+.badge{font-size:11px;padding:1px 8px;border-radius:999px;background:var(--accent);color:#fff;white-space:nowrap}
+.todo-peek a{margin-left:auto;color:var(--accent);text-decoration:none;white-space:nowrap}
+
+nav{position:sticky;top:0;z-index:5;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);margin:0 -16px;padding:10px 16px;display:flex;gap:8px;overflow-x:auto;scrollbar-width:none}
+nav::-webkit-scrollbar{display:none}
+nav a{flex:none;text-decoration:none;font-size:13px;padding:6px 12px;border-radius:999px;background:var(--paper);border:1px solid var(--line);box-shadow:var(--shadow)}
+
+section{margin-top:28px;scroll-margin-top:60px}
+section>h3{font-size:18px;margin:0 0 4px;display:flex;align-items:center;gap:6px}
+.lead{color:var(--muted);font-size:13.5px;margin:0 0 12px}
+
+/* map */
+.map{padding:8px}
+.map svg{display:block;width:100%;height:auto;border-radius:10px}
+.map text{font-family:var(--hand)}
+.legend{display:flex;flex-wrap:wrap;gap:6px 14px;padding:8px 8px 2px;font-size:12.5px;color:var(--muted)}
+.legend i{display:inline-block;width:18px;height:4px;border-radius:2px;vertical-align:middle;margin-right:5px}
+
+/* flights */
+.flight{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:8px}
+.flight+.flight{margin-top:10px}
+.ap b{font-size:22px;font-family:var(--mono);letter-spacing:1px;display:block;line-height:1.1}
+.ap .t{font-family:var(--mono);font-size:15px;font-weight:600}
+.ap .n{font-size:11.5px;color:var(--muted)}
+.ap.r{text-align:right}
+.mid{text-align:center;font-size:11.5px;color:var(--muted);min-width:80px}
+.mid .line{height:1px;background:repeating-linear-gradient(90deg,var(--muted) 0 4px,transparent 4px 8px);margin:12px 0 10px;position:relative}
+.mid .line span{position:absolute;left:50%;top:-10px;transform:translateX(-50%);background:var(--paper);padding:0 4px;color:var(--ink);font-size:13px}
+.topbar{display:flex;align-items:center;gap:8px;font-size:13px;margin-bottom:6px}
+.topbar a.back{color:var(--muted);text-decoration:none}
+.topbar .cat{font-size:12px;padding:1px 9px;border-radius:999px;background:var(--info-soft);color:var(--info)}
+.star{margin-left:auto;font:inherit;font-size:13px;cursor:pointer;border:1px solid var(--line);background:var(--paper);color:var(--muted);border-radius:999px;padding:4px 12px}
+.star.on{color:#b27a00;border-color:#e8c46a;background:var(--warn-soft)}
+.fmeta{grid-column:1/-1;font-size:12.5px;color:var(--muted);border-top:1px dashed var(--line);padding-top:8px;display:flex;flex-wrap:wrap;gap:4px 10px}
+.tz{font-size:10.5px;color:var(--muted);font-family:var(--mono);margin-left:3px;font-weight:400}
+
+/* bookings */
+.bk{display:flex;gap:12px}
+.bk+.bk{margin-top:12px;padding-top:12px;border-top:1px dashed var(--line)}
+.bk .ic{font-size:22px;line-height:1.2}
+.bk h4{margin:0;font-size:15px}
+.bk .row{font-size:13px;color:var(--muted)}
+.bk .row a{color:var(--info);text-decoration:none}
+.tag{display:inline-block;font-size:11px;padding:0 7px;border-radius:999px;margin-left:6px;vertical-align:2px;background:var(--ok-soft);color:var(--ok);font-weight:500}
+.tag.warn{background:var(--warn-soft);color:var(--warn)}
+.tag.pending{background:var(--accent-soft);color:var(--accent)}
+.tag.info{background:var(--info-soft);color:var(--info)}
+
+/* days */
+.day{margin-top:14px;padding:0;overflow:hidden}
+.dayhead{display:flex;gap:12px;align-items:center;padding:14px 16px;cursor:pointer;user-select:none}
+.datebox{flex:none;width:54px;height:50px;border-radius:12px;color:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;line-height:1.05;font-weight:700}
+.datebox b{font-size:16px}.datebox span{font-size:10px;font-weight:500;opacity:.9}
+.dayhead h4{margin:0;font-size:16px}
+.dayhead .rs{font-size:12px;color:var(--muted)}
+.dayhead .chev{margin-left:auto;color:var(--muted);transition:transform .2s}
+.day.open .chev{transform:rotate(90deg)}
+.daytools{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:0 16px 10px;font-size:12px;color:var(--muted)}
+.daytools a{color:var(--info);text-decoration:none;white-space:nowrap;font-weight:600}
+.daybody{display:none;padding:0 16px 14px}
+.day.open .daybody{display:block}
+.tl{list-style:none;margin:0;padding:0}
+.tl li{display:grid;grid-template-columns:58px 1fr;gap:10px;padding:9px 0;border-top:1px solid var(--line)}
+.tl .tm{font-family:var(--mono);font-size:13px;font-weight:600;padding-top:1px}
+.tl .tm .tz{display:block;margin:0}
+.tl .tt{font-weight:600;font-size:14.5px}
+.tl .nt{font-size:13px;color:var(--muted);margin-top:2px}
+.tl a.pl{color:var(--info);text-decoration:none;font-size:12.5px;display:inline-block;margin-top:2px}
+.tl li.past{opacity:.5}
+.stay{margin-top:8px;font-size:13px;background:var(--bg);border-radius:10px;padding:8px 10px}
+.stay a{color:var(--info);text-decoration:none}
+
+/* todo */
+.prog{height:6px;border-radius:3px;background:var(--line);overflow:hidden;margin:4px 0 12px}
+.prog i{display:block;height:100%;background:var(--ok)}
+.tdl{list-style:none;margin:0;padding:0}
+.tdl li{display:flex;gap:10px;padding:9px 0;border-top:1px solid var(--line);font-size:14px}
+.tdl li .b{flex:none;width:18px;text-align:center}
+.tdl li.done{color:var(--muted)}
+.tdl li.done .x{text-decoration:line-through}
+.tdl .nt{display:block;font-size:12.5px;color:var(--muted)}
+.tdh{font-size:12px;color:var(--muted);margin:14px 0 2px;letter-spacing:1px}
+
+/* tips */
+.tips{display:grid;gap:10px}
+.tip{display:flex;gap:10px}
+.tip .ic{font-size:20px}
+.tip b{display:block;font-size:14px}
+.tip p{margin:2px 0 0;font-size:13.5px;color:var(--muted)}
+footer{margin-top:40px;text-align:center;font-size:12px;color:var(--muted)}
+@media (min-width:700px){ header h1{font-size:28px} .count{font-size:36px} }
+</style>
+</head>
+<body>
+<div class="wrap" id="app"></div>
+<script id="trip-data" type="application/json">{
+ "title": "巴塞罗那周末 · 示例行程",
+ "emoji": "🏖️",
+ "category": "周末短途",
+ "kicker": "SAMPLE · 示例页面，用来展示分类和追踪",
+ "dates": {
+  "start": "2026-11-14",
+  "end": "2026-11-15"
+ },
+ "people": 2,
+ "route": "马德里 → 巴塞罗那（高铁往返）",
+ "summaryLine": "1 晚 2 天 · 只带背包",
+ "tz": "Europe/Madrid",
+ "updated": "2026-10-20",
+ "status": [
+  {
+   "icon": "🚄",
+   "text": "往返高铁已出票"
+  },
+  {
+   "icon": "🏨",
+   "text": "酒店 1/1 晚"
+  },
+  {
+   "icon": "⛪",
+   "text": "圣家堂已购"
+  },
+  {
+   "icon": "🦎",
+   "text": "桂尔公园待购",
+   "ok": false
+  }
+ ],
+ "overview": "周六一早高铁到巴塞罗那，第一天圣家堂 + 哥特区 + 海边，第二天桂尔公园和 Bunkers 观景台，傍晚高铁回马德里。不涉及时差。",
+ "map": {
+  "points": {
+   "mad": {
+    "name": "马德里",
+    "offmap": true,
+    "lat": 40.0,
+    "lon": -1.0
+   },
+   "sants": {
+    "name": "Sants 火车站",
+    "lat": 41.3792,
+    "lon": 2.1402,
+    "q": "Barcelona Sants",
+    "anchor": "end"
+   },
+   "hotel": {
+    "name": "Eixample 酒店",
+    "big": true,
+    "lat": 41.3915,
+    "lon": 2.165,
+    "q": "Eixample, Barcelona",
+    "anchor": "end",
+    "dy": -10
+   },
+   "sagrada": {
+    "name": "圣家堂",
+    "lat": 41.4036,
+    "lon": 2.1744,
+    "q": "Sagrada Família",
+    "anchor": "start"
+   },
+   "gotic": {
+    "name": "哥特区",
+    "lat": 41.3833,
+    "lon": 2.1777,
+    "q": "Barri Gòtic",
+    "anchor": "end",
+    "dy": 14
+   },
+   "barceloneta": {
+    "name": "巴塞罗内塔海滩",
+    "lat": 41.3784,
+    "lon": 2.1925,
+    "q": "Barceloneta Beach",
+    "anchor": "start"
+   },
+   "guell": {
+    "name": "桂尔公园",
+    "lat": 41.4145,
+    "lon": 2.1527,
+    "q": "Park Güell",
+    "anchor": "end"
+   },
+   "bunkers": {
+    "name": "Bunkers del Carmel",
+    "lat": 41.4189,
+    "lon": 2.1617,
+    "q": "Bunkers del Carmel",
+    "anchor": "start",
+    "dy": -8
+   }
+  },
+  "bounds": [
+   41.36,
+   2.12,
+   41.43,
+   2.21
+  ],
+  "land": [
+   [
+    [
+     41.3,
+     2.08
+    ],
+    [
+     41.345,
+     2.15
+    ],
+    [
+     41.365,
+     2.175
+    ],
+    [
+     41.375,
+     2.185
+    ],
+    [
+     41.372,
+     2.192
+    ],
+    [
+     41.38,
+     2.196
+    ],
+    [
+     41.39,
+     2.2
+    ],
+    [
+     41.4,
+     2.215
+    ],
+    [
+     41.41,
+     2.228
+    ],
+    [
+     41.45,
+     2.26
+    ],
+    [
+     41.5,
+     2.26
+    ],
+    [
+     41.5,
+     2.0
+    ],
+    [
+     41.3,
+     2.0
+    ]
+   ]
+  ],
+  "labels": [
+   {
+    "text": "地 中 海",
+    "lat": 41.37,
+    "lon": 2.205
+   }
+  ]
+ },
+ "flights": [
+  {
+   "mode": "train",
+   "from": {
+    "code": "MAD",
+    "name": "马德里 Atocha",
+    "tz": "Europe/Madrid"
+   },
+   "to": {
+    "code": "BCN",
+    "name": "巴塞罗那 Sants",
+    "tz": "Europe/Madrid"
+   },
+   "depart": "2026-11-14T07:30",
+   "arrive": "2026-11-14T10:15",
+   "duration": "2h45",
+   "stops": "高铁",
+   "airline": "示例高铁",
+   "number": "AVE 0000",
+   "status": "已出票",
+   "note": "提前 30 分钟过安检"
+  },
+  {
+   "mode": "train",
+   "from": {
+    "code": "BCN",
+    "name": "巴塞罗那 Sants",
+    "tz": "Europe/Madrid"
+   },
+   "to": {
+    "code": "MAD",
+    "name": "马德里 Atocha",
+    "tz": "Europe/Madrid"
+   },
+   "depart": "2026-11-15T18:00",
+   "arrive": "2026-11-15T20:45",
+   "duration": "2h45",
+   "stops": "高铁",
+   "airline": "示例高铁",
+   "number": "AVE 0001",
+   "status": "已出票"
+  }
+ ],
+ "bookings": [
+  {
+   "icon": "🏨",
+   "title": "Eixample 区酒店（示例）",
+   "status": "已订 1 晚",
+   "time": "11/14 15:00 入住 → 11/15 12:00 退房",
+   "address": "Eixample, Barcelona",
+   "q": "Eixample, Barcelona",
+   "note": "上午到可先寄存背包"
+  },
+  {
+   "icon": "⛪",
+   "title": "圣家堂门票",
+   "status": "已购",
+   "time": "11/14（周六）11:30 时段 · 2 张",
+   "address": "C/ de Mallorca 401",
+   "q": "Sagrada Família",
+   "note": "含语音导览；入场时间严格"
+  },
+  {
+   "icon": "🦎",
+   "title": "桂尔公园时段票",
+   "status": "待购",
+   "time": "11/15（周日）建议 9:30",
+   "address": "Carrer d'Olot, Barcelona",
+   "q": "Park Güell",
+   "note": "周末常售罄，官网提前买"
+  }
+ ],
+ "days": [
+  {
+   "date": "2026-11-14",
+   "title": "高铁抵达 · 圣家堂与老城",
+   "subtitle": "圣家堂 · 哥特区 · 海边日落",
+   "mapLabel": "圣家堂 · 老城",
+   "travelmode": "transit",
+   "route": [
+    "mad",
+    "sants",
+    "hotel",
+    "sagrada",
+    "gotic",
+    "barceloneta"
+   ],
+   "stayPoint": "hotel",
+   "items": [
+    {
+     "time": "07:30",
+     "title": "马德里 Atocha 高铁出发",
+     "flight": true
+    },
+    {
+     "time": "10:15",
+     "title": "抵达 Sants，地铁到酒店寄存",
+     "place": "Barcelona Sants"
+    },
+    {
+     "time": "11:30",
+     "title": "圣家堂",
+     "tag": "已购票",
+     "note": "约 1.5 小时；上午东面受难立面光线好",
+     "place": "Sagrada Família"
+    },
+    {
+     "time": "13:30",
+     "title": "Eixample 午饭",
+     "note": "西班牙午饭 14 点左右人才多"
+    },
+    {
+     "time": "15:30",
+     "title": "哥特区 + 主教座堂",
+     "place": "Barcelona Cathedral"
+    },
+    {
+     "time": "17:30",
+     "title": "巴塞罗内塔海滩看日落",
+     "note": "11 月日落约 17:35",
+     "place": "Barceloneta Beach"
+    },
+    {
+     "time": "20:30",
+     "title": "Tapas 晚饭",
+     "tag": "需预订",
+     "place": "El Born, Barcelona"
+    }
+   ],
+   "stay": "Eixample 区酒店",
+   "stayQ": "Eixample, Barcelona"
+  },
+  {
+   "date": "2026-11-15",
+   "title": "桂尔公园 · 观景台 · 返程",
+   "subtitle": "高迪 · 俯瞰全城",
+   "mapLabel": "桂尔公园 · 返程",
+   "travelmode": "transit",
+   "route": [
+    "hotel",
+    "guell",
+    "bunkers",
+    "sants",
+    "mad"
+   ],
+   "items": [
+    {
+     "time": "09:30",
+     "title": "桂尔公园（纪念区）",
+     "tag": "待购·时段票",
+     "place": "Park Güell"
+    },
+    {
+     "time": "11:30",
+     "title": "步行到 Bunkers del Carmel",
+     "note": "上坡约 25 分钟，全城最佳视角",
+     "place": "Bunkers del Carmel"
+    },
+    {
+     "time": "13:30",
+     "title": "Gràcia 区午饭 + 闲逛",
+     "note": "周日不少小店关门",
+     "place": "Gràcia, Barcelona"
+    },
+    {
+     "time": "16:00",
+     "title": "回酒店取包，去 Sants"
+    },
+    {
+     "time": "18:00",
+     "title": "高铁回马德里",
+     "flight": true,
+     "note": "20:45 到 Atocha"
+    }
+   ]
+  }
+ ],
+ "todos": [
+  {
+   "text": "买桂尔公园 11/15 9:30 时段票",
+   "due": "尽快",
+   "urgent": true
+  },
+  {
+   "text": "订 11/14 晚 tapas 餐厅",
+   "due": "11/10 前"
+  },
+  {
+   "text": "往返高铁",
+   "done": true
+  },
+  {
+   "text": "酒店 1 晚",
+   "done": true
+  },
+  {
+   "text": "圣家堂门票",
+   "done": true
+  }
+ ],
+ "tips": [
+  {
+   "icon": "👜",
+   "title": "防扒",
+   "text": "兰布拉大道、地铁和海滩是扒手高发区：包背前面，手机别放后裤袋。"
+  },
+  {
+   "icon": "🚇",
+   "title": "交通",
+   "text": "地铁可直接刷银行卡或买 T-casual 10 次卡，两个人可以分开买。"
+  },
+  {
+   "icon": "🕘",
+   "title": "作息",
+   "text": "午饭 14 点、晚饭 21 点才是饭点；周日很多商店不开门。"
+  }
+ ],
+ "footer": "Travel Plan · ruqinga",
+ "_slug": "barcelona-weekend-2026"
+}</script>
+<script>
+(function(){
+const T = JSON.parse(document.getElementById('trip-data').textContent);
+const TZ = T.tz || 'UTC';
+const PALETTE = ['#d9534f','#e08a1e','#2f8a57','#2d6fb0','#7a4fb5','#c2477e','#14808a','#8a6d1e'];
+const modeIcon = f => ({train:'🚄',bus:'🚌',ferry:'⛴'})[f.mode] || '✈';
+const WD = ['周日','周一','周二','周三','周四','周五','周六'];
+const $app = document.getElementById('app');
+const esc = s => String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const gmap = q => 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(q);
+
+/* ---------- time zone helpers ---------- */
+function tzOffset(ts, tz){
+  const p = {}; new Intl.DateTimeFormat('en-US',{timeZone:tz,hourCycle:'h23',year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',second:'2-digit'})
+    .formatToParts(new Date(ts)).forEach(x=>p[x.type]=x.value);
+  return Date.UTC(+p.year, p.month-1, +p.day, +p.hour%24, +p.minute, +p.second) - ts;
+}
+function epoch(local, tz){ // "2026-12-29T09:05" wall time in tz -> ms
+  const [d,t='00:00'] = local.split('T'); const [Y,M,D] = d.split('-').map(Number); const [h,m] = t.split(':').map(Number);
+  const base = Date.UTC(Y,M-1,D,h,m); let ts = base;
+  for(let i=0;i<3;i++) ts = base - tzOffset(ts, tz);
+  return ts;
+}
+function tzName(ts, tz){
+  try{
+    const n = new Intl.DateTimeFormat('en-GB',{timeZone:tz,timeZoneName:'short'}).formatToParts(new Date(ts)).find(x=>x.type==='timeZoneName').value;
+    if(/^GMT[+-]?\d*$/.test(n) || n==='UTC'){ const o = tzOffset(ts,tz)/36e5; return 'UTC' + (o===0?'':(o>0?'+':'') + o); }
+    return n;
+  }catch(e){ return tz; }
+}
+const hm = s => (s.split('T')[1]||'').slice(0,5);
+function md(dateStr){ const [Y,M,D]=dateStr.split('-').map(Number); return {Y,M,D,wd:WD[new Date(Date.UTC(Y,M-1,D)).getUTCDay()]}; }
+function fmtDate(dateStr){ const x=md(dateStr); return `${x.M}/${x.D}（${x.wd}）`; }
+
+/* ---------- build event list for countdown ---------- */
+const events = [];
+(T.flights||[]).forEach(f=>{
+  events.push({ts:epoch(f.depart, f.from.tz||TZ), tz:f.from.tz||TZ, title:`${f.from.code} ${modeIcon(f)} ${f.to.code} ${f.mode&&f.mode!=='flight'?'出发':'起飞'}`,
+    sub:[f.airline, f.number, f.duration, f.note].filter(Boolean).join(' · ')});
+});
+(T.days||[]).forEach((d,di)=>{
+  (d.items||[]).forEach(it=>{
+    if(!it.time || it.countdown===false || it.flight) return;
+    const tz = it.tz || d.tz || TZ;
+    events.push({ts:epoch(d.date+'T'+it.time, tz), tz, title:it.title, sub:[fmtDate(d.date), it.note].filter(Boolean).join(' · '), day:di});
+  });
+});
+events.sort((a,b)=>a.ts-b.ts);
+
+/* ---------- render ---------- */
+let h = '';
+const people = T.people ? ` · ${T.people} 人` : '';
+const dateRange = T.dates ? `${T.dates.start.replace(/-/g,'.')}（${md(T.dates.start).wd}）— ${T.dates.end.slice(5).replace('-','.')}（${md(T.dates.end).wd}）` : '';
+h += `<div class="topbar"><a class="back" href="../">← 全部行程</a>${T.category?`<span class="cat">${esc(T.category)}</span>`:''}<button class="star" id="star" type="button"></button></div>`;
+h += `<header><div class="meta">${esc(T.kicker||'TRAVEL BOOK')}</div>
+<h1>${esc(T.emoji||'🧳')} ${esc(T.title)}</h1>
+<div class="meta">${esc(dateRange)}${esc(people)}${T.route?' · '+esc(T.route):''}</div>
+${T.summaryLine?`<div class="meta">${esc(T.summaryLine)}</div>`:''}
+<div class="chips">${(T.status||[]).map(s=>`<span class="chip ${s.ok===false?'pending':(s.ok==='info'?'info':'')}">${esc(s.icon||'')} ${esc(s.text)}</span>`).join('')}</div></header>`;
+
+const firstTodo = (T.todos||[]).find(t=>!t.done);
+h += `<div class="card now" id="now"><div class="label"><span class="dot"></span><span id="now-label">此刻关注 · NOW</span></div>
+<h2 id="now-title"></h2><div class="sub" id="now-sub"></div><div class="count" id="now-count"></div>
+${firstTodo?`<div class="todo-peek"><span class="badge">当前待办</span><span>${esc(firstTodo.text)}</span><a href="#todo">去清单 →</a></div>`:''}</div>`;
+
+const navs = [['overview','🗺️ 总览'], T.flights&&T.flights.length&&['flights', T.flights.every(f=>!f.mode||f.mode==='flight')?'✈️ 航班':'🚆 交通'], T.bookings&&T.bookings.length&&['bookings','🏨 预订'],
+  ['days','📅 每日行程'], T.todos&&T.todos.length&&['todo','✅ 待办清单'], T.tips&&T.tips.length&&['tips','💡 贴士']].filter(Boolean);
+h += `<nav>${navs.map(([id,t])=>`<a href="#${id}">${t}</a>`).join('')}</nav>`;
+
+/* overview + map */
+h += `<section id="overview"><h3>🗺️ 行程总览</h3>${T.overview?`<p class="lead">${esc(T.overview)}</p>`:''}`;
+if(T.map && T.map.points) h += `<div class="card map">${renderMap()}</div>`;
+h += `</section>`;
+
+/* flights */
+if(T.flights && T.flights.length){
+  h += `<section id="flights"><h3>✈️ 航班 / 长途交通</h3><p class="lead">时间均为出发地 / 到达地当地时间。</p><div class="card">`;
+  T.flights.forEach(f=>{
+    const tz1=f.from.tz||TZ, tz2=f.to.tz||TZ, t1=epoch(f.depart,tz1), t2=epoch(f.arrive,tz2);
+    const dd = f.depart.split('T')[0], ad = f.arrive.split('T')[0];
+    h += `<div class="flight">
+      <div class="ap"><b>${esc(f.from.code)}</b><span class="t">${hm(f.depart)}</span><span class="tz">${tzName(t1,tz1)}</span><div class="n">${esc(f.from.name||'')} · ${fmtDate(dd)}</div></div>
+      <div class="mid">${esc(f.duration||'')}<div class="line"><span>${modeIcon(f)}</span></div>${esc(f.stops||'直飞')}</div>
+      <div class="ap r"><b>${esc(f.to.code)}</b><span class="t">${hm(f.arrive)}</span><span class="tz">${tzName(t2,tz2)}</span><div class="n">${esc(f.to.name||'')}${ad!==dd?' · '+fmtDate(ad):''}</div></div>
+      <div class="fmeta"><span>${esc([f.airline,f.number].filter(Boolean).join(' '))}</span>${f.status?`<span class="tag ${f.status.includes('待')?'pending':''}">${esc(f.status)}</span>`:''}${f.note?`<span>${esc(f.note)}</span>`:''}</div>
+    </div>`;
+  });
+  h += `</div></section>`;
+}
+
+/* bookings */
+if(T.bookings && T.bookings.length){
+  h += `<section id="bookings"><h3>🏨 已确认的预订</h3><p class="lead">租车、住宿、门票。点地址直接打开 Google 地图。</p><div class="card">`;
+  T.bookings.forEach(b=>{
+    h += `<div class="bk"><div class="ic">${esc(b.icon||'📌')}</div><div><h4>${esc(b.title)}${b.status?`<span class="tag ${tagKind(b.status)}">${esc(b.status)}</span>`:''}</h4>
+      ${b.time?`<div class="row">🕒 ${esc(b.time)}</div>`:''}
+      ${b.address?`<div class="row">📍 <a href="${gmap(b.q||b.address)}" target="_blank" rel="noopener">${esc(b.address)}</a></div>`:''}
+      ${b.phone?`<div class="row">📞 <a href="tel:${esc(b.phone.replace(/[^+\d]/g,''))}">${esc(b.phone)}</a></div>`:''}
+      ${b.note?`<div class="row">${esc(b.note)}</div>`:''}</div></div>`;
+  });
+  h += `</div></section>`;
+}
+
+/* days */
+h += `<section id="days"><h3>📅 每日行程</h3><p class="lead">点日期展开/收起。地点可点击直接唤起 Google 地图；“全天路线”一键打开多点导航。</p>`;
+(T.days||[]).forEach((d,i)=>{
+  const c = d.color || PALETTE[i%PALETTE.length]; const x = md(d.date); const tz = d.tz||TZ;
+  const pts = (d.route||[]).map(id=>T.map&&T.map.points[id]).filter(p=>p&&!p.offmap&&(p.q||p.name));
+  let dir = '';
+  if(pts.length>=2){
+    const q = p=>encodeURIComponent(p.q||p.name);
+    dir = `https://www.google.com/maps/dir/?api=1&origin=${q(pts[0])}&destination=${q(pts[pts.length-1])}` +
+      (pts.length>2?`&waypoints=${pts.slice(1,-1).map(q).join('%7C')}`:'') + `&travelmode=${d.travelmode||'driving'}`;
+  }
+  h += `<div class="card day" id="day${i+1}" data-date="${d.date}"><div class="dayhead">
+    <div class="datebox" style="background:${c}"><b>${x.M}.${x.D}</b><span>${x.wd}</span></div>
+    <div><h4>${esc(d.title)}</h4><div class="rs">${esc(d.subtitle||'')}</div></div><span class="chev">›</span></div>
+    <div class="daytools"><span>时间为当地时间 · ${esc(tzName(epoch(d.date+'T12:00',tz),tz))}</span>${dir?`<a href="${dir}" target="_blank" rel="noopener">🧭 全天路线 ↗</a>`:''}</div>
+    <div class="daybody"><ul class="tl">`;
+  (d.items||[]).forEach(it=>{
+    const itz = it.tz||tz;
+    const ts = it.time ? epoch(d.date+'T'+it.time, itz) : null;
+    h += `<li data-ts="${ts||''}"><div class="tm">${esc(it.time||'')}${it.time?`<span class="tz">${tzName(ts,itz)}</span>`:''}</div><div>
+      <div class="tt">${esc(it.title)}${it.tag?`<span class="tag ${tagKind(it.tag)}">${esc(it.tag)}</span>`:''}</div>
+      ${it.note?`<div class="nt">${esc(it.note)}</div>`:''}
+      ${it.place?`<a class="pl" href="${gmap(it.place)}" target="_blank" rel="noopener">📍 ${esc(it.placeLabel||it.place)}</a>`:''}
+    </div></li>`;
+  });
+  h += `</ul>${d.stay?`<div class="stay">🛏️ 今晚住：${d.stayQ?`<a href="${gmap(d.stayQ)}" target="_blank" rel="noopener">${esc(d.stay)}</a>`:esc(d.stay)}</div>`:''}</div></div>`;
+});
+h += `</section>`;
+
+/* todos */
+if(T.todos && T.todos.length){
+  const done = T.todos.filter(t=>t.done).length;
+  h += `<section id="todo"><h3>✅ 待办清单</h3><p class="lead">由行程负责人统一更新——办完一项告诉 Claude，页面会同步给所有人。${T.updated?' 最后更新：'+esc(T.updated):''}</p>
+  <div class="card"><div style="display:flex;justify-content:space-between;font-size:13px"><span>进度</span><span>${done} / ${T.todos.length}</span></div>
+  <div class="prog"><i style="width:${Math.round(done/T.todos.length*100)}%"></i></div>`;
+  const todo = T.todos.filter(t=>!t.done), dn = T.todos.filter(t=>t.done);
+  const li = t => `<li class="${t.done?'done':''}"><span class="b">${t.done?'✅':(t.urgent?'🔴':'⬜')}</span><span><span class="x">${esc(t.text)}</span>${t.due?` <span class="tag ${t.done?'':'warn'}">${esc(t.due)}</span>`:''}${t.note?`<span class="nt">${esc(t.note)}</span>`:''}</span></li>`;
+  if(todo.length) h += `<div class="tdh">待完成</div><ul class="tdl">${todo.map(li).join('')}</ul>`;
+  if(dn.length) h += `<div class="tdh">已搞定</div><ul class="tdl">${dn.map(li).join('')}</ul>`;
+  h += `</div></section>`;
+}
+
+/* tips */
+if(T.tips && T.tips.length){
+  h += `<section id="tips"><h3>💡 实用贴士</h3><div class="card tips">${T.tips.map(t=>`<div class="tip"><div class="ic">${esc(t.icon||'•')}</div><div><b>${esc(t.title)}</b><p>${esc(t.text)}</p></div></div>`).join('')}</div></section>`;
+}
+h += `<footer>${esc(T.footer||'Travel Book')} · ${esc(T.title)}</footer>`;
+$app.innerHTML = h;
+
+function tagKind(s){ s=String(s); if(/待|未|需|必须|尽快/.test(s)) return /需|提前/.test(s)?'warn':'pending'; if(/已|✓|确认/.test(s)) return ''; return 'info'; }
+
+/* ---------- map ---------- */
+function renderMap(){
+  const M = T.map, P = M.points, ids = Object.keys(P);
+  const inPts = ids.filter(k=>!P[k].offmap).map(k=>P[k]);
+  let la0=Infinity,la1=-Infinity,lo0=Infinity,lo1=-Infinity;
+  inPts.forEach(p=>{la0=Math.min(la0,p.lat);la1=Math.max(la1,p.lat);lo0=Math.min(lo0,p.lon);lo1=Math.max(lo1,p.lon);});
+  if(M.bounds){[la0,lo0,la1,lo1]=M.bounds;}
+  const k = Math.cos((la0+la1)/2*Math.PI/180);
+  let w = (lo1-lo0)*k, hgt = (la1-la0);
+  const W = 640, pad = 60;
+  const sc = Math.min((W-2*pad)/(w||1e-3), 420/(hgt||1e-3));
+  const H = Math.max(260, Math.round(hgt*sc + 2*pad));
+  const ox = (W - w*sc)/2, oy = (H - hgt*sc)/2;
+  const X = lon => ox + (lon-lo0)*k*sc, Y = lat => oy + (la1-lat)*sc;
+  let s = `<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="行程地图">
+  <defs><filter id="rough"><feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="2" seed="3"/><feDisplacementMap in="SourceGraphic" scale="3.5"/></filter>
+  <pattern id="grid" width="24" height="24" patternUnits="userSpaceOnUse"><path d="M24 0H0V24" fill="none" stroke="var(--line)" stroke-width=".6"/></pattern></defs>
+  <rect width="${W}" height="${H}" fill="${(M.coast||M.land)?'var(--map-water)':'var(--map-land)'}"/>`;
+  (M.land||[]).forEach(poly=>{ s += `<path d="${poly.map((p,i)=>(i?'L':'M')+X(p[1]).toFixed(1)+' '+Y(p[0]).toFixed(1)).join('')}Z" fill="var(--map-land)" stroke="var(--map-ink)" stroke-width="1.3" filter="url(#rough)"/>`; });
+  (M.coast||[]).forEach(line=>{ s += `<path d="${line.map((p,i)=>(i?'L':'M')+X(p[1]).toFixed(1)+' '+Y(p[0]).toFixed(1)).join('')}" fill="none" stroke="var(--map-ink)" stroke-width="1.3" stroke-linejoin="round" filter="url(#rough)"/>`; });
+  s += `<rect width="${W}" height="${H}" fill="url(#grid)" opacity=".5"/>`;
+  (M.labels||[]).forEach(l=>{ s += `<text x="${X(l.lon)}" y="${Y(l.lat)}" fill="var(--map-ink)" font-size="15" font-style="italic" text-anchor="middle" opacity=".8" letter-spacing="3">${esc(l.text)}</text>`; });
+  // day routes
+  const legend = []; const offLabeled = new Set();
+  (T.days||[]).forEach((d,i)=>{
+    const c = d.color || PALETTE[i%PALETTE.length]; const r = (d.route||[]).map(id=>Object.assign({id},P[id])).filter(p=>p.lat!=null);
+    if(r.length<2) return; legend.push([c, `${md(d.date).M}/${md(d.date).D} ${d.mapLabel||d.title}`]);
+    const jitter = (i%2?1:-1)*1.5;
+    for(let j=0;j<r.length-1;j++){
+      let a=r[j], b=r[j+1]; let ax=X(a.lon)+jitter, ay=Y(a.lat)+jitter, bx=X(b.lon)+jitter, by=Y(b.lat)+jitter;
+      const off = a.offmap||b.offmap; const fly = off || (d.flightSegs||[]).includes(j);
+      if(off){ // clip to short arrow from edge toward in-map point
+        const inn = a.offmap? [bx,by]:[ax,ay], out = a.offmap? [ax,ay]:[bx,by];
+        const dx=out[0]-inn[0], dy=out[1]-inn[1], L=Math.hypot(dx,dy)||1, len=Math.min(110, L);
+        const ex=inn[0]+dx/L*len, ey=inn[1]+dy/L*len;
+        if(a.offmap){ax=ex;ay=ey}else{bx=ex;by=ey}
+        const lx=ex, ly=ey;
+        const offId = a.offmap? a.id : b.id, offName = a.offmap? a.name : b.name;
+        if(!offLabeled.has(offId)){ offLabeled.add(offId); s += `<text x="${lx}" y="${ly-8}" fill="var(--map-ink)" font-size="13" text-anchor="${dx<0?'start':'end'}" paint-order="stroke" stroke="var(--paper)" stroke-width="3">${esc(offName)} 方向 ↗</text>`; }
+      }
+      const mx=(ax+bx)/2+(by-ay)*.12, my=(ay+by)/2-(bx-ax)*.12;
+      s += `<path d="M${ax} ${ay}Q${mx} ${my} ${bx} ${by}" fill="none" stroke="${c}" stroke-width="${fly?2:3}" stroke-linecap="round" ${fly?'stroke-dasharray="6 6"':''} opacity=".9" filter="url(#rough)"/>`;
+    }
+  });
+  // points
+  const stays = new Set((T.days||[]).map(d=>d.stayPoint).filter(Boolean));
+  ids.forEach(id=>{
+    const p=P[id]; if(p.offmap) return; const x=X(p.lon), y=Y(p.lat);
+    const isStay = stays.has(id);
+    s += isStay ? `<g transform="translate(${x},${y})"><rect x="-9" y="-9" width="18" height="18" rx="4" fill="var(--paper)" stroke="var(--ink)" stroke-width="1.4"/><text y="4.5" font-size="12" text-anchor="middle" fill="var(--ink)" font-weight="700">住</text></g>`
+      : `<circle cx="${x}" cy="${y}" r="${p.kind==='minor'?3:4.5}" fill="var(--paper)" stroke="var(--ink)" stroke-width="1.6"/>`;
+    if(p.label!==false){
+      const anc = p.anchor || (x > W*0.62 ? 'end' : 'start'); const dx = anc==='end'?-11:(anc==='middle'?0:11);
+      s += `<text x="${x+dx}" y="${y+(p.dy||4)}" font-size="${p.big?15:13}" fill="var(--ink)" text-anchor="${anc}" paint-order="stroke" stroke="var(--paper)" stroke-width="3" stroke-linejoin="round">${esc(p.name)}</text>`;
+    }
+  });
+  // compass + scale
+  s += `<g transform="translate(28,34)" fill="var(--map-ink)" stroke="var(--map-ink)"><path d="M0 18V-8" stroke-width="1.5"/><path d="M-5 -2L0 -12L5 -2Z" stroke="none"/><text y="-16" font-size="12" text-anchor="middle" stroke="none">北</text></g>`;
+  const kmPerPx = 111.32/sc; const nice=[1,2,5,10,20,50,100,200,500,1000]; const km = nice.find(n=>n/kmPerPx>60)||1000; const px = km/kmPerPx;
+  s += `<g transform="translate(${W-24-px},${H-20})" stroke="var(--map-ink)" fill="var(--map-ink)"><path d="M0 -4V0H${px}V-4" fill="none" stroke-width="1.4"/><text x="${px/2}" y="-8" font-size="11" text-anchor="middle" stroke="none">${km} km</text></g>`;
+  s += `</svg>`;
+  return s + `<div class="legend">${legend.map(([c,t])=>`<span><i style="background:${c}"></i>${esc(t)}</span>`).join('')}${stays.size?'<span><b style="border:1.3px solid var(--ink);border-radius:3px;padding:0 2px;font-size:10px;color:var(--ink)">住</b> 住宿</span>':''}</div>`;
+}
+
+/* ---------- interactions ---------- */
+document.querySelectorAll('.dayhead').forEach(el=>el.addEventListener('click',()=>el.parentElement.classList.toggle('open')));
+// open today's day (or first day before trip)
+const todayStr = (()=>{ const p={}; new Intl.DateTimeFormat('en-CA',{timeZone:TZ,year:'numeric',month:'2-digit',day:'2-digit'}).formatToParts(new Date()).forEach(x=>p[x.type]=x.value); return `${p.year}-${p.month}-${p.day}`; })();
+const dayEls=[...document.querySelectorAll('.day')];
+const cur = dayEls.find(e=>e.dataset.date===todayStr);
+if(cur) cur.classList.add('open'); else if(dayEls[0] && (!T.dates || todayStr < T.dates.start)) dayEls[0].classList.add('open');
+else dayEls.forEach(e=>e.classList.add('open'));
+
+/* ---------- countdown ---------- */
+const $t=document.getElementById('now-title'), $s=document.getElementById('now-sub'), $c=document.getElementById('now-count'), $l=document.getElementById('now-label');
+function tick(){
+  const now = Date.now();
+  document.querySelectorAll('.tl li[data-ts]').forEach(li=>{ const ts=+li.dataset.ts; if(ts) li.classList.toggle('past', ts < now - 3600e3); });
+  const e = events.find(e=>e.ts > now);
+  if(!e){ $l.textContent='旅程结束'; $t.textContent=T.endMessage||'平安到家，旅途愉快 🎉'; $s.textContent=''; $c.textContent=''; return; }
+  let d = Math.floor((e.ts-now)/1000); const D=Math.floor(d/86400); d%=86400;
+  const p = n=>String(n).padStart(2,'0');
+  $t.textContent = e.title; $s.textContent = e.sub || '';
+  $c.innerHTML = `${D?`<span class="d">${D}天</span> `:''}${p(Math.floor(d/3600))}:${p(Math.floor(d%3600/60))}:${p(d%60)}<small>后 · 当地 ${hm(new Date(e.ts+tzOffset(e.ts,e.tz)).toISOString().replace('Z',''))} ${tzName(e.ts,e.tz)}</small>`;
+}
+tick(); setInterval(tick,1000);
+
+/* ---------- track toggle (shared with home page, per browser) ---------- */
+const KEY='travelplan.tracked', $star=document.getElementById('star');
+function readTrack(){ try{ return JSON.parse(localStorage.getItem(KEY)||'{}'); }catch(e){ return {}; } }
+function isTracked(){ const m=readTrack(); return T._slug in m ? !!m[T._slug] : !!T.track; }
+function paintStar(){ const on=isTracked(); $star.classList.toggle('on',on); $star.textContent = on?'★ 追踪中':'☆ 追踪'; }
+$star.addEventListener('click',()=>{ const m=readTrack(); m[T._slug]=!isTracked(); try{ localStorage.setItem(KEY,JSON.stringify(m)); }catch(e){} paintStar(); });
+paintStar();
+})();
+</script>
+</body>
+</html>

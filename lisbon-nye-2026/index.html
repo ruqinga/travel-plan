@@ -75,7 +75,12 @@ section>h3{font-size:18px;margin:0 0 4px;display:flex;align-items:center;gap:6px
 .ap.r{text-align:right}
 .mid{text-align:center;font-size:11.5px;color:var(--muted);min-width:80px}
 .mid .line{height:1px;background:repeating-linear-gradient(90deg,var(--muted) 0 4px,transparent 4px 8px);margin:12px 0 10px;position:relative}
-.mid .line:after{content:"✈";position:absolute;left:50%;top:-10px;transform:translateX(-50%);background:var(--paper);padding:0 4px;color:var(--ink);font-size:13px}
+.mid .line span{position:absolute;left:50%;top:-10px;transform:translateX(-50%);background:var(--paper);padding:0 4px;color:var(--ink);font-size:13px}
+.topbar{display:flex;align-items:center;gap:8px;font-size:13px;margin-bottom:6px}
+.topbar a.back{color:var(--muted);text-decoration:none}
+.topbar .cat{font-size:12px;padding:1px 9px;border-radius:999px;background:var(--info-soft);color:var(--info)}
+.star{margin-left:auto;font:inherit;font-size:13px;cursor:pointer;border:1px solid var(--line);background:var(--paper);color:var(--muted);border-radius:999px;padding:4px 12px}
+.star.on{color:#b27a00;border-color:#e8c46a;background:var(--warn-soft)}
 .fmeta{grid-column:1/-1;font-size:12.5px;color:var(--muted);border-top:1px dashed var(--line);padding-top:8px;display:flex;flex-wrap:wrap;gap:4px 10px}
 .tz{font-size:10.5px;color:var(--muted);font-family:var(--mono);margin-left:3px;font-weight:400}
 
@@ -141,6 +146,8 @@ footer{margin-top:40px;text-align:center;font-size:12px;color:var(--muted)}
 <script id="trip-data" type="application/json">{
  "title": "里斯本跨年 · 示例行程",
  "emoji": "🇵🇹",
+ "category": "假期长途",
+ "track": true,
  "kicker": "SAMPLE · 示例页面，用来展示模板效果",
  "dates": {
   "start": "2026-12-29",
@@ -897,13 +904,15 @@ footer{margin-top:40px;text-align:center;font-size:12px;color:var(--muted)}
    "text": "大部分地方能刷卡；小费不是必须，满意可留 5–10%。"
   }
  ],
- "footer": "Travel Plan · ruqinga"
+ "footer": "Travel Plan · ruqinga",
+ "_slug": "lisbon-nye-2026"
 }</script>
 <script>
 (function(){
 const T = JSON.parse(document.getElementById('trip-data').textContent);
 const TZ = T.tz || 'UTC';
 const PALETTE = ['#d9534f','#e08a1e','#2f8a57','#2d6fb0','#7a4fb5','#c2477e','#14808a','#8a6d1e'];
+const modeIcon = f => ({train:'🚄',bus:'🚌',ferry:'⛴'})[f.mode] || '✈';
 const WD = ['周日','周一','周二','周三','周四','周五','周六'];
 const $app = document.getElementById('app');
 const esc = s => String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -935,7 +944,7 @@ function fmtDate(dateStr){ const x=md(dateStr); return `${x.M}/${x.D}（${x.wd}�
 /* ---------- build event list for countdown ---------- */
 const events = [];
 (T.flights||[]).forEach(f=>{
-  events.push({ts:epoch(f.depart, f.from.tz||TZ), tz:f.from.tz||TZ, title:`${f.from.code} ✈ ${f.to.code} 起飞`,
+  events.push({ts:epoch(f.depart, f.from.tz||TZ), tz:f.from.tz||TZ, title:`${f.from.code} ${modeIcon(f)} ${f.to.code} ${f.mode&&f.mode!=='flight'?'出发':'起飞'}`,
     sub:[f.airline, f.number, f.duration, f.note].filter(Boolean).join(' · ')});
 });
 (T.days||[]).forEach((d,di)=>{
@@ -951,6 +960,7 @@ events.sort((a,b)=>a.ts-b.ts);
 let h = '';
 const people = T.people ? ` · ${T.people} 人` : '';
 const dateRange = T.dates ? `${T.dates.start.replace(/-/g,'.')}（${md(T.dates.start).wd}）— ${T.dates.end.slice(5).replace('-','.')}（${md(T.dates.end).wd}）` : '';
+h += `<div class="topbar"><a class="back" href="../">← 全部行程</a>${T.category?`<span class="cat">${esc(T.category)}</span>`:''}<button class="star" id="star" type="button"></button></div>`;
 h += `<header><div class="meta">${esc(T.kicker||'TRAVEL BOOK')}</div>
 <h1>${esc(T.emoji||'🧳')} ${esc(T.title)}</h1>
 <div class="meta">${esc(dateRange)}${esc(people)}${T.route?' · '+esc(T.route):''}</div>
@@ -962,7 +972,7 @@ h += `<div class="card now" id="now"><div class="label"><span class="dot"></span
 <h2 id="now-title"></h2><div class="sub" id="now-sub"></div><div class="count" id="now-count"></div>
 ${firstTodo?`<div class="todo-peek"><span class="badge">当前待办</span><span>${esc(firstTodo.text)}</span><a href="#todo">去清单 →</a></div>`:''}</div>`;
 
-const navs = [['overview','🗺️ 总览'], T.flights&&T.flights.length&&['flights','✈️ 航班'], T.bookings&&T.bookings.length&&['bookings','🏨 预订'],
+const navs = [['overview','🗺️ 总览'], T.flights&&T.flights.length&&['flights', T.flights.every(f=>!f.mode||f.mode==='flight')?'✈️ 航班':'🚆 交通'], T.bookings&&T.bookings.length&&['bookings','🏨 预订'],
   ['days','📅 每日行程'], T.todos&&T.todos.length&&['todo','✅ 待办清单'], T.tips&&T.tips.length&&['tips','💡 贴士']].filter(Boolean);
 h += `<nav>${navs.map(([id,t])=>`<a href="#${id}">${t}</a>`).join('')}</nav>`;
 
@@ -979,7 +989,7 @@ if(T.flights && T.flights.length){
     const dd = f.depart.split('T')[0], ad = f.arrive.split('T')[0];
     h += `<div class="flight">
       <div class="ap"><b>${esc(f.from.code)}</b><span class="t">${hm(f.depart)}</span><span class="tz">${tzName(t1,tz1)}</span><div class="n">${esc(f.from.name||'')} · ${fmtDate(dd)}</div></div>
-      <div class="mid">${esc(f.duration||'')}<div class="line"></div>${esc(f.stops||'直飞')}</div>
+      <div class="mid">${esc(f.duration||'')}<div class="line"><span>${modeIcon(f)}</span></div>${esc(f.stops||'直飞')}</div>
       <div class="ap r"><b>${esc(f.to.code)}</b><span class="t">${hm(f.arrive)}</span><span class="tz">${tzName(t2,tz2)}</span><div class="n">${esc(f.to.name||'')}${ad!==dd?' · '+fmtDate(ad):''}</div></div>
       <div class="fmeta"><span>${esc([f.airline,f.number].filter(Boolean).join(' '))}</span>${f.status?`<span class="tag ${f.status.includes('待')?'pending':''}">${esc(f.status)}</span>`:''}${f.note?`<span>${esc(f.note)}</span>`:''}</div>
     </div>`;
@@ -1089,7 +1099,7 @@ function renderMap(){
         if(a.offmap){ax=ex;ay=ey}else{bx=ex;by=ey}
         const lx=ex, ly=ey;
         const offId = a.offmap? a.id : b.id, offName = a.offmap? a.name : b.name;
-        if(!offLabeled.has(offId)){ offLabeled.add(offId); s += `<text x="${lx}" y="${ly-8}" fill="var(--map-ink)" font-size="13" text-anchor="${dx<0?'start':'end'}" paint-order="stroke" stroke="var(--paper)" stroke-width="3">✈ ${esc(offName)} 方向</text>`; }
+        if(!offLabeled.has(offId)){ offLabeled.add(offId); s += `<text x="${lx}" y="${ly-8}" fill="var(--map-ink)" font-size="13" text-anchor="${dx<0?'start':'end'}" paint-order="stroke" stroke="var(--paper)" stroke-width="3">${esc(offName)} 方向 ↗</text>`; }
       }
       const mx=(ax+bx)/2+(by-ay)*.12, my=(ay+by)/2-(bx-ax)*.12;
       s += `<path d="M${ax} ${ay}Q${mx} ${my} ${bx} ${by}" fill="none" stroke="${c}" stroke-width="${fly?2:3}" stroke-linecap="round" ${fly?'stroke-dasharray="6 6"':''} opacity=".9" filter="url(#rough)"/>`;
@@ -1137,6 +1147,14 @@ function tick(){
   $c.innerHTML = `${D?`<span class="d">${D}天</span> `:''}${p(Math.floor(d/3600))}:${p(Math.floor(d%3600/60))}:${p(d%60)}<small>后 · 当地 ${hm(new Date(e.ts+tzOffset(e.ts,e.tz)).toISOString().replace('Z',''))} ${tzName(e.ts,e.tz)}</small>`;
 }
 tick(); setInterval(tick,1000);
+
+/* ---------- track toggle (shared with home page, per browser) ---------- */
+const KEY='travelplan.tracked', $star=document.getElementById('star');
+function readTrack(){ try{ return JSON.parse(localStorage.getItem(KEY)||'{}'); }catch(e){ return {}; } }
+function isTracked(){ const m=readTrack(); return T._slug in m ? !!m[T._slug] : !!T.track; }
+function paintStar(){ const on=isTracked(); $star.classList.toggle('on',on); $star.textContent = on?'★ 追踪中':'☆ 追踪'; }
+$star.addEventListener('click',()=>{ const m=readTrack(); m[T._slug]=!isTracked(); try{ localStorage.setItem(KEY,JSON.stringify(m)); }catch(e){} paintStar(); });
+paintStar();
 })();
 </script>
 </body>

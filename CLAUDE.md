@@ -1,6 +1,7 @@
 # Travel Plan · 旅行手册仓库
 
 每个行程一个文件夹：`<slug>/trip.json`（唯一需要编辑的文件）→ `python3 build.py` 生成 `<slug>/index.html` 和首页 `index.html`。
+首页是行程面板：按 `category` 分类筛选；按日期自动分组为 进行中 / 即将出发 / 已结束；☆ 追踪的行程置顶并显示实时倒计时、待办进度。
 GitHub Pages 从 `main` 分支根目录发布：`https://ruqinga.github.io/travel-plan/<slug>/`。
 
 ## 工作流程（每次新行程 / 更新）
@@ -10,6 +11,7 @@ GitHub Pages 从 `main` 分支根目录发布：`https://ruqinga.github.io/trave
 4. `python3 build.py <slug>`；用 Playwright（`/opt/pw-browsers/chromium-*`，手机 390×844 + 深色模式）截图检查，无 console 报错。
 5. `git add -A && git commit && git push origin main`；约 1 分钟后上线。把链接发给用户。
 6. 之后用户说"XX 办完了 / 改一下 XX"，只改 trip.json 对应字段 → build → push，链接不变。
+7. 用户说"追踪/不追踪 XX"或"把 XX 归到 YY 类"：改 `track` / `category` → build → push。新行程默认 `track: true`；行程结束后可改回 false。
 
 ## 内容原则
 - **以已出票的航班时间为锚**排行程，时间对不上就整体重排，别硬塞。
@@ -24,6 +26,8 @@ GitHub Pages 从 `main` 分支根目录发布：`https://ruqinga.github.io/trave
 ```jsonc
 {
   "title": "德州劳工节牛仔之旅", "emoji": "🤠", "kicker": "可选，标题上方小字",
+  "category": "假期长途",               // 首页分类筛选用；沿用已有分类名（先看其他 trip.json 用了哪些），别随手造近义新分类
+  "track": true,                       // 默认追踪（置顶+倒计时）。每个浏览器里点 ☆ 可覆盖，保存在 localStorage
   "dates": {"start": "2026-09-04", "end": "2026-09-08"}, "people": 4,
   "route": "达拉斯 → 奥斯汀", "summaryLine": "可选一行补充",
   "tz": "America/Chicago",            // 默认时区（IANA）
@@ -38,7 +42,7 @@ GitHub Pages 从 `main` 分支根目录发布：`https://ruqinga.github.io/trave
     "coast": [[[lat, lon], ...]],                   // 可选，只画线（州界/海岸）
     "labels": [{"text": "大 西 洋", "lat": 0, "lon": 0}]
   },
-  "flights": [{"from": {"code": "MAD", "name": "马德里 T4", "tz": "Europe/Madrid"}, "to": {...},
+  "flights": [{"mode": "flight|train|bus|ferry", "from": {"code": "MAD", "name": "马德里 T4", "tz": "Europe/Madrid"}, "to": {...},
                "depart": "2026-12-29T09:05", "arrive": "2026-12-29T09:20",   // 各自当地时间
                "duration": "1h15", "stops": "直飞", "airline": "", "number": "", "status": "已出票", "note": ""}],
   "bookings": [{"icon": "🏨", "title": "", "status": "已订", "time": "", "address": "", "q": "", "phone": "", "note": ""}],

@@ -1,0 +1,385 @@
+{
+  "title": "巴塞罗那周末 · 示例行程",
+  "emoji": "🏖️",
+  "category": "周末短途",
+  "kicker": "SAMPLE · 示例页面，用来展示分类和追踪",
+  "dates": {
+    "start": "2026-11-14",
+    "end": "2026-11-15"
+  },
+  "people": 2,
+  "route": "马德里 → 巴塞罗那（高铁往返）",
+  "summaryLine": "1 晚 2 天 · 只带背包",
+  "tz": "Europe/Madrid",
+  "updated": "2026-10-20",
+  "status": [
+    {
+      "icon": "🚄",
+      "text": "往返高铁已出票"
+    },
+    {
+      "icon": "🏨",
+      "text": "酒店 1/1 晚"
+    },
+    {
+      "icon": "⛪",
+      "text": "圣家堂已购"
+    },
+    {
+      "icon": "🦎",
+      "text": "桂尔公园待购",
+      "ok": false
+    }
+  ],
+  "overview": "周六一早高铁到巴塞罗那，第一天圣家堂 + 哥特区 + 海边，第二天桂尔公园和 Bunkers 观景台，傍晚高铁回马德里。不涉及时差。",
+  "map": {
+    "points": {
+      "mad": {
+        "name": "马德里",
+        "offmap": true,
+        "lat": 40.0,
+        "lon": -1.0
+      },
+      "sants": {
+        "name": "Sants 火车站",
+        "lat": 41.3792,
+        "lon": 2.1402,
+        "q": "Barcelona Sants",
+        "anchor": "end"
+      },
+      "hotel": {
+        "name": "Eixample 酒店",
+        "big": true,
+        "lat": 41.3915,
+        "lon": 2.165,
+        "q": "Eixample, Barcelona",
+        "anchor": "end",
+        "dy": -10
+      },
+      "sagrada": {
+        "name": "圣家堂",
+        "lat": 41.4036,
+        "lon": 2.1744,
+        "q": "Sagrada Família",
+        "anchor": "start"
+      },
+      "gotic": {
+        "name": "哥特区",
+        "lat": 41.3833,
+        "lon": 2.1777,
+        "q": "Barri Gòtic",
+        "anchor": "end",
+        "dy": 14
+      },
+      "barceloneta": {
+        "name": "巴塞罗内塔海滩",
+        "lat": 41.3784,
+        "lon": 2.1925,
+        "q": "Barceloneta Beach",
+        "anchor": "start"
+      },
+      "guell": {
+        "name": "桂尔公园",
+        "lat": 41.4145,
+        "lon": 2.1527,
+        "q": "Park Güell",
+        "anchor": "end"
+      },
+      "bunkers": {
+        "name": "Bunkers del Carmel",
+        "lat": 41.4189,
+        "lon": 2.1617,
+        "q": "Bunkers del Carmel",
+        "anchor": "start",
+        "dy": -8
+      }
+    },
+    "bounds": [
+      41.36,
+      2.12,
+      41.43,
+      2.21
+    ],
+    "land": [
+      [
+        [
+          41.3,
+          2.08
+        ],
+        [
+          41.345,
+          2.15
+        ],
+        [
+          41.365,
+          2.175
+        ],
+        [
+          41.375,
+          2.185
+        ],
+        [
+          41.372,
+          2.192
+        ],
+        [
+          41.38,
+          2.196
+        ],
+        [
+          41.39,
+          2.2
+        ],
+        [
+          41.4,
+          2.215
+        ],
+        [
+          41.41,
+          2.228
+        ],
+        [
+          41.45,
+          2.26
+        ],
+        [
+          41.5,
+          2.26
+        ],
+        [
+          41.5,
+          2.0
+        ],
+        [
+          41.3,
+          2.0
+        ]
+      ]
+    ],
+    "labels": [
+      {
+        "text": "地 中 海",
+        "lat": 41.37,
+        "lon": 2.205
+      }
+    ]
+  },
+  "flights": [
+    {
+      "mode": "train",
+      "from": {
+        "code": "MAD",
+        "name": "马德里 Atocha",
+        "tz": "Europe/Madrid"
+      },
+      "to": {
+        "code": "BCN",
+        "name": "巴塞罗那 Sants",
+        "tz": "Europe/Madrid"
+      },
+      "depart": "2026-11-14T07:30",
+      "arrive": "2026-11-14T10:15",
+      "duration": "2h45",
+      "stops": "高铁",
+      "airline": "示例高铁",
+      "number": "AVE 0000",
+      "status": "已出票",
+      "note": "提前 30 分钟过安检"
+    },
+    {
+      "mode": "train",
+      "from": {
+        "code": "BCN",
+        "name": "巴塞罗那 Sants",
+        "tz": "Europe/Madrid"
+      },
+      "to": {
+        "code": "MAD",
+        "name": "马德里 Atocha",
+        "tz": "Europe/Madrid"
+      },
+      "depart": "2026-11-15T18:00",
+      "arrive": "2026-11-15T20:45",
+      "duration": "2h45",
+      "stops": "高铁",
+      "airline": "示例高铁",
+      "number": "AVE 0001",
+      "status": "已出票"
+    }
+  ],
+  "bookings": [
+    {
+      "icon": "🏨",
+      "title": "Eixample 区酒店（示例）",
+      "status": "已订 1 晚",
+      "time": "11/14 15:00 入住 → 11/15 12:00 退房",
+      "address": "Eixample, Barcelona",
+      "q": "Eixample, Barcelona",
+      "note": "上午到可先寄存背包"
+    },
+    {
+      "icon": "⛪",
+      "title": "圣家堂门票",
+      "status": "已购",
+      "time": "11/14（周六）11:30 时段 · 2 张",
+      "address": "C/ de Mallorca 401",
+      "q": "Sagrada Família",
+      "note": "含语音导览；入场时间严格"
+    },
+    {
+      "icon": "🦎",
+      "title": "桂尔公园时段票",
+      "status": "待购",
+      "time": "11/15（周日）建议 9:30",
+      "address": "Carrer d'Olot, Barcelona",
+      "q": "Park Güell",
+      "note": "周末常售罄，官网提前买"
+    }
+  ],
+  "days": [
+    {
+      "date": "2026-11-14",
+      "title": "高铁抵达 · 圣家堂与老城",
+      "subtitle": "圣家堂 · 哥特区 · 海边日落",
+      "mapLabel": "圣家堂 · 老城",
+      "travelmode": "transit",
+      "route": [
+        "mad",
+        "sants",
+        "hotel",
+        "sagrada",
+        "gotic",
+        "barceloneta"
+      ],
+      "stayPoint": "hotel",
+      "items": [
+        {
+          "time": "07:30",
+          "title": "马德里 Atocha 高铁出发",
+          "flight": true
+        },
+        {
+          "time": "10:15",
+          "title": "抵达 Sants，地铁到酒店寄存",
+          "place": "Barcelona Sants"
+        },
+        {
+          "time": "11:30",
+          "title": "圣家堂",
+          "tag": "已购票",
+          "note": "约 1.5 小时；上午东面受难立面光线好",
+          "place": "Sagrada Família"
+        },
+        {
+          "time": "13:30",
+          "title": "Eixample 午饭",
+          "note": "西班牙午饭 14 点左右人才多"
+        },
+        {
+          "time": "15:30",
+          "title": "哥特区 + 主教座堂",
+          "place": "Barcelona Cathedral"
+        },
+        {
+          "time": "17:30",
+          "title": "巴塞罗内塔海滩看日落",
+          "note": "11 月日落约 17:35",
+          "place": "Barceloneta Beach"
+        },
+        {
+          "time": "20:30",
+          "title": "Tapas 晚饭",
+          "tag": "需预订",
+          "place": "El Born, Barcelona"
+        }
+      ],
+      "stay": "Eixample 区酒店",
+      "stayQ": "Eixample, Barcelona"
+    },
+    {
+      "date": "2026-11-15",
+      "title": "桂尔公园 · 观景台 · 返程",
+      "subtitle": "高迪 · 俯瞰全城",
+      "mapLabel": "桂尔公园 · 返程",
+      "travelmode": "transit",
+      "route": [
+        "hotel",
+        "guell",
+        "bunkers",
+        "sants",
+        "mad"
+      ],
+      "items": [
+        {
+          "time": "09:30",
+          "title": "桂尔公园（纪念区）",
+          "tag": "待购·时段票",
+          "place": "Park Güell"
+        },
+        {
+          "time": "11:30",
+          "title": "步行到 Bunkers del Carmel",
+          "note": "上坡约 25 分钟，全城最佳视角",
+          "place": "Bunkers del Carmel"
+        },
+        {
+          "time": "13:30",
+          "title": "Gràcia 区午饭 + 闲逛",
+          "note": "周日不少小店关门",
+          "place": "Gràcia, Barcelona"
+        },
+        {
+          "time": "16:00",
+          "title": "回酒店取包，去 Sants"
+        },
+        {
+          "time": "18:00",
+          "title": "高铁回马德里",
+          "flight": true,
+          "note": "20:45 到 Atocha"
+        }
+      ]
+    }
+  ],
+  "todos": [
+    {
+      "text": "买桂尔公园 11/15 9:30 时段票",
+      "due": "尽快",
+      "urgent": true
+    },
+    {
+      "text": "订 11/14 晚 tapas 餐厅",
+      "due": "11/10 前"
+    },
+    {
+      "text": "往返高铁",
+      "done": true
+    },
+    {
+      "text": "酒店 1 晚",
+      "done": true
+    },
+    {
+      "text": "圣家堂门票",
+      "done": true
+    }
+  ],
+  "tips": [
+    {
+      "icon": "👜",
+      "title": "防扒",
+      "text": "兰布拉大道、地铁和海滩是扒手高发区：包背前面，手机别放后裤袋。"
+    },
+    {
+      "icon": "🚇",
+      "title": "交通",
+      "text": "地铁可直接刷银行卡或买 T-casual 10 次卡，两个人可以分开买。"
+    },
+    {
+      "icon": "🕘",
+      "title": "作息",
+      "text": "午饭 14 点、晚饭 21 点才是饭点；周日很多商店不开门。"
+    }
+  ],
+  "footer": "Travel Plan · ruqinga"
+}
