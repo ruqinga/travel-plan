@@ -15,4 +15,5 @@ GitHub Pages 从 `main` 分支根目录发布：`https://ruqinga.github.io/trave
 
 ## 行程页（网页端，导出图片时不包含）
 - 顶部数据条（天数/目的地/交通/预算，`stats`）网页上隐藏，只在「导出图片」不是截网页，而是用 `posterHTML()` 单独排一张 960px 宽、浅色的紧凑海报：标题 + 数据条（天数/目的地/交通/预算）+ 地图 + 每天时间线（多天并排）+ 底部卡片（徒步/交通/预订/住宿/预算/提示）。按 `LEVELS` 逐级缩小字号、减少备注/条目，直到高度 ≤ 宽度 × 2.1，保证手机一屏能看全。待办不进海报。
+- **待办可轻点勾选**：trip.json 里的 `done` 是所有人看到的默认值；轻点勾选只保存在这台设备（localStorage `travelplan.todos`，按待办文字记），再点一次回到默认。用户说「XX 办完了」时仍要改 `done` 并推送，所有人才同步。
 - 章节导航按实际小节生成（每个模块有自己的 id：day1/map/hikes/transport/tinfo/flights/bookings/stay/budget/checklist/todos/tips），按钮文字和小节标题一致。
