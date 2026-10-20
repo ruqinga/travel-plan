@@ -1,0 +1,1143 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex">
+<title>里斯本跨年 · 示例行程</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧳</text></svg>">
+<style>
+:root{
+  --bg:#f6f2ea; --paper:#fffdf8; --ink:#2b2622; --muted:#7c7268; --line:#e7dfd2;
+  --accent:#c8402f; --accent-soft:#fbe6e1; --ok:#2f8a57; --ok-soft:#e3f3e8;
+  --warn:#b26a00; --warn-soft:#fdf0d8; --info:#2d6fb0; --info-soft:#e3eef9;
+  --map-water:#d6e5ec; --map-land:#f4efe4; --map-ink:#8b7f70;
+  --shadow:0 1px 2px rgba(60,40,20,.06),0 6px 20px rgba(60,40,20,.06);
+  --mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+  --hand:"Kaiti SC","STKaiti","KaiTi","BiauKai",cursive;
+}
+@media (prefers-color-scheme:dark){
+  :root{
+    --bg:#191714; --paper:#23201c; --ink:#ece6dc; --muted:#a39888; --line:#37322b;
+    --accent:#ff7a63; --accent-soft:#3d2520; --ok:#6cc792; --ok-soft:#1f3328;
+    --warn:#f0b04a; --warn-soft:#3a2d17; --info:#7fb3e8; --info-soft:#1d2b3a;
+    --map-water:#17242b; --map-land:#24211c; --map-ink:#8f8576;
+    --shadow:0 1px 2px rgba(0,0,0,.3),0 6px 20px rgba(0,0,0,.25);
+  }
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.6 -apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","Noto Sans CJK SC",sans-serif}
+a{color:inherit}
+.wrap{max-width:760px;margin:0 auto;padding:20px 16px 60px}
+header h1{font-size:24px;line-height:1.3;margin:8px 0 4px;letter-spacing:.5px}
+.meta{color:var(--muted);font-size:13px}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin:12px 0 4px}
+.chip{display:inline-flex;align-items:center;gap:4px;font-size:12.5px;padding:3px 10px;border-radius:999px;background:var(--ok-soft);color:var(--ok);white-space:nowrap}
+.chip.pending{background:var(--accent-soft);color:var(--accent)}
+.chip.info{background:var(--info-soft);color:var(--info)}
+
+.card{background:var(--paper);border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow);padding:16px}
+.now{margin:14px 0 6px;position:relative;overflow:hidden}
+.now .label{font-size:11px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;display:flex;align-items:center;gap:6px}
+.dot{width:7px;height:7px;border-radius:50%;background:var(--accent);animation:pulse 1.6s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.25}}
+.now h2{margin:6px 0 2px;font-size:19px}
+.now .sub{color:var(--muted);font-size:12.5px}
+.count{font-family:var(--mono);font-size:30px;font-weight:700;color:var(--accent);margin:6px 0 2px;font-variant-numeric:tabular-nums;letter-spacing:1px}
+.count small{display:block;font-size:12.5px;color:var(--muted);font-weight:400;letter-spacing:0;margin-top:2px}
+.count .d{font-family:inherit}
+.todo-peek{display:flex;align-items:center;gap:8px;border-top:1px dashed var(--line);margin-top:12px;padding-top:10px;font-size:13px}
+.badge{font-size:11px;padding:1px 8px;border-radius:999px;background:var(--accent);color:#fff;white-space:nowrap}
+.todo-peek a{margin-left:auto;color:var(--accent);text-decoration:none;white-space:nowrap}
+
+nav{position:sticky;top:0;z-index:5;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);margin:0 -16px;padding:10px 16px;display:flex;gap:8px;overflow-x:auto;scrollbar-width:none}
+nav::-webkit-scrollbar{display:none}
+nav a{flex:none;text-decoration:none;font-size:13px;padding:6px 12px;border-radius:999px;background:var(--paper);border:1px solid var(--line);box-shadow:var(--shadow)}
+
+section{margin-top:28px;scroll-margin-top:60px}
+section>h3{font-size:18px;margin:0 0 4px;display:flex;align-items:center;gap:6px}
+.lead{color:var(--muted);font-size:13.5px;margin:0 0 12px}
+
+/* map */
+.map{padding:8px}
+.map svg{display:block;width:100%;height:auto;border-radius:10px}
+.map text{font-family:var(--hand)}
+.legend{display:flex;flex-wrap:wrap;gap:6px 14px;padding:8px 8px 2px;font-size:12.5px;color:var(--muted)}
+.legend i{display:inline-block;width:18px;height:4px;border-radius:2px;vertical-align:middle;margin-right:5px}
+
+/* flights */
+.flight{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:8px}
+.flight+.flight{margin-top:10px}
+.ap b{font-size:22px;font-family:var(--mono);letter-spacing:1px;display:block;line-height:1.1}
+.ap .t{font-family:var(--mono);font-size:15px;font-weight:600}
+.ap .n{font-size:11.5px;color:var(--muted)}
+.ap.r{text-align:right}
+.mid{text-align:center;font-size:11.5px;color:var(--muted);min-width:80px}
+.mid .line{height:1px;background:repeating-linear-gradient(90deg,var(--muted) 0 4px,transparent 4px 8px);margin:12px 0 10px;position:relative}
+.mid .line:after{content:"✈";position:absolute;left:50%;top:-10px;transform:translateX(-50%);background:var(--paper);padding:0 4px;color:var(--ink);font-size:13px}
+.fmeta{grid-column:1/-1;font-size:12.5px;color:var(--muted);border-top:1px dashed var(--line);padding-top:8px;display:flex;flex-wrap:wrap;gap:4px 10px}
+.tz{font-size:10.5px;color:var(--muted);font-family:var(--mono);margin-left:3px;font-weight:400}
+
+/* bookings */
+.bk{display:flex;gap:12px}
+.bk+.bk{margin-top:12px;padding-top:12px;border-top:1px dashed var(--line)}
+.bk .ic{font-size:22px;line-height:1.2}
+.bk h4{margin:0;font-size:15px}
+.bk .row{font-size:13px;color:var(--muted)}
+.bk .row a{color:var(--info);text-decoration:none}
+.tag{display:inline-block;font-size:11px;padding:0 7px;border-radius:999px;margin-left:6px;vertical-align:2px;background:var(--ok-soft);color:var(--ok);font-weight:500}
+.tag.warn{background:var(--warn-soft);color:var(--warn)}
+.tag.pending{background:var(--accent-soft);color:var(--accent)}
+.tag.info{background:var(--info-soft);color:var(--info)}
+
+/* days */
+.day{margin-top:14px;padding:0;overflow:hidden}
+.dayhead{display:flex;gap:12px;align-items:center;padding:14px 16px;cursor:pointer;user-select:none}
+.datebox{flex:none;width:54px;height:50px;border-radius:12px;color:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;line-height:1.05;font-weight:700}
+.datebox b{font-size:16px}.datebox span{font-size:10px;font-weight:500;opacity:.9}
+.dayhead h4{margin:0;font-size:16px}
+.dayhead .rs{font-size:12px;color:var(--muted)}
+.dayhead .chev{margin-left:auto;color:var(--muted);transition:transform .2s}
+.day.open .chev{transform:rotate(90deg)}
+.daytools{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:0 16px 10px;font-size:12px;color:var(--muted)}
+.daytools a{color:var(--info);text-decoration:none;white-space:nowrap;font-weight:600}
+.daybody{display:none;padding:0 16px 14px}
+.day.open .daybody{display:block}
+.tl{list-style:none;margin:0;padding:0}
+.tl li{display:grid;grid-template-columns:58px 1fr;gap:10px;padding:9px 0;border-top:1px solid var(--line)}
+.tl .tm{font-family:var(--mono);font-size:13px;font-weight:600;padding-top:1px}
+.tl .tm .tz{display:block;margin:0}
+.tl .tt{font-weight:600;font-size:14.5px}
+.tl .nt{font-size:13px;color:var(--muted);margin-top:2px}
+.tl a.pl{color:var(--info);text-decoration:none;font-size:12.5px;display:inline-block;margin-top:2px}
+.tl li.past{opacity:.5}
+.stay{margin-top:8px;font-size:13px;background:var(--bg);border-radius:10px;padding:8px 10px}
+.stay a{color:var(--info);text-decoration:none}
+
+/* todo */
+.prog{height:6px;border-radius:3px;background:var(--line);overflow:hidden;margin:4px 0 12px}
+.prog i{display:block;height:100%;background:var(--ok)}
+.tdl{list-style:none;margin:0;padding:0}
+.tdl li{display:flex;gap:10px;padding:9px 0;border-top:1px solid var(--line);font-size:14px}
+.tdl li .b{flex:none;width:18px;text-align:center}
+.tdl li.done{color:var(--muted)}
+.tdl li.done .x{text-decoration:line-through}
+.tdl .nt{display:block;font-size:12.5px;color:var(--muted)}
+.tdh{font-size:12px;color:var(--muted);margin:14px 0 2px;letter-spacing:1px}
+
+/* tips */
+.tips{display:grid;gap:10px}
+.tip{display:flex;gap:10px}
+.tip .ic{font-size:20px}
+.tip b{display:block;font-size:14px}
+.tip p{margin:2px 0 0;font-size:13.5px;color:var(--muted)}
+footer{margin-top:40px;text-align:center;font-size:12px;color:var(--muted)}
+@media (min-width:700px){ header h1{font-size:28px} .count{font-size:36px} }
+</style>
+</head>
+<body>
+<div class="wrap" id="app"></div>
+<script id="trip-data" type="application/json">{
+ "title": "里斯本跨年 · 示例行程",
+ "emoji": "🇵🇹",
+ "kicker": "SAMPLE · 示例页面，用来展示模板效果",
+ "dates": {
+  "start": "2026-12-29",
+  "end": "2027-01-02"
+ },
+ "people": 2,
+ "route": "马德里 → 里斯本 → 辛特拉 / 卡斯凯什",
+ "summaryLine": "4 晚 5 天 · 全程公共交通 · 住 Chiado 一个酒店不换",
+ "tz": "Europe/Lisbon",
+ "updated": "2026-10-20",
+ "status": [
+  {
+   "icon": "✈️",
+   "text": "往返机票已出票"
+  },
+  {
+   "icon": "🏨",
+   "text": "酒店 4/4 晚"
+  },
+  {
+   "icon": "⛪",
+   "text": "热罗尼莫斯已购"
+  },
+  {
+   "icon": "🏰",
+   "text": "佩纳宫时段票待购",
+   "ok": false
+  },
+  {
+   "icon": "🎸",
+   "text": "法朵晚餐待订",
+   "ok": false
+  }
+ ],
+ "overview": "从马德里飞一小时到里斯本，住在市中心 Chiado 不换酒店，每天放射状出去一条线：老城 → 贝伦 → 辛特拉 → 卡斯凯什海岸。跨年夜在商业广场看烟花。注意里斯本比马德里慢 1 小时。",
+ "map": {
+  "points": {
+   "mad": {
+    "name": "马德里",
+    "offmap": true,
+    "lat": 40.49,
+    "lon": -3.57
+   },
+   "lis": {
+    "name": "LIS 机场",
+    "lat": 38.7742,
+    "lon": -9.1342,
+    "q": "Lisbon Humberto Delgado Airport"
+   },
+   "hotel": {
+    "name": "里斯本市区 · Chiado",
+    "big": true,
+    "lat": 38.7105,
+    "lon": -9.142,
+    "q": "Chiado, Lisbon",
+    "anchor": "start",
+    "dy": 18
+   },
+   "alfama": {
+    "name": "Alfama",
+    "label": false,
+    "kind": "minor",
+    "lat": 38.7117,
+    "lon": -9.13,
+    "q": "Alfama, Lisbon"
+   },
+   "monte": {
+    "name": "Senhora do Monte",
+    "label": false,
+    "kind": "minor",
+    "lat": 38.7192,
+    "lon": -9.1328,
+    "q": "Miradouro da Senhora do Monte"
+   },
+   "comercio": {
+    "name": "商业广场",
+    "label": false,
+    "kind": "minor",
+    "lat": 38.7075,
+    "lon": -9.1365,
+    "q": "Praça do Comércio"
+   },
+   "timeout": {
+    "name": "Time Out Market",
+    "label": false,
+    "kind": "minor",
+    "lat": 38.7069,
+    "lon": -9.1459,
+    "q": "Time Out Market Lisboa"
+   },
+   "jeronimos": {
+    "name": "热罗尼莫斯修道院",
+    "lat": 38.6979,
+    "lon": -9.2066,
+    "q": "Jerónimos Monastery",
+    "anchor": "middle",
+    "dy": 24
+   },
+   "torre": {
+    "name": "贝伦塔",
+    "lat": 38.6916,
+    "lon": -9.216,
+    "q": "Belém Tower",
+    "anchor": "end",
+    "dy": 5
+   },
+   "lxf": {
+    "name": "LX Factory",
+    "lat": 38.7034,
+    "lon": -9.1785,
+    "q": "LX Factory",
+    "anchor": "middle",
+    "dy": -12
+   },
+   "pena": {
+    "name": "佩纳宫",
+    "lat": 38.7876,
+    "lon": -9.3906,
+    "q": "Pena Palace",
+    "anchor": "start"
+   },
+   "regaleira": {
+    "name": "雷加莱拉庄园",
+    "lat": 38.7963,
+    "lon": -9.3962,
+    "q": "Quinta da Regaleira",
+    "anchor": "start",
+    "dy": -8
+   },
+   "cascais": {
+    "name": "卡斯凯什",
+    "lat": 38.6979,
+    "lon": -9.4215,
+    "q": "Cascais",
+    "anchor": "start",
+    "dy": 18
+   },
+   "roca": {
+    "name": "罗卡角",
+    "lat": 38.7804,
+    "lon": -9.4989,
+    "q": "Cabo da Roca",
+    "anchor": "start"
+   }
+  },
+  "bounds": [
+   38.655,
+   -9.53,
+   38.83,
+   -9.07
+  ],
+  "land": [
+   [
+    [
+     38.96,
+     -9.42
+    ],
+    [
+     38.87,
+     -9.47
+    ],
+    [
+     38.82,
+     -9.48
+    ],
+    [
+     38.79,
+     -9.495
+    ],
+    [
+     38.78,
+     -9.5
+    ],
+    [
+     38.75,
+     -9.49
+    ],
+    [
+     38.73,
+     -9.48
+    ],
+    [
+     38.71,
+     -9.485
+    ],
+    [
+     38.695,
+     -9.44
+    ],
+    [
+     38.695,
+     -9.42
+    ],
+    [
+     38.685,
+     -9.39
+    ],
+    [
+     38.68,
+     -9.36
+    ],
+    [
+     38.677,
+     -9.33
+    ],
+    [
+     38.687,
+     -9.3
+    ],
+    [
+     38.69,
+     -9.26
+    ],
+    [
+     38.692,
+     -9.22
+    ],
+    [
+     38.697,
+     -9.19
+    ],
+    [
+     38.703,
+     -9.165
+    ],
+    [
+     38.706,
+     -9.145
+    ],
+    [
+     38.708,
+     -9.13
+    ],
+    [
+     38.715,
+     -9.115
+    ],
+    [
+     38.735,
+     -9.1
+    ],
+    [
+     38.765,
+     -9.093
+    ],
+    [
+     38.8,
+     -9.08
+    ],
+    [
+     38.86,
+     -9.05
+    ],
+    [
+     38.95,
+     -8.98
+    ],
+    [
+     38.96,
+     -8.6
+    ],
+    [
+     39.2,
+     -8.6
+    ],
+    [
+     39.2,
+     -9.42
+    ]
+   ],
+   [
+    [
+     38.6,
+     -9.21
+    ],
+    [
+     38.64,
+     -9.23
+    ],
+    [
+     38.665,
+     -9.235
+    ],
+    [
+     38.675,
+     -9.22
+    ],
+    [
+     38.672,
+     -9.19
+    ],
+    [
+     38.68,
+     -9.17
+    ],
+    [
+     38.686,
+     -9.147
+    ],
+    [
+     38.68,
+     -9.12
+    ],
+    [
+     38.665,
+     -9.1
+    ],
+    [
+     38.66,
+     -9.07
+    ],
+    [
+     38.68,
+     -9.04
+    ],
+    [
+     38.55,
+     -9.04
+    ],
+    [
+     38.55,
+     -9.21
+    ]
+   ]
+  ],
+  "labels": [
+   {
+    "text": "大 西 洋",
+    "lat": 38.62,
+    "lon": -9.45
+   },
+   {
+    "text": "特 茹 河",
+    "lat": 38.692,
+    "lon": -9.115
+   }
+  ]
+ },
+ "flights": [
+  {
+   "from": {
+    "code": "MAD",
+    "name": "马德里 T4",
+    "tz": "Europe/Madrid"
+   },
+   "to": {
+    "code": "LIS",
+    "name": "里斯本 T1",
+    "tz": "Europe/Lisbon"
+   },
+   "depart": "2026-12-29T09:05",
+   "arrive": "2026-12-29T09:20",
+   "duration": "1h15",
+   "airline": "示例航司",
+   "number": "XX 1234",
+   "status": "已出票",
+   "note": "建议 07:30 到 T4 · 只带登机行李"
+  },
+  {
+   "from": {
+    "code": "LIS",
+    "name": "里斯本 T1",
+    "tz": "Europe/Lisbon"
+   },
+   "to": {
+    "code": "MAD",
+    "name": "马德里 T4",
+    "tz": "Europe/Madrid"
+   },
+   "depart": "2027-01-02T15:10",
+   "arrive": "2027-01-02T17:25",
+   "duration": "1h15",
+   "airline": "示例航司",
+   "number": "XX 1235",
+   "status": "已出票",
+   "note": "13:30 前到机场 · 地铁红线直达"
+  }
+ ],
+ "bookings": [
+  {
+   "icon": "🏨",
+   "title": "Chiado 区酒店（示例）",
+   "status": "已订 4 晚",
+   "time": "12/29 15:00 起入住 → 1/2 11:00 前退房",
+   "address": "Chiado, Lisboa",
+   "q": "Chiado, Lisbon",
+   "note": "早到可先寄存行李；跨年夜酒店到商业广场步行约 10 分钟"
+  },
+  {
+   "icon": "⛪",
+   "title": "热罗尼莫斯修道院门票",
+   "status": "已购",
+   "time": "12/30（周三）10:00 时段 · 2 张",
+   "address": "Praça do Império, Belém",
+   "q": "Jerónimos Monastery",
+   "note": "电子票在手机钱包里；周一和 1/1 闭馆"
+  },
+  {
+   "icon": "🏰",
+   "title": "佩纳宫 宫殿+公园时段票",
+   "status": "待购",
+   "time": "12/31（周四）建议 10:00 场",
+   "address": "Estrada da Pena, Sintra",
+   "q": "Pena Palace",
+   "note": "跨年前后常售罄，务必官网提前买"
+  }
+ ],
+ "days": [
+  {
+   "date": "2026-12-29",
+   "title": "落地里斯本 · 老城 Alfama",
+   "subtitle": "MAD ✈ LIS · 28 路电车 · 法朵",
+   "mapLabel": "抵达 · 老城",
+   "travelmode": "transit",
+   "route": [
+    "mad",
+    "lis",
+    "hotel",
+    "alfama",
+    "monte"
+   ],
+   "stayPoint": "hotel",
+   "items": [
+    {
+     "time": "09:05",
+     "tz": "Europe/Madrid",
+     "title": "马德里 T4 起飞",
+     "flight": true,
+     "note": "马德里时间 · 机上把手表拨慢 1 小时"
+    },
+    {
+     "time": "09:20",
+     "title": "抵达 LIS T1",
+     "note": "地铁红线 → 绿线到 Baixa-Chiado，约 35 分钟；入口机器买 Viva Viagem 卡",
+     "place": "Lisbon Humberto Delgado Airport",
+     "placeLabel": "LIS 机场"
+    },
+    {
+     "time": "10:30",
+     "title": "酒店寄存行李",
+     "place": "Chiado, Lisbon",
+     "placeLabel": "Chiado"
+    },
+    {
+     "time": "11:00",
+     "title": "Baixa 散步 + 早午饭",
+     "note": "奥古斯塔街 → 凯旋门 → 商业广场",
+     "place": "Rua Augusta Arch"
+    },
+    {
+     "time": "13:30",
+     "title": "28 路电车上老城",
+     "note": "Martim Moniz 始发站排队人少，坐到 Graça",
+     "tag": "人多·早上车",
+     "place": "Martim Moniz, Lisbon"
+    },
+    {
+     "time": "14:30",
+     "title": "Alfama 小巷 + 主教座堂",
+     "place": "Lisbon Cathedral"
+    },
+    {
+     "time": "16:40",
+     "title": "Senhora do Monte 观景台看日落",
+     "note": "12 月日落约 17:20",
+     "place": "Miradouro da Senhora do Monte"
+    },
+    {
+     "time": "20:00",
+     "title": "Alfama 法朵晚餐",
+     "tag": "需预订",
+     "note": "热门店需提前 1–2 周订位",
+     "place": "Alfama fado restaurant"
+    }
+   ],
+   "stay": "Chiado 区酒店",
+   "stayQ": "Chiado, Lisbon"
+  },
+  {
+   "date": "2026-12-30",
+   "title": "贝伦 · 大航海时代",
+   "subtitle": "修道院 · 蛋挞 · 贝伦塔 · LX Factory",
+   "mapLabel": "贝伦",
+   "travelmode": "transit",
+   "route": [
+    "hotel",
+    "jeronimos",
+    "torre",
+    "lxf",
+    "hotel"
+   ],
+   "stayPoint": "hotel",
+   "items": [
+    {
+     "time": "09:15",
+     "title": "15E 电车去贝伦",
+     "note": "商业广场上车，约 25 分钟",
+     "place": "Praça do Comércio"
+    },
+    {
+     "time": "10:00",
+     "title": "热罗尼莫斯修道院",
+     "tag": "已购票",
+     "note": "回廊是重点，约 1.5 小时",
+     "place": "Jerónimos Monastery"
+    },
+    {
+     "time": "11:45",
+     "title": "Pastéis de Belém 蛋挞",
+     "note": "外带队伍快；店内座位区通常不用排很久",
+     "place": "Pastéis de Belém"
+    },
+    {
+     "time": "12:30",
+     "title": "发现者纪念碑 → 贝伦塔",
+     "note": "沿河步行 15 分钟",
+     "place": "Belém Tower"
+    },
+    {
+     "time": "15:00",
+     "title": "MAAT 美术馆屋顶",
+     "note": "屋顶免费可走",
+     "place": "MAAT Lisbon"
+    },
+    {
+     "time": "17:00",
+     "title": "LX Factory 逛 + 晚饭",
+     "note": "Ler Devagar 书店",
+     "place": "LX Factory"
+    }
+   ],
+   "stay": "Chiado 区酒店",
+   "stayQ": "Chiado, Lisbon"
+  },
+  {
+   "date": "2026-12-31",
+   "title": "辛特拉 · 跨年夜",
+   "subtitle": "佩纳宫 · 雷加莱拉 · 商业广场烟花",
+   "mapLabel": "辛特拉 · 跨年",
+   "travelmode": "transit",
+   "route": [
+    "hotel",
+    "pena",
+    "regaleira",
+    "hotel",
+    "comercio"
+   ],
+   "stayPoint": "hotel",
+   "items": [
+    {
+     "time": "08:31",
+     "title": "Rossio 站火车去辛特拉",
+     "note": "约 40 分钟，Viva Viagem 卡可刷",
+     "place": "Rossio Station"
+    },
+    {
+     "time": "09:30",
+     "title": "434 路巴士上山",
+     "note": "排队长可打车，约 10 分钟"
+    },
+    {
+     "time": "10:00",
+     "title": "佩纳宫",
+     "tag": "待购·时段票",
+     "note": "先宫殿后公园，约 2.5 小时",
+     "place": "Pena Palace"
+    },
+    {
+     "time": "13:30",
+     "title": "下山午饭",
+     "note": "辛特拉老镇试 Travesseiro 酥饼",
+     "place": "Piriquita Sintra"
+    },
+    {
+     "time": "14:30",
+     "title": "雷加莱拉庄园 · 倒塔井",
+     "note": "最后入场较早，别拖",
+     "place": "Quinta da Regaleira"
+    },
+    {
+     "time": "17:00",
+     "title": "火车回里斯本",
+     "note": "跨年夜返程车很挤，别坐太晚"
+    },
+    {
+     "time": "21:00",
+     "title": "早点吃跨年晚饭",
+     "note": "餐厅跨年夜多为套餐需预订"
+    },
+    {
+     "time": "23:30",
+     "title": "商业广场等烟花",
+     "note": "安检：别带大包和玻璃瓶；0:00 烟花",
+     "place": "Praça do Comércio"
+    }
+   ],
+   "stay": "Chiado 区酒店",
+   "stayQ": "Chiado, Lisbon"
+  },
+  {
+   "date": "2027-01-01",
+   "title": "元旦 · 海边慢一天",
+   "subtitle": "卡斯凯什 · 地狱之口 · 罗卡角日落",
+   "mapLabel": "卡斯凯什海岸",
+   "travelmode": "transit",
+   "route": [
+    "hotel",
+    "cascais",
+    "roca",
+    "hotel"
+   ],
+   "stayPoint": "hotel",
+   "items": [
+    {
+     "time": "11:00",
+     "title": "睡个懒觉，Cais do Sodré 坐火车",
+     "note": "元旦多数博物馆闭馆，安排户外；火车按节假日班次",
+     "place": "Cais do Sodré station"
+    },
+    {
+     "time": "12:00",
+     "title": "卡斯凯什老城 + 午饭",
+     "place": "Cascais"
+    },
+    {
+     "time": "14:00",
+     "title": "地狱之口海崖",
+     "note": "从老城沿海步行约 20 分钟",
+     "place": "Boca do Inferno"
+    },
+    {
+     "time": "15:45",
+     "title": "403 路巴士去罗卡角",
+     "note": "节假日班次少，提前看时刻；打车约 20 分钟",
+     "tag": "看班次"
+    },
+    {
+     "time": "17:00",
+     "title": "罗卡角 · 欧亚大陆最西端日落",
+     "note": "风很大，带帽子",
+     "place": "Cabo da Roca"
+    },
+    {
+     "time": "18:30",
+     "title": "回市区",
+     "note": "403 回卡斯凯什换火车，约 1.5 小时"
+    }
+   ],
+   "stay": "Chiado 区酒店",
+   "stayQ": "Chiado, Lisbon"
+  },
+  {
+   "date": "2027-01-02",
+   "title": "Time Out Market · 回马德里",
+   "subtitle": "早午饭 · LIS ✈ MAD",
+   "mapLabel": "返程",
+   "travelmode": "transit",
+   "route": [
+    "hotel",
+    "timeout",
+    "lis",
+    "mad"
+   ],
+   "items": [
+    {
+     "time": "10:30",
+     "title": "退房，行李寄前台",
+     "place": "Chiado, Lisbon",
+     "placeLabel": "Chiado"
+    },
+    {
+     "time": "11:00",
+     "title": "Time Out Market 早午饭",
+     "place": "Time Out Market Lisboa"
+    },
+    {
+     "time": "12:45",
+     "title": "取行李，地铁去机场",
+     "note": "Cais do Sodré 绿线 → 红线，约 40 分钟"
+    },
+    {
+     "time": "15:10",
+     "title": "LIS T1 起飞",
+     "flight": true,
+     "note": "17:25 马德里时间到 T4"
+    }
+   ]
+  }
+ ],
+ "todos": [
+  {
+   "text": "买佩纳宫 12/31 时段票（宫殿+公园）",
+   "due": "尽快",
+   "urgent": true,
+   "note": "跨年前后常售罄"
+  },
+  {
+   "text": "订 12/29 晚 Alfama 法朵餐厅",
+   "due": "12/15 前"
+  },
+  {
+   "text": "订 12/31 跨年晚饭",
+   "due": "12/1 前",
+   "note": "跨年夜套餐，越早越好选"
+  },
+  {
+   "text": "下载 Google 地图里斯本离线区域"
+  },
+  {
+   "text": "确认是否需要旅行保险"
+  },
+  {
+   "text": "往返机票",
+   "done": true
+  },
+  {
+   "text": "酒店 4 晚",
+   "done": true
+  },
+  {
+   "text": "热罗尼莫斯修道院门票 12/30 10:00",
+   "done": true
+  }
+ ],
+ "tips": [
+  {
+   "icon": "🕐",
+   "title": "时差",
+   "text": "里斯本比马德里慢 1 小时（WET vs CET）。本页所有时间都是当地时间并标了时区，倒计时已自动换算。"
+  },
+  {
+   "icon": "🌦️",
+   "title": "天气",
+   "text": "12 月底白天约 9–15°C，常有阵雨，石板路湿滑。带防水外套和防滑鞋，雨伞容易被海风吹翻。"
+  },
+  {
+   "icon": "🚇",
+   "title": "交通卡",
+   "text": "地铁站买 Viva Viagem 卡并充 Zapping 储值，地铁、电车、去辛特拉/卡斯凯什的火车都能刷。"
+  },
+  {
+   "icon": "🎆",
+   "title": "跨年夜",
+   "text": "商业广场人非常多：约好走散后的集合点，手机充满电，别带大包；结束后地铁会很挤，可直接走回 Chiado。"
+  },
+  {
+   "icon": "🏛️",
+   "title": "闭馆日",
+   "text": "热罗尼莫斯修道院、贝伦塔等周一和 1 月 1 日闭馆，所以元旦安排了户外海岸线。"
+  },
+  {
+   "icon": "💶",
+   "title": "小费 / 付款",
+   "text": "大部分地方能刷卡；小费不是必须，满意可留 5–10%。"
+  }
+ ],
+ "footer": "Travel Plan · ruqinga"
+}</script>
+<script>
+(function(){
+const T = JSON.parse(document.getElementById('trip-data').textContent);
+const TZ = T.tz || 'UTC';
+const PALETTE = ['#d9534f','#e08a1e','#2f8a57','#2d6fb0','#7a4fb5','#c2477e','#14808a','#8a6d1e'];
+const WD = ['周日','周一','周二','周三','周四','周五','周六'];
+const $app = document.getElementById('app');
+const esc = s => String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const gmap = q => 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(q);
+
+/* ---------- time zone helpers ---------- */
+function tzOffset(ts, tz){
+  const p = {}; new Intl.DateTimeFormat('en-US',{timeZone:tz,hourCycle:'h23',year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',second:'2-digit'})
+    .formatToParts(new Date(ts)).forEach(x=>p[x.type]=x.value);
+  return Date.UTC(+p.year, p.month-1, +p.day, +p.hour%24, +p.minute, +p.second) - ts;
+}
+function epoch(local, tz){ // "2026-12-29T09:05" wall time in tz -> ms
+  const [d,t='00:00'] = local.split('T'); const [Y,M,D] = d.split('-').map(Number); const [h,m] = t.split(':').map(Number);
+  const base = Date.UTC(Y,M-1,D,h,m); let ts = base;
+  for(let i=0;i<3;i++) ts = base - tzOffset(ts, tz);
+  return ts;
+}
+function tzName(ts, tz){
+  try{
+    const n = new Intl.DateTimeFormat('en-GB',{timeZone:tz,timeZoneName:'short'}).formatToParts(new Date(ts)).find(x=>x.type==='timeZoneName').value;
+    if(/^GMT[+-]?\d*$/.test(n) || n==='UTC'){ const o = tzOffset(ts,tz)/36e5; return 'UTC' + (o===0?'':(o>0?'+':'') + o); }
+    return n;
+  }catch(e){ return tz; }
+}
+const hm = s => (s.split('T')[1]||'').slice(0,5);
+function md(dateStr){ const [Y,M,D]=dateStr.split('-').map(Number); return {Y,M,D,wd:WD[new Date(Date.UTC(Y,M-1,D)).getUTCDay()]}; }
+function fmtDate(dateStr){ const x=md(dateStr); return `${x.M}/${x.D}（${x.wd}）`; }
+
+/* ---------- build event list for countdown ---------- */
+const events = [];
+(T.flights||[]).forEach(f=>{
+  events.push({ts:epoch(f.depart, f.from.tz||TZ), tz:f.from.tz||TZ, title:`${f.from.code} ✈ ${f.to.code} 起飞`,
+    sub:[f.airline, f.number, f.duration, f.note].filter(Boolean).join(' · ')});
+});
+(T.days||[]).forEach((d,di)=>{
+  (d.items||[]).forEach(it=>{
+    if(!it.time || it.countdown===false || it.flight) return;
+    const tz = it.tz || d.tz || TZ;
+    events.push({ts:epoch(d.date+'T'+it.time, tz), tz, title:it.title, sub:[fmtDate(d.date), it.note].filter(Boolean).join(' · '), day:di});
+  });
+});
+events.sort((a,b)=>a.ts-b.ts);
+
+/* ---------- render ---------- */
+let h = '';
+const people = T.people ? ` · ${T.people} 人` : '';
+const dateRange = T.dates ? `${T.dates.start.replace(/-/g,'.')}（${md(T.dates.start).wd}）— ${T.dates.end.slice(5).replace('-','.')}（${md(T.dates.end).wd}）` : '';
+h += `<header><div class="meta">${esc(T.kicker||'TRAVEL BOOK')}</div>
+<h1>${esc(T.emoji||'🧳')} ${esc(T.title)}</h1>
+<div class="meta">${esc(dateRange)}${esc(people)}${T.route?' · '+esc(T.route):''}</div>
+${T.summaryLine?`<div class="meta">${esc(T.summaryLine)}</div>`:''}
+<div class="chips">${(T.status||[]).map(s=>`<span class="chip ${s.ok===false?'pending':(s.ok==='info'?'info':'')}">${esc(s.icon||'')} ${esc(s.text)}</span>`).join('')}</div></header>`;
+
+const firstTodo = (T.todos||[]).find(t=>!t.done);
+h += `<div class="card now" id="now"><div class="label"><span class="dot"></span><span id="now-label">此刻关注 · NOW</span></div>
+<h2 id="now-title"></h2><div class="sub" id="now-sub"></div><div class="count" id="now-count"></div>
+${firstTodo?`<div class="todo-peek"><span class="badge">当前待办</span><span>${esc(firstTodo.text)}</span><a href="#todo">去清单 →</a></div>`:''}</div>`;
+
+const navs = [['overview','🗺️ 总览'], T.flights&&T.flights.length&&['flights','✈️ 航班'], T.bookings&&T.bookings.length&&['bookings','🏨 预订'],
+  ['days','📅 每日行程'], T.todos&&T.todos.length&&['todo','✅ 待办清单'], T.tips&&T.tips.length&&['tips','💡 贴士']].filter(Boolean);
+h += `<nav>${navs.map(([id,t])=>`<a href="#${id}">${t}</a>`).join('')}</nav>`;
+
+/* overview + map */
+h += `<section id="overview"><h3>🗺️ 行程总览</h3>${T.overview?`<p class="lead">${esc(T.overview)}</p>`:''}`;
+if(T.map && T.map.points) h += `<div class="card map">${renderMap()}</div>`;
+h += `</section>`;
+
+/* flights */
+if(T.flights && T.flights.length){
+  h += `<section id="flights"><h3>✈️ 航班 / 长途交通</h3><p class="lead">时间均为出发地 / 到达地当地时间。</p><div class="card">`;
+  T.flights.forEach(f=>{
+    const tz1=f.from.tz||TZ, tz2=f.to.tz||TZ, t1=epoch(f.depart,tz1), t2=epoch(f.arrive,tz2);
+    const dd = f.depart.split('T')[0], ad = f.arrive.split('T')[0];
+    h += `<div class="flight">
+      <div class="ap"><b>${esc(f.from.code)}</b><span class="t">${hm(f.depart)}</span><span class="tz">${tzName(t1,tz1)}</span><div class="n">${esc(f.from.name||'')} · ${fmtDate(dd)}</div></div>
+      <div class="mid">${esc(f.duration||'')}<div class="line"></div>${esc(f.stops||'直飞')}</div>
+      <div class="ap r"><b>${esc(f.to.code)}</b><span class="t">${hm(f.arrive)}</span><span class="tz">${tzName(t2,tz2)}</span><div class="n">${esc(f.to.name||'')}${ad!==dd?' · '+fmtDate(ad):''}</div></div>
+      <div class="fmeta"><span>${esc([f.airline,f.number].filter(Boolean).join(' '))}</span>${f.status?`<span class="tag ${f.status.includes('待')?'pending':''}">${esc(f.status)}</span>`:''}${f.note?`<span>${esc(f.note)}</span>`:''}</div>
+    </div>`;
+  });
+  h += `</div></section>`;
+}
+
+/* bookings */
+if(T.bookings && T.bookings.length){
+  h += `<section id="bookings"><h3>🏨 已确认的预订</h3><p class="lead">租车、住宿、门票。点地址直接打开 Google 地图。</p><div class="card">`;
+  T.bookings.forEach(b=>{
+    h += `<div class="bk"><div class="ic">${esc(b.icon||'📌')}</div><div><h4>${esc(b.title)}${b.status?`<span class="tag ${tagKind(b.status)}">${esc(b.status)}</span>`:''}</h4>
+      ${b.time?`<div class="row">🕒 ${esc(b.time)}</div>`:''}
+      ${b.address?`<div class="row">📍 <a href="${gmap(b.q||b.address)}" target="_blank" rel="noopener">${esc(b.address)}</a></div>`:''}
+      ${b.phone?`<div class="row">📞 <a href="tel:${esc(b.phone.replace(/[^+\d]/g,''))}">${esc(b.phone)}</a></div>`:''}
+      ${b.note?`<div class="row">${esc(b.note)}</div>`:''}</div></div>`;
+  });
+  h += `</div></section>`;
+}
+
+/* days */
+h += `<section id="days"><h3>📅 每日行程</h3><p class="lead">点日期展开/收起。地点可点击直接唤起 Google 地图；“全天路线”一键打开多点导航。</p>`;
+(T.days||[]).forEach((d,i)=>{
+  const c = d.color || PALETTE[i%PALETTE.length]; const x = md(d.date); const tz = d.tz||TZ;
+  const pts = (d.route||[]).map(id=>T.map&&T.map.points[id]).filter(p=>p&&!p.offmap&&(p.q||p.name));
+  let dir = '';
+  if(pts.length>=2){
+    const q = p=>encodeURIComponent(p.q||p.name);
+    dir = `https://www.google.com/maps/dir/?api=1&origin=${q(pts[0])}&destination=${q(pts[pts.length-1])}` +
+      (pts.length>2?`&waypoints=${pts.slice(1,-1).map(q).join('%7C')}`:'') + `&travelmode=${d.travelmode||'driving'}`;
+  }
+  h += `<div class="card day" id="day${i+1}" data-date="${d.date}"><div class="dayhead">
+    <div class="datebox" style="background:${c}"><b>${x.M}.${x.D}</b><span>${x.wd}</span></div>
+    <div><h4>${esc(d.title)}</h4><div class="rs">${esc(d.subtitle||'')}</div></div><span class="chev">›</span></div>
+    <div class="daytools"><span>时间为当地时间 · ${esc(tzName(epoch(d.date+'T12:00',tz),tz))}</span>${dir?`<a href="${dir}" target="_blank" rel="noopener">🧭 全天路线 ↗</a>`:''}</div>
+    <div class="daybody"><ul class="tl">`;
+  (d.items||[]).forEach(it=>{
+    const itz = it.tz||tz;
+    const ts = it.time ? epoch(d.date+'T'+it.time, itz) : null;
+    h += `<li data-ts="${ts||''}"><div class="tm">${esc(it.time||'')}${it.time?`<span class="tz">${tzName(ts,itz)}</span>`:''}</div><div>
+      <div class="tt">${esc(it.title)}${it.tag?`<span class="tag ${tagKind(it.tag)}">${esc(it.tag)}</span>`:''}</div>
+      ${it.note?`<div class="nt">${esc(it.note)}</div>`:''}
+      ${it.place?`<a class="pl" href="${gmap(it.place)}" target="_blank" rel="noopener">📍 ${esc(it.placeLabel||it.place)}</a>`:''}
+    </div></li>`;
+  });
+  h += `</ul>${d.stay?`<div class="stay">🛏️ 今晚住：${d.stayQ?`<a href="${gmap(d.stayQ)}" target="_blank" rel="noopener">${esc(d.stay)}</a>`:esc(d.stay)}</div>`:''}</div></div>`;
+});
+h += `</section>`;
+
+/* todos */
+if(T.todos && T.todos.length){
+  const done = T.todos.filter(t=>t.done).length;
+  h += `<section id="todo"><h3>✅ 待办清单</h3><p class="lead">由行程负责人统一更新——办完一项告诉 Claude，页面会同步给所有人。${T.updated?' 最后更新：'+esc(T.updated):''}</p>
+  <div class="card"><div style="display:flex;justify-content:space-between;font-size:13px"><span>进度</span><span>${done} / ${T.todos.length}</span></div>
+  <div class="prog"><i style="width:${Math.round(done/T.todos.length*100)}%"></i></div>`;
+  const todo = T.todos.filter(t=>!t.done), dn = T.todos.filter(t=>t.done);
+  const li = t => `<li class="${t.done?'done':''}"><span class="b">${t.done?'✅':(t.urgent?'🔴':'⬜')}</span><span><span class="x">${esc(t.text)}</span>${t.due?` <span class="tag ${t.done?'':'warn'}">${esc(t.due)}</span>`:''}${t.note?`<span class="nt">${esc(t.note)}</span>`:''}</span></li>`;
+  if(todo.length) h += `<div class="tdh">待完成</div><ul class="tdl">${todo.map(li).join('')}</ul>`;
+  if(dn.length) h += `<div class="tdh">已搞定</div><ul class="tdl">${dn.map(li).join('')}</ul>`;
+  h += `</div></section>`;
+}
+
+/* tips */
+if(T.tips && T.tips.length){
+  h += `<section id="tips"><h3>💡 实用贴士</h3><div class="card tips">${T.tips.map(t=>`<div class="tip"><div class="ic">${esc(t.icon||'•')}</div><div><b>${esc(t.title)}</b><p>${esc(t.text)}</p></div></div>`).join('')}</div></section>`;
+}
+h += `<footer>${esc(T.footer||'Travel Book')} · ${esc(T.title)}</footer>`;
+$app.innerHTML = h;
+
+function tagKind(s){ s=String(s); if(/待|未|需|必须|尽快/.test(s)) return /需|提前/.test(s)?'warn':'pending'; if(/已|✓|确认/.test(s)) return ''; return 'info'; }
+
+/* ---------- map ---------- */
+function renderMap(){
+  const M = T.map, P = M.points, ids = Object.keys(P);
+  const inPts = ids.filter(k=>!P[k].offmap).map(k=>P[k]);
+  let la0=Infinity,la1=-Infinity,lo0=Infinity,lo1=-Infinity;
+  inPts.forEach(p=>{la0=Math.min(la0,p.lat);la1=Math.max(la1,p.lat);lo0=Math.min(lo0,p.lon);lo1=Math.max(lo1,p.lon);});
+  if(M.bounds){[la0,lo0,la1,lo1]=M.bounds;}
+  const k = Math.cos((la0+la1)/2*Math.PI/180);
+  let w = (lo1-lo0)*k, hgt = (la1-la0);
+  const W = 640, pad = 60;
+  const sc = Math.min((W-2*pad)/(w||1e-3), 420/(hgt||1e-3));
+  const H = Math.max(260, Math.round(hgt*sc + 2*pad));
+  const ox = (W - w*sc)/2, oy = (H - hgt*sc)/2;
+  const X = lon => ox + (lon-lo0)*k*sc, Y = lat => oy + (la1-lat)*sc;
+  let s = `<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="行程地图">
+  <defs><filter id="rough"><feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="2" seed="3"/><feDisplacementMap in="SourceGraphic" scale="3.5"/></filter>
+  <pattern id="grid" width="24" height="24" patternUnits="userSpaceOnUse"><path d="M24 0H0V24" fill="none" stroke="var(--line)" stroke-width=".6"/></pattern></defs>
+  <rect width="${W}" height="${H}" fill="${(M.coast||M.land)?'var(--map-water)':'var(--map-land)'}"/>`;
+  (M.land||[]).forEach(poly=>{ s += `<path d="${poly.map((p,i)=>(i?'L':'M')+X(p[1]).toFixed(1)+' '+Y(p[0]).toFixed(1)).join('')}Z" fill="var(--map-land)" stroke="var(--map-ink)" stroke-width="1.3" filter="url(#rough)"/>`; });
+  (M.coast||[]).forEach(line=>{ s += `<path d="${line.map((p,i)=>(i?'L':'M')+X(p[1]).toFixed(1)+' '+Y(p[0]).toFixed(1)).join('')}" fill="none" stroke="var(--map-ink)" stroke-width="1.3" stroke-linejoin="round" filter="url(#rough)"/>`; });
+  s += `<rect width="${W}" height="${H}" fill="url(#grid)" opacity=".5"/>`;
+  (M.labels||[]).forEach(l=>{ s += `<text x="${X(l.lon)}" y="${Y(l.lat)}" fill="var(--map-ink)" font-size="15" font-style="italic" text-anchor="middle" opacity=".8" letter-spacing="3">${esc(l.text)}</text>`; });
+  // day routes
+  const legend = []; const offLabeled = new Set();
+  (T.days||[]).forEach((d,i)=>{
+    const c = d.color || PALETTE[i%PALETTE.length]; const r = (d.route||[]).map(id=>Object.assign({id},P[id])).filter(p=>p.lat!=null);
+    if(r.length<2) return; legend.push([c, `${md(d.date).M}/${md(d.date).D} ${d.mapLabel||d.title}`]);
+    const jitter = (i%2?1:-1)*1.5;
+    for(let j=0;j<r.length-1;j++){
+      let a=r[j], b=r[j+1]; let ax=X(a.lon)+jitter, ay=Y(a.lat)+jitter, bx=X(b.lon)+jitter, by=Y(b.lat)+jitter;
+      const off = a.offmap||b.offmap; const fly = off || (d.flightSegs||[]).includes(j);
+      if(off){ // clip to short arrow from edge toward in-map point
+        const inn = a.offmap? [bx,by]:[ax,ay], out = a.offmap? [ax,ay]:[bx,by];
+        const dx=out[0]-inn[0], dy=out[1]-inn[1], L=Math.hypot(dx,dy)||1, len=Math.min(110, L);
+        const ex=inn[0]+dx/L*len, ey=inn[1]+dy/L*len;
+        if(a.offmap){ax=ex;ay=ey}else{bx=ex;by=ey}
+        const lx=ex, ly=ey;
+        const offId = a.offmap? a.id : b.id, offName = a.offmap? a.name : b.name;
+        if(!offLabeled.has(offId)){ offLabeled.add(offId); s += `<text x="${lx}" y="${ly-8}" fill="var(--map-ink)" font-size="13" text-anchor="${dx<0?'start':'end'}" paint-order="stroke" stroke="var(--paper)" stroke-width="3">✈ ${esc(offName)} 方向</text>`; }
+      }
+      const mx=(ax+bx)/2+(by-ay)*.12, my=(ay+by)/2-(bx-ax)*.12;
+      s += `<path d="M${ax} ${ay}Q${mx} ${my} ${bx} ${by}" fill="none" stroke="${c}" stroke-width="${fly?2:3}" stroke-linecap="round" ${fly?'stroke-dasharray="6 6"':''} opacity=".9" filter="url(#rough)"/>`;
+    }
+  });
+  // points
+  const stays = new Set((T.days||[]).map(d=>d.stayPoint).filter(Boolean));
+  ids.forEach(id=>{
+    const p=P[id]; if(p.offmap) return; const x=X(p.lon), y=Y(p.lat);
+    const isStay = stays.has(id);
+    s += isStay ? `<g transform="translate(${x},${y})"><rect x="-9" y="-9" width="18" height="18" rx="4" fill="var(--paper)" stroke="var(--ink)" stroke-width="1.4"/><text y="4.5" font-size="12" text-anchor="middle" fill="var(--ink)" font-weight="700">住</text></g>`
+      : `<circle cx="${x}" cy="${y}" r="${p.kind==='minor'?3:4.5}" fill="var(--paper)" stroke="var(--ink)" stroke-width="1.6"/>`;
+    if(p.label!==false){
+      const anc = p.anchor || (x > W*0.62 ? 'end' : 'start'); const dx = anc==='end'?-11:(anc==='middle'?0:11);
+      s += `<text x="${x+dx}" y="${y+(p.dy||4)}" font-size="${p.big?15:13}" fill="var(--ink)" text-anchor="${anc}" paint-order="stroke" stroke="var(--paper)" stroke-width="3" stroke-linejoin="round">${esc(p.name)}</text>`;
+    }
+  });
+  // compass + scale
+  s += `<g transform="translate(28,34)" fill="var(--map-ink)" stroke="var(--map-ink)"><path d="M0 18V-8" stroke-width="1.5"/><path d="M-5 -2L0 -12L5 -2Z" stroke="none"/><text y="-16" font-size="12" text-anchor="middle" stroke="none">北</text></g>`;
+  const kmPerPx = 111.32/sc; const nice=[1,2,5,10,20,50,100,200,500,1000]; const km = nice.find(n=>n/kmPerPx>60)||1000; const px = km/kmPerPx;
+  s += `<g transform="translate(${W-24-px},${H-20})" stroke="var(--map-ink)" fill="var(--map-ink)"><path d="M0 -4V0H${px}V-4" fill="none" stroke-width="1.4"/><text x="${px/2}" y="-8" font-size="11" text-anchor="middle" stroke="none">${km} km</text></g>`;
+  s += `</svg>`;
+  return s + `<div class="legend">${legend.map(([c,t])=>`<span><i style="background:${c}"></i>${esc(t)}</span>`).join('')}${stays.size?'<span><b style="border:1.3px solid var(--ink);border-radius:3px;padding:0 2px;font-size:10px;color:var(--ink)">住</b> 住宿</span>':''}</div>`;
+}
+
+/* ---------- interactions ---------- */
+document.querySelectorAll('.dayhead').forEach(el=>el.addEventListener('click',()=>el.parentElement.classList.toggle('open')));
+// open today's day (or first day before trip)
+const todayStr = (()=>{ const p={}; new Intl.DateTimeFormat('en-CA',{timeZone:TZ,year:'numeric',month:'2-digit',day:'2-digit'}).formatToParts(new Date()).forEach(x=>p[x.type]=x.value); return `${p.year}-${p.month}-${p.day}`; })();
+const dayEls=[...document.querySelectorAll('.day')];
+const cur = dayEls.find(e=>e.dataset.date===todayStr);
+if(cur) cur.classList.add('open'); else if(dayEls[0] && (!T.dates || todayStr < T.dates.start)) dayEls[0].classList.add('open');
+else dayEls.forEach(e=>e.classList.add('open'));
+
+/* ---------- countdown ---------- */
+const $t=document.getElementById('now-title'), $s=document.getElementById('now-sub'), $c=document.getElementById('now-count'), $l=document.getElementById('now-label');
+function tick(){
+  const now = Date.now();
+  document.querySelectorAll('.tl li[data-ts]').forEach(li=>{ const ts=+li.dataset.ts; if(ts) li.classList.toggle('past', ts < now - 3600e3); });
+  const e = events.find(e=>e.ts > now);
+  if(!e){ $l.textContent='旅程结束'; $t.textContent=T.endMessage||'平安到家，旅途愉快 🎉'; $s.textContent=''; $c.textContent=''; return; }
+  let d = Math.floor((e.ts-now)/1000); const D=Math.floor(d/86400); d%=86400;
+  const p = n=>String(n).padStart(2,'0');
+  $t.textContent = e.title; $s.textContent = e.sub || '';
+  $c.innerHTML = `${D?`<span class="d">${D}天</span> `:''}${p(Math.floor(d/3600))}:${p(Math.floor(d%3600/60))}:${p(d%60)}<small>后 · 当地 ${hm(new Date(e.ts+tzOffset(e.ts,e.tz)).toISOString().replace('Z',''))} ${tzName(e.ts,e.tz)}</small>`;
+}
+tick(); setInterval(tick,1000);
+})();
+</script>
+</body>
+</html>

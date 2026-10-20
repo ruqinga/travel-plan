@@ -1,0 +1,761 @@
+{
+  "title": "里斯本跨年 · 示例行程",
+  "emoji": "🇵🇹",
+  "kicker": "SAMPLE · 示例页面，用来展示模板效果",
+  "dates": {
+    "start": "2026-12-29",
+    "end": "2027-01-02"
+  },
+  "people": 2,
+  "route": "马德里 → 里斯本 → 辛特拉 / 卡斯凯什",
+  "summaryLine": "4 晚 5 天 · 全程公共交通 · 住 Chiado 一个酒店不换",
+  "tz": "Europe/Lisbon",
+  "updated": "2026-10-20",
+  "status": [
+    {
+      "icon": "✈️",
+      "text": "往返机票已出票"
+    },
+    {
+      "icon": "🏨",
+      "text": "酒店 4/4 晚"
+    },
+    {
+      "icon": "⛪",
+      "text": "热罗尼莫斯已购"
+    },
+    {
+      "icon": "🏰",
+      "text": "佩纳宫时段票待购",
+      "ok": false
+    },
+    {
+      "icon": "🎸",
+      "text": "法朵晚餐待订",
+      "ok": false
+    }
+  ],
+  "overview": "从马德里飞一小时到里斯本，住在市中心 Chiado 不换酒店，每天放射状出去一条线：老城 → 贝伦 → 辛特拉 → 卡斯凯什海岸。跨年夜在商业广场看烟花。注意里斯本比马德里慢 1 小时。",
+  "map": {
+    "points": {
+      "mad": {
+        "name": "马德里",
+        "offmap": true,
+        "lat": 40.49,
+        "lon": -3.57
+      },
+      "lis": {
+        "name": "LIS 机场",
+        "lat": 38.7742,
+        "lon": -9.1342,
+        "q": "Lisbon Humberto Delgado Airport"
+      },
+      "hotel": {
+        "name": "里斯本市区 · Chiado",
+        "big": true,
+        "lat": 38.7105,
+        "lon": -9.142,
+        "q": "Chiado, Lisbon",
+        "anchor": "start",
+        "dy": 18
+      },
+      "alfama": {
+        "name": "Alfama",
+        "label": false,
+        "kind": "minor",
+        "lat": 38.7117,
+        "lon": -9.13,
+        "q": "Alfama, Lisbon"
+      },
+      "monte": {
+        "name": "Senhora do Monte",
+        "label": false,
+        "kind": "minor",
+        "lat": 38.7192,
+        "lon": -9.1328,
+        "q": "Miradouro da Senhora do Monte"
+      },
+      "comercio": {
+        "name": "商业广场",
+        "label": false,
+        "kind": "minor",
+        "lat": 38.7075,
+        "lon": -9.1365,
+        "q": "Praça do Comércio"
+      },
+      "timeout": {
+        "name": "Time Out Market",
+        "label": false,
+        "kind": "minor",
+        "lat": 38.7069,
+        "lon": -9.1459,
+        "q": "Time Out Market Lisboa"
+      },
+      "jeronimos": {
+        "name": "热罗尼莫斯修道院",
+        "lat": 38.6979,
+        "lon": -9.2066,
+        "q": "Jerónimos Monastery",
+        "anchor": "middle",
+        "dy": 24
+      },
+      "torre": {
+        "name": "贝伦塔",
+        "lat": 38.6916,
+        "lon": -9.216,
+        "q": "Belém Tower",
+        "anchor": "end",
+        "dy": 5
+      },
+      "lxf": {
+        "name": "LX Factory",
+        "lat": 38.7034,
+        "lon": -9.1785,
+        "q": "LX Factory",
+        "anchor": "middle",
+        "dy": -12
+      },
+      "pena": {
+        "name": "佩纳宫",
+        "lat": 38.7876,
+        "lon": -9.3906,
+        "q": "Pena Palace",
+        "anchor": "start"
+      },
+      "regaleira": {
+        "name": "雷加莱拉庄园",
+        "lat": 38.7963,
+        "lon": -9.3962,
+        "q": "Quinta da Regaleira",
+        "anchor": "start",
+        "dy": -8
+      },
+      "cascais": {
+        "name": "卡斯凯什",
+        "lat": 38.6979,
+        "lon": -9.4215,
+        "q": "Cascais",
+        "anchor": "start",
+        "dy": 18
+      },
+      "roca": {
+        "name": "罗卡角",
+        "lat": 38.7804,
+        "lon": -9.4989,
+        "q": "Cabo da Roca",
+        "anchor": "start"
+      }
+    },
+    "bounds": [
+      38.655,
+      -9.53,
+      38.83,
+      -9.07
+    ],
+    "land": [
+      [
+        [
+          38.96,
+          -9.42
+        ],
+        [
+          38.87,
+          -9.47
+        ],
+        [
+          38.82,
+          -9.48
+        ],
+        [
+          38.79,
+          -9.495
+        ],
+        [
+          38.78,
+          -9.5
+        ],
+        [
+          38.75,
+          -9.49
+        ],
+        [
+          38.73,
+          -9.48
+        ],
+        [
+          38.71,
+          -9.485
+        ],
+        [
+          38.695,
+          -9.44
+        ],
+        [
+          38.695,
+          -9.42
+        ],
+        [
+          38.685,
+          -9.39
+        ],
+        [
+          38.68,
+          -9.36
+        ],
+        [
+          38.677,
+          -9.33
+        ],
+        [
+          38.687,
+          -9.3
+        ],
+        [
+          38.69,
+          -9.26
+        ],
+        [
+          38.692,
+          -9.22
+        ],
+        [
+          38.697,
+          -9.19
+        ],
+        [
+          38.703,
+          -9.165
+        ],
+        [
+          38.706,
+          -9.145
+        ],
+        [
+          38.708,
+          -9.13
+        ],
+        [
+          38.715,
+          -9.115
+        ],
+        [
+          38.735,
+          -9.1
+        ],
+        [
+          38.765,
+          -9.093
+        ],
+        [
+          38.8,
+          -9.08
+        ],
+        [
+          38.86,
+          -9.05
+        ],
+        [
+          38.95,
+          -8.98
+        ],
+        [
+          38.96,
+          -8.6
+        ],
+        [
+          39.2,
+          -8.6
+        ],
+        [
+          39.2,
+          -9.42
+        ]
+      ],
+      [
+        [
+          38.6,
+          -9.21
+        ],
+        [
+          38.64,
+          -9.23
+        ],
+        [
+          38.665,
+          -9.235
+        ],
+        [
+          38.675,
+          -9.22
+        ],
+        [
+          38.672,
+          -9.19
+        ],
+        [
+          38.68,
+          -9.17
+        ],
+        [
+          38.686,
+          -9.147
+        ],
+        [
+          38.68,
+          -9.12
+        ],
+        [
+          38.665,
+          -9.1
+        ],
+        [
+          38.66,
+          -9.07
+        ],
+        [
+          38.68,
+          -9.04
+        ],
+        [
+          38.55,
+          -9.04
+        ],
+        [
+          38.55,
+          -9.21
+        ]
+      ]
+    ],
+    "labels": [
+      {
+        "text": "大 西 洋",
+        "lat": 38.62,
+        "lon": -9.45
+      },
+      {
+        "text": "特 茹 河",
+        "lat": 38.692,
+        "lon": -9.115
+      }
+    ]
+  },
+  "flights": [
+    {
+      "from": {
+        "code": "MAD",
+        "name": "马德里 T4",
+        "tz": "Europe/Madrid"
+      },
+      "to": {
+        "code": "LIS",
+        "name": "里斯本 T1",
+        "tz": "Europe/Lisbon"
+      },
+      "depart": "2026-12-29T09:05",
+      "arrive": "2026-12-29T09:20",
+      "duration": "1h15",
+      "airline": "示例航司",
+      "number": "XX 1234",
+      "status": "已出票",
+      "note": "建议 07:30 到 T4 · 只带登机行李"
+    },
+    {
+      "from": {
+        "code": "LIS",
+        "name": "里斯本 T1",
+        "tz": "Europe/Lisbon"
+      },
+      "to": {
+        "code": "MAD",
+        "name": "马德里 T4",
+        "tz": "Europe/Madrid"
+      },
+      "depart": "2027-01-02T15:10",
+      "arrive": "2027-01-02T17:25",
+      "duration": "1h15",
+      "airline": "示例航司",
+      "number": "XX 1235",
+      "status": "已出票",
+      "note": "13:30 前到机场 · 地铁红线直达"
+    }
+  ],
+  "bookings": [
+    {
+      "icon": "🏨",
+      "title": "Chiado 区酒店（示例）",
+      "status": "已订 4 晚",
+      "time": "12/29 15:00 起入住 → 1/2 11:00 前退房",
+      "address": "Chiado, Lisboa",
+      "q": "Chiado, Lisbon",
+      "note": "早到可先寄存行李；跨年夜酒店到商业广场步行约 10 分钟"
+    },
+    {
+      "icon": "⛪",
+      "title": "热罗尼莫斯修道院门票",
+      "status": "已购",
+      "time": "12/30（周三）10:00 时段 · 2 张",
+      "address": "Praça do Império, Belém",
+      "q": "Jerónimos Monastery",
+      "note": "电子票在手机钱包里；周一和 1/1 闭馆"
+    },
+    {
+      "icon": "🏰",
+      "title": "佩纳宫 宫殿+公园时段票",
+      "status": "待购",
+      "time": "12/31（周四）建议 10:00 场",
+      "address": "Estrada da Pena, Sintra",
+      "q": "Pena Palace",
+      "note": "跨年前后常售罄，务必官网提前买"
+    }
+  ],
+  "days": [
+    {
+      "date": "2026-12-29",
+      "title": "落地里斯本 · 老城 Alfama",
+      "subtitle": "MAD ✈ LIS · 28 路电车 · 法朵",
+      "mapLabel": "抵达 · 老城",
+      "travelmode": "transit",
+      "route": [
+        "mad",
+        "lis",
+        "hotel",
+        "alfama",
+        "monte"
+      ],
+      "stayPoint": "hotel",
+      "items": [
+        {
+          "time": "09:05",
+          "tz": "Europe/Madrid",
+          "title": "马德里 T4 起飞",
+          "flight": true,
+          "note": "马德里时间 · 机上把手表拨慢 1 小时"
+        },
+        {
+          "time": "09:20",
+          "title": "抵达 LIS T1",
+          "note": "地铁红线 → 绿线到 Baixa-Chiado，约 35 分钟；入口机器买 Viva Viagem 卡",
+          "place": "Lisbon Humberto Delgado Airport",
+          "placeLabel": "LIS 机场"
+        },
+        {
+          "time": "10:30",
+          "title": "酒店寄存行李",
+          "place": "Chiado, Lisbon",
+          "placeLabel": "Chiado"
+        },
+        {
+          "time": "11:00",
+          "title": "Baixa 散步 + 早午饭",
+          "note": "奥古斯塔街 → 凯旋门 → 商业广场",
+          "place": "Rua Augusta Arch"
+        },
+        {
+          "time": "13:30",
+          "title": "28 路电车上老城",
+          "note": "Martim Moniz 始发站排队人少，坐到 Graça",
+          "tag": "人多·早上车",
+          "place": "Martim Moniz, Lisbon"
+        },
+        {
+          "time": "14:30",
+          "title": "Alfama 小巷 + 主教座堂",
+          "place": "Lisbon Cathedral"
+        },
+        {
+          "time": "16:40",
+          "title": "Senhora do Monte 观景台看日落",
+          "note": "12 月日落约 17:20",
+          "place": "Miradouro da Senhora do Monte"
+        },
+        {
+          "time": "20:00",
+          "title": "Alfama 法朵晚餐",
+          "tag": "需预订",
+          "note": "热门店需提前 1–2 周订位",
+          "place": "Alfama fado restaurant"
+        }
+      ],
+      "stay": "Chiado 区酒店",
+      "stayQ": "Chiado, Lisbon"
+    },
+    {
+      "date": "2026-12-30",
+      "title": "贝伦 · 大航海时代",
+      "subtitle": "修道院 · 蛋挞 · 贝伦塔 · LX Factory",
+      "mapLabel": "贝伦",
+      "travelmode": "transit",
+      "route": [
+        "hotel",
+        "jeronimos",
+        "torre",
+        "lxf",
+        "hotel"
+      ],
+      "stayPoint": "hotel",
+      "items": [
+        {
+          "time": "09:15",
+          "title": "15E 电车去贝伦",
+          "note": "商业广场上车，约 25 分钟",
+          "place": "Praça do Comércio"
+        },
+        {
+          "time": "10:00",
+          "title": "热罗尼莫斯修道院",
+          "tag": "已购票",
+          "note": "回廊是重点，约 1.5 小时",
+          "place": "Jerónimos Monastery"
+        },
+        {
+          "time": "11:45",
+          "title": "Pastéis de Belém 蛋挞",
+          "note": "外带队伍快；店内座位区通常不用排很久",
+          "place": "Pastéis de Belém"
+        },
+        {
+          "time": "12:30",
+          "title": "发现者纪念碑 → 贝伦塔",
+          "note": "沿河步行 15 分钟",
+          "place": "Belém Tower"
+        },
+        {
+          "time": "15:00",
+          "title": "MAAT 美术馆屋顶",
+          "note": "屋顶免费可走",
+          "place": "MAAT Lisbon"
+        },
+        {
+          "time": "17:00",
+          "title": "LX Factory 逛 + 晚饭",
+          "note": "Ler Devagar 书店",
+          "place": "LX Factory"
+        }
+      ],
+      "stay": "Chiado 区酒店",
+      "stayQ": "Chiado, Lisbon"
+    },
+    {
+      "date": "2026-12-31",
+      "title": "辛特拉 · 跨年夜",
+      "subtitle": "佩纳宫 · 雷加莱拉 · 商业广场烟花",
+      "mapLabel": "辛特拉 · 跨年",
+      "travelmode": "transit",
+      "route": [
+        "hotel",
+        "pena",
+        "regaleira",
+        "hotel",
+        "comercio"
+      ],
+      "stayPoint": "hotel",
+      "items": [
+        {
+          "time": "08:31",
+          "title": "Rossio 站火车去辛特拉",
+          "note": "约 40 分钟，Viva Viagem 卡可刷",
+          "place": "Rossio Station"
+        },
+        {
+          "time": "09:30",
+          "title": "434 路巴士上山",
+          "note": "排队长可打车，约 10 分钟"
+        },
+        {
+          "time": "10:00",
+          "title": "佩纳宫",
+          "tag": "待购·时段票",
+          "note": "先宫殿后公园，约 2.5 小时",
+          "place": "Pena Palace"
+        },
+        {
+          "time": "13:30",
+          "title": "下山午饭",
+          "note": "辛特拉老镇试 Travesseiro 酥饼",
+          "place": "Piriquita Sintra"
+        },
+        {
+          "time": "14:30",
+          "title": "雷加莱拉庄园 · 倒塔井",
+          "note": "最后入场较早，别拖",
+          "place": "Quinta da Regaleira"
+        },
+        {
+          "time": "17:00",
+          "title": "火车回里斯本",
+          "note": "跨年夜返程车很挤，别坐太晚"
+        },
+        {
+          "time": "21:00",
+          "title": "早点吃跨年晚饭",
+          "note": "餐厅跨年夜多为套餐需预订"
+        },
+        {
+          "time": "23:30",
+          "title": "商业广场等烟花",
+          "note": "安检：别带大包和玻璃瓶；0:00 烟花",
+          "place": "Praça do Comércio"
+        }
+      ],
+      "stay": "Chiado 区酒店",
+      "stayQ": "Chiado, Lisbon"
+    },
+    {
+      "date": "2027-01-01",
+      "title": "元旦 · 海边慢一天",
+      "subtitle": "卡斯凯什 · 地狱之口 · 罗卡角日落",
+      "mapLabel": "卡斯凯什海岸",
+      "travelmode": "transit",
+      "route": [
+        "hotel",
+        "cascais",
+        "roca",
+        "hotel"
+      ],
+      "stayPoint": "hotel",
+      "items": [
+        {
+          "time": "11:00",
+          "title": "睡个懒觉，Cais do Sodré 坐火车",
+          "note": "元旦多数博物馆闭馆，安排户外；火车按节假日班次",
+          "place": "Cais do Sodré station"
+        },
+        {
+          "time": "12:00",
+          "title": "卡斯凯什老城 + 午饭",
+          "place": "Cascais"
+        },
+        {
+          "time": "14:00",
+          "title": "地狱之口海崖",
+          "note": "从老城沿海步行约 20 分钟",
+          "place": "Boca do Inferno"
+        },
+        {
+          "time": "15:45",
+          "title": "403 路巴士去罗卡角",
+          "note": "节假日班次少，提前看时刻；打车约 20 分钟",
+          "tag": "看班次"
+        },
+        {
+          "time": "17:00",
+          "title": "罗卡角 · 欧亚大陆最西端日落",
+          "note": "风很大，带帽子",
+          "place": "Cabo da Roca"
+        },
+        {
+          "time": "18:30",
+          "title": "回市区",
+          "note": "403 回卡斯凯什换火车，约 1.5 小时"
+        }
+      ],
+      "stay": "Chiado 区酒店",
+      "stayQ": "Chiado, Lisbon"
+    },
+    {
+      "date": "2027-01-02",
+      "title": "Time Out Market · 回马德里",
+      "subtitle": "早午饭 · LIS ✈ MAD",
+      "mapLabel": "返程",
+      "travelmode": "transit",
+      "route": [
+        "hotel",
+        "timeout",
+        "lis",
+        "mad"
+      ],
+      "items": [
+        {
+          "time": "10:30",
+          "title": "退房，行李寄前台",
+          "place": "Chiado, Lisbon",
+          "placeLabel": "Chiado"
+        },
+        {
+          "time": "11:00",
+          "title": "Time Out Market 早午饭",
+          "place": "Time Out Market Lisboa"
+        },
+        {
+          "time": "12:45",
+          "title": "取行李，地铁去机场",
+          "note": "Cais do Sodré 绿线 → 红线，约 40 分钟"
+        },
+        {
+          "time": "15:10",
+          "title": "LIS T1 起飞",
+          "flight": true,
+          "note": "17:25 马德里时间到 T4"
+        }
+      ]
+    }
+  ],
+  "todos": [
+    {
+      "text": "买佩纳宫 12/31 时段票（宫殿+公园）",
+      "due": "尽快",
+      "urgent": true,
+      "note": "跨年前后常售罄"
+    },
+    {
+      "text": "订 12/29 晚 Alfama 法朵餐厅",
+      "due": "12/15 前"
+    },
+    {
+      "text": "订 12/31 跨年晚饭",
+      "due": "12/1 前",
+      "note": "跨年夜套餐，越早越好选"
+    },
+    {
+      "text": "下载 Google 地图里斯本离线区域"
+    },
+    {
+      "text": "确认是否需要旅行保险"
+    },
+    {
+      "text": "往返机票",
+      "done": true
+    },
+    {
+      "text": "酒店 4 晚",
+      "done": true
+    },
+    {
+      "text": "热罗尼莫斯修道院门票 12/30 10:00",
+      "done": true
+    }
+  ],
+  "tips": [
+    {
+      "icon": "🕐",
+      "title": "时差",
+      "text": "里斯本比马德里慢 1 小时（WET vs CET）。本页所有时间都是当地时间并标了时区，倒计时已自动换算。"
+    },
+    {
+      "icon": "🌦️",
+      "title": "天气",
+      "text": "12 月底白天约 9–15°C，常有阵雨，石板路湿滑。带防水外套和防滑鞋，雨伞容易被海风吹翻。"
+    },
+    {
+      "icon": "🚇",
+      "title": "交通卡",
+      "text": "地铁站买 Viva Viagem 卡并充 Zapping 储值，地铁、电车、去辛特拉/卡斯凯什的火车都能刷。"
+    },
+    {
+      "icon": "🎆",
+      "title": "跨年夜",
+      "text": "商业广场人非常多：约好走散后的集合点，手机充满电，别带大包；结束后地铁会很挤，可直接走回 Chiado。"
+    },
+    {
+      "icon": "🏛️",
+      "title": "闭馆日",
+      "text": "热罗尼莫斯修道院、贝伦塔等周一和 1 月 1 日闭馆，所以元旦安排了户外海岸线。"
+    },
+    {
+      "icon": "💶",
+      "title": "小费 / 付款",
+      "text": "大部分地方能刷卡；小费不是必须，满意可留 5–10%。"
+    }
+  ],
+  "footer": "Travel Plan · ruqinga"
+}
