@@ -27,7 +27,8 @@
 }
 .xp{--main:var(--main-l);color:var(--ink);font:15px/1.6 var(--sans)}
 *{box-sizing:border-box}
-html{-webkit-text-size-adjust:100%}
+html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
+[id]{scroll-margin-top:112px}
 body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.6 var(--sans);-webkit-font-smoothing:antialiased}
 a{color:inherit}
 .wrap{max-width:1180px;margin:0 auto;padding:0 16px 60px}
@@ -43,6 +44,29 @@ a{color:inherit}
 .btn{font:inherit;font-size:14px;font-weight:600;cursor:pointer;border:0;border-radius:999px;padding:7px 15px;background:var(--ink);color:var(--bg);text-decoration:none;display:inline-flex;align-items:center;gap:5px}
 .btn.ghost{background:var(--paper);color:var(--ink);box-shadow:inset 0 0 0 1px var(--line)}
 .topbar .btn{margin-left:auto}
+.topbar{flex-wrap:wrap}
+.chapters{flex-basis:100%;display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;margin:2px -16px 0;padding:2px 16px 0}
+.chapters::-webkit-scrollbar{display:none}
+.chapters a{flex:none;font-size:13px;font-weight:600;padding:4px 12px;border-radius:999px;background:var(--paper);color:var(--ink);text-decoration:none;box-shadow:inset 0 0 0 1px var(--line)}
+.chapters a.on{background:var(--ink);color:var(--bg);box-shadow:none}
+/* countdown (now) card */
+.now .lb{font-size:11.5px;letter-spacing:2.5px;color:var(--muted);font-weight:600;display:flex;align-items:center;gap:7px}
+.now .dot{width:7px;height:7px;border-radius:50%;background:var(--accent);animation:pulse 1.6s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.25}}
+.now h2{margin:8px 0 2px;font:700 21px/1.35 var(--serif);letter-spacing:1px}
+.now .sb{font-size:13px;color:var(--muted)}
+.now .cdn{font:700 clamp(30px,7cqi,46px)/1.15 var(--mono);color:var(--accent);margin:10px 0 2px;font-variant-numeric:tabular-nums;letter-spacing:1px}
+.now .cdn small{display:block;font:500 12.5px var(--mono);color:var(--muted);letter-spacing:0;margin-top:4px}
+.now .peek{display:flex;align-items:center;gap:8px;margin-top:12px;padding-top:11px;border-top:.5px dashed var(--dash);font-size:13.5px}
+.now .peek b{flex:none;font-size:11px;padding:1px 8px;border-radius:999px;background:var(--accent);color:#fff}
+.now .peek a{margin-left:auto;color:var(--accent);text-decoration:none;font-weight:600;white-space:nowrap}
+/* clickable map */
+.mapbox svg text{pointer-events:none}
+.mapbox svg a{cursor:pointer}
+.mapbox svg a.pinlk:hover path,.mapbox svg a.pinlk:hover circle{filter:brightness(1.12)}
+.maplinks{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
+.maplinks a{font-size:13px;font-weight:600;padding:5px 12px;border-radius:999px;text-decoration:none;color:var(--blue);background:color-mix(in srgb,var(--blue) 10%,var(--paper))}
+.maplinks a.main{background:var(--blue);color:#fff}
 
 /* poster */
 .poster{container-type:inline-size;background:var(--bg);display:flex;flex-direction:column;gap:14px}
@@ -204,7 +228,7 @@ const dayDate = (d,i) => d.date || (D0 ? new Date(Date.UTC(...D0.split('-').map(
 let h = '';
 h += `<div class="topbar noexp"><a class="back" href="../">行程</a>
   <span class="st ${status==='on'?'on':status==='gone'?'gone':''}">${status==='on'?'Ongoing':status==='gone'?'Gone':'Plan to go'}</span>
-  <button class="btn" id="exp" type="button">⤓ 导出图片</button></div>`;
+  <button class="btn" id="exp" type="button">⤓ 导出图片</button><nav class="chapters" id="chapters"></nav></div>`;
 h += `<div class="poster" id="poster">`;
 
 /* hero */
@@ -213,9 +237,18 @@ h += `<header class="box hero"><div class="seal">${esc(sealTxt())}</div><div><h1
   ${(T.highlights||[]).length?`<div class="hl">${T.highlights.map(esc).join(' · ')}</div>`:''}</div>
   <div class="hero-r">${T.from?`<span class="pill main">出发地 ${esc(T.from)}</span>`:''}<span class="pill">日期 ${esc(dateTxt)}</span>${T.people?`<span class="pill">${esc(T.people)} 人</span>`:''}</div></header>`;
 
+/* now / countdown (web only) */
+const EV = T._events || [];
+if(status!=='gone' && EV.length){
+  const firstTodo = (T.todos||[]).find(t=>!t.done);
+  h += `<section class="box now noexp" id="now"><div class="lb"><span class="dot"></span><span id="now-lb">此刻关注 · NOW</span></div>
+    <h2 id="now-t"></h2><div class="sb" id="now-s"></div><div class="cdn" id="now-c"></div>
+    ${firstTodo?`<div class="peek"><b>当前待办</b><span>${esc(firstTodo.text)}</span><a href="#todos">去清单 ›</a></div>`:''}</section>`;
+}
+
 /* stats */
 const stats = T.stats || autoStats();
-if(stats.length) h += `<div class="stats" style="--n:${stats.length}">${stats.map(s=>`<div class="stat"><span>${esc(s.k)}</span><b>${esc(s.v)}</b></div>`).join('')}</div>`;
+if(stats.length) h += `<div class="stats" id="overview" style="--n:${stats.length}">${stats.map(s=>`<div class="stat"><span>${esc(s.k)}</span><b>${esc(s.v)}</b></div>`).join('')}</div>`;
 
 /* days (+ map beside when one day) */
 const hasMap = T.map && T.map.points;
@@ -228,7 +261,7 @@ else {
 
 /* hikes */
 if((T.hikes||[]).length){
-  h += `<section class="box"><h3>🥾 徒步路线</h3>${T.hikes.map(k=>{
+  h += `<section class="box" id="hikes"><h3>🥾 徒步路线</h3>${T.hikes.map(k=>{
     const st = [['全程',k.distance],['用时',k.time],['爬升',k.gain],['难度',k.difficulty]].filter(x=>x[1]);
     const url = k.wikiloc || ('https://www.google.com/search?q=' + encodeURIComponent('wikiloc ' + (k.search||k.name)));
     return `<div class="hike"><h4>${esc(k.name)}${k.shape?`<span class="tag">${esc(k.shape)}</span>`:''}</h4>
@@ -241,21 +274,21 @@ if((T.hikes||[]).length){
 /* transport chain (full width) */
 const TR = T.transport || {};
 if((TR.chain||[]).length){
-  h += `<section class="box dashed"><h3>${esc(TR.title||'交通路线')}</h3><div class="chain">${TR.chain.map((c,i)=>
+  h += `<section class="box dashed" id="transport"><h3>${esc(TR.title||'交通路线')}</h3><div class="chain">${TR.chain.map((c,i)=>
     c.via ? `<span class="via">→ ${esc(c.via)} →</span>` : `<span class="node ${i===TR.chain.length-1?'end':''}">${esc(c.at)}</span>`).join('')}</div>
     ${TR.note?`<div class="note">${esc(TR.note)}</div>`:''}</section>`;
 }
 
 /* legacy flights + bookings */
 if((T.flights||[]).length){
-  h += `<section class="box"><h3>🚆 长途交通</h3>${T.flights.map(f=>`<div class="flight">
+  h += `<section class="box" id="flights"><h3>🚆 长途交通</h3>${T.flights.map(f=>`<div class="flight">
     <div class="ap"><b>${esc(f.from.code)}</b><span class="t">${esc((f.depart||'').slice(11,16))}</span><div class="n">${esc(f.from.name||'')} · ${fd(f.depart.slice(0,10))}</div></div>
     <div class="mid">${esc(f.duration||'')}<br>${({train:'🚄',bus:'🚌',ferry:'⛴'})[f.mode]||'✈'}<br>${esc(f.stops||'')}</div>
     <div class="ap r"><b>${esc(f.to.code)}</b><span class="t">${esc((f.arrive||'').slice(11,16))}</span><div class="n">${esc(f.to.name||'')}</div></div>
     <div class="fmeta">${esc([f.airline,f.number,f.status,f.note].filter(Boolean).join(' · '))}</div></div>`).join('')}</section>`;
 }
 if((T.bookings||[]).length){
-  h += `<section class="box"><h3>🎟️ 预订</h3>${T.bookings.map(b=>`<div class="bk"><div class="ic">${esc(b.icon||'📌')}</div><div>
+  h += `<section class="box" id="bookings"><h3>🎟️ 预订</h3>${T.bookings.map(b=>`<div class="bk"><div class="ic">${esc(b.icon||'📌')}</div><div>
     <b>${esc(b.title)}</b>${b.status?`<span class="tag ${/待|未/.test(b.status)?'no':''}">${esc(b.status)}</span>`:''}
     ${b.time?`<div class="row">🕒 ${esc(b.time)}</div>`:''}
     ${b.address?`<div class="row">📍 <a href="${gmap(b.q||b.address)}" target="_blank" rel="noopener">${esc(b.address)}</a></div>`:''}
@@ -273,20 +306,47 @@ if(T.budget) trio.push(`<section class="box"><h3>${esc(T.budget.title||'预算�
 const tipList = T.checklist || [];
 if(tipList.length || (!(TR.lines||[]).length && (T.packing||[]).length)) trio.push(`<section class="box"><h3>${esc(T.checklistTitle||'行前小贴士')}</h3><ul class="ck">${tipList.map(t=>`<li>${esc(t)}</li>`).join('')}</ul>
   ${!(TR.lines||[]).length && (T.packing||[]).length?`<div class="chips">${T.packing.map(p=>`<span>${esc(p)}</span>`).join('')}</div>`:''}</section>`);
-if(trio.length) h += `<div class="cols ${trio.length>=3?'c3':trio.length===2?'c2':''}">${trio.join('')}</div>`;
+if(trio.length) h += `<div id="info" class="cols ${trio.length>=3?'c3':trio.length===2?'c2':''}">${trio.join('')}</div>`;
 
 /* legacy todos + tips */
 if((T.todos||[]).length){
-  h += `<section class="box"><h3>✅ 待办</h3><ul class="tdl">${T.todos.map(t=>`<li class="${t.done?'done':''}">${t.done?'✅':(t.urgent?'🔴':'⬜')} ${esc(t.text)}${t.due&&!t.done?`<span class="tag">${esc(t.due)}</span>`:''}</li>`).join('')}</ul></section>`;
+  h += `<section class="box" id="todos"><h3>✅ 待办</h3><ul class="tdl">${T.todos.map(t=>`<li class="${t.done?'done':''}">${t.done?'✅':(t.urgent?'🔴':'⬜')} ${esc(t.text)}${t.due&&!t.done?`<span class="tag">${esc(t.due)}</span>`:''}</li>`).join('')}</ul></section>`;
 }
 if((T.tips||[]).length){
-  h += `<section class="box"><h3>💡 贴士</h3><ul class="ck">${T.tips.map(t=>`<li><span><b>${esc(t.title)}</b> ${esc(t.text)}</span></li>`).join('')}</ul></section>`;
+  h += `<section class="box" id="tips"><h3>💡 贴士</h3><ul class="ck">${T.tips.map(t=>`<li><span><b>${esc(t.title)}</b> ${esc(t.text)}</span></li>`).join('')}</ul></section>`;
 }
 
 if(T.band) h += `<div class="band"><b>${esc(T.band.text||'')}</b>${T.band.note?`<span>${esc(T.band.note)}</span>`:''}</div>`;
 h += `</div>`; // poster
 if(T.updated) h += `<div class="upd">最后更新 ${esc(T.updated)} · <a href="../">Travel Plan</a></div>`;
 document.getElementById('app').innerHTML = h;
+
+/* chapter nav: only sections that exist */
+const CH = [['now','此刻'],['overview','概览'],['day1','行程'],['map','地图'],['hikes','徒步'],['transport','交通'],['flights','长途交通'],['bookings','预订'],['info', T.budget?'住宿·预算':'实用信息'],['todos','待办'],['tips','贴士']]
+  .filter(([id])=>document.getElementById(id));
+const $ch = document.getElementById('chapters');
+$ch.innerHTML = CH.map(([id,l])=>`<a href="#${id}" data-ch="${id}">${l}</a>`).join('');
+if('IntersectionObserver' in window){
+  const seen = new Map();
+  const io = new IntersectionObserver(es=>{ es.forEach(e=>seen.set(e.target.id, e.isIntersecting)); const cur = CH.find(([id])=>seen.get(id));
+    $ch.querySelectorAll('a').forEach(a=>a.classList.toggle('on', !!cur && a.dataset.ch===cur[0]));
+    const on=$ch.querySelector('a.on'); if(on) $ch.scrollTo({left:on.offsetLeft-60, behavior:'smooth'}); }, {rootMargin:'-112px 0px -55% 0px'});
+  CH.forEach(([id])=>io.observe(document.getElementById(id)));
+}
+
+/* countdown tick */
+if(document.getElementById('now')){
+  const $t=document.getElementById('now-t'), $s=document.getElementById('now-s'), $c=document.getElementById('now-c'), $l=document.getElementById('now-lb');
+  const fmtT = ms => new Intl.DateTimeFormat('zh-CN',{timeZone:TZ,month:'numeric',day:'numeric',weekday:'short',hour:'2-digit',minute:'2-digit',hourCycle:'h23'}).format(new Date(ms));
+  const tick = ()=>{
+    const now = Date.now(), e = EV.find(e=>e[0]>now), p2 = n=>String(n).padStart(2,'0');
+    if(!e){ $l.textContent='行程安排已全部结束'; $t.textContent='一路平安，旅途愉快'; $s.textContent=''; $c.textContent=''; return; }
+    let x = Math.floor((e[0]-now)/1000); const D = Math.floor(x/86400); x %= 86400;
+    $t.textContent = e[1]; $s.textContent = e[2] || '';
+    $c.innerHTML = `${D?D+'天 ':''}${p2(Math.floor(x/3600))}:${p2(Math.floor(x%3600/60))}:${p2(x%60)}<small>后 · ${esc(fmtT(e[0]))}（当地时间）</small>`;
+  };
+  tick(); setInterval(tick, 1000);
+}
 
 /* ---------- pieces ---------- */
 function sealTxt(){ if(T.seal) return T.seal; const n = D0 ? Math.round((Date.parse(D1)-Date.parse(D0))/864e5)+1 : (T.length||days.length||1); return n===1?'一日':(['','一','二','三','四','五','六','七','八','九','十'][n]||n)+'日'; }
@@ -302,7 +362,7 @@ function autoStats(){
 function dayCard(d,i){
   const c = dayColor(d,i), dt = dayDate(d,i);
   let n = 0;
-  let s = `<section class="box"><div class="dayhead"><span class="badge" style="background:${c}">${esc(d.badge || (days.length===1?'一日行程':'Day '+(i+1)))}</span><h4>${esc(d.title||'')}</h4>
+  let s = `<section class="box" id="day${i+1}"><div class="dayhead"><span class="badge" style="background:${c}">${esc(d.badge || (days.length===1?'一日行程':'Day '+(i+1)))}</span><h4>${esc(d.title||'')}</h4>
     ${dt?`<span class="dt">${fd(dt)}${dt===today?' <span class="today noexp">今天</span>':''}</span>`:''}</div><ul class="tl">`;
   (d.items||[]).forEach(it=>{
     if(it.move){ s += `<li class="move"><span class="ln"></span><span>↓ ${esc(it.move)}</span></li>`; return; }
@@ -318,9 +378,26 @@ function dayCard(d,i){
   return s + `</section>`;
 }
 function mapCard(){
-  return `<section class="box mapbox"><h3>路线地图${T.map.subtitle?`<span class="s">${esc(T.map.subtitle)}</span>`:''}</h3>${renderMap()}</section>`;
+  const all = routeUrl(allRoutePts(), T.travelmode || inferMode());
+  const per = days.length>1 ? days.map((d,i)=>[d, i, routeUrl(dayPts(d), dayMode(d))]).filter(x=>x[2]) : [];
+  return `<section class="box mapbox" id="map"><h3>路线地图${T.map.subtitle?`<span class="s">${esc(T.map.subtitle)}</span>`:''}</h3>${renderMap(all)}
+    ${all?`<div class="maplinks noexp"><a class="main" href="${esc(all)}" target="_blank" rel="noopener">🧭 Google 地图打开${days.length>1?'全程':''}路线 ↗</a>${per.map(([d,i,u])=>`<a href="${esc(u)}" target="_blank" rel="noopener">${esc(d.mapLabel||('Day '+(i+1)))} ↗</a>`).join('')}</div>
+    <div class="note noexp">点地图打开整条路线；点图钉或地点打开该位置。</div>`:''}</section>`;
 }
-function renderMap(){
+function ploc(p){ return p.q || `${p.lat},${p.lon}`; }
+function inferMode(){ const m = (T.mode||'') + ' ' + ((T.hikes||[]).length?'徒步':''); return /自驾|开车|租车|drive/i.test(m) ? 'driving' : (/徒步|步行|hike|walk/i.test(m) && !/TRAM|大巴|火车|高铁|地铁|飞/i.test(T.mode||'') ? 'walking' : (/TRAM|大巴|火车|高铁|地铁|公交|bus|train/i.test(m) ? 'transit' : 'walking')); }
+function dayMode(d){ return d.travelmode || T.travelmode || inferMode(); }
+function dayPts(d){ const P=T.map.points; const r=(d.route||[]).map(id=>P[id]).filter(p=>p&&!p.offmap); return r.filter((p,i)=>i===0||p!==r[i-1]); }
+function allRoutePts(){ const seen=new Set(), out=[]; days.forEach(d=>dayPts(d).forEach(p=>{ if(!seen.has(p)){ seen.add(p); out.push(p); } })); if(!out.length) Object.values(T.map.points).filter(p=>!p.offmap).forEach(p=>out.push(p)); return out; }
+function routeUrl(pts, mode){
+  if(pts.length<2) return pts.length ? gmap(ploc(pts[0])) : '';
+  const o=pts[0], de=pts[pts.length-1], w=pts.slice(1,-1).slice(0,9);
+  let u = `https://www.google.com/maps/dir/?api=1&origin=${encodeURIComponent(ploc(o))}&destination=${encodeURIComponent(ploc(de))}`;
+  if(w.length) u += `&waypoints=${w.map(p=>encodeURIComponent(ploc(p))).join('%7C')}`;
+  if(!(mode==='transit' && w.length)) u += `&travelmode=${mode}`;   // Google ignores waypoints in transit mode, so let it choose
+  return u;
+}
+function renderMap(routeLink){
   const M = T.map, P = M.points, ids = Object.keys(P);
   let la0=Infinity,la1=-Infinity,lo0=Infinity,lo1=-Infinity;
   ids.filter(k=>!P[k].offmap).forEach(k=>{const p=P[k];la0=Math.min(la0,p.lat);la1=Math.max(la1,p.lat);lo0=Math.min(lo0,p.lon);lo1=Math.max(lo1,p.lon);});
@@ -369,6 +446,7 @@ function renderMap(){
       s += `<path d="M${ax} ${ay}Q${mx} ${my} ${bx} ${by}" fill="none" stroke="${c}" stroke-width="3.2" stroke-linecap="round" stroke-dasharray="${(d.dashed||[]).includes(j)?'2 7':'7 6'}"/>`;
     }
   });
+  if(routeLink) s += `<a href="${esc(routeLink)}" target="_blank" rel="noopener" aria-label="在 Google 地图打开路线"><rect width="${W}" height="${H}" fill="#000" fill-opacity="0"/></a>`;
   // plain points
   const pinned = {};
   days.forEach((d,i)=>(d.items||[]).forEach(it=>{ if(it.pt && P[it.pt] && !P[it.pt].offmap){ (pinned[it.pt]=pinned[it.pt]||[]).push({n:it._n, c:MARK[it.mark]||dayColor(d,i), time:it.time}); } }));
@@ -376,9 +454,9 @@ function renderMap(){
     const p=P[id]; if(p.offmap) return; const x=X(p.lon), y=Y(p.lat), pins=pinned[id];
     if(pins){
       const f = pins[0];
-      s += `<g transform="translate(${x},${y})"><path d="M0 0C-4-8-13-12-13-22a13 13 0 0 1 26 0C13-12 4-8 0 0Z" fill="${f.c}" stroke="#fff" stroke-width="1.6"/><text y="-17" font-size="13" font-weight="700" fill="#fff" text-anchor="middle">${pins.map(q=>q.n).join('·')}</text></g>`;
+      s += `<a class="pinlk" href="${esc(gmap(ploc(p)))}" target="_blank" rel="noopener"><g transform="translate(${x},${y})"><path d="M0 0C-4-8-13-12-13-22a13 13 0 0 1 26 0C13-12 4-8 0 0Z" fill="${f.c}" stroke="#fff" stroke-width="1.6"/><text y="-17" font-size="13" font-weight="700" fill="#fff" text-anchor="middle">${pins.map(q=>q.n).join('·')}</text></g></a>`;
     } else {
-      s += `<circle cx="${x}" cy="${y}" r="${p.kind==='minor'?3:4.5}" fill="var(--paper)" stroke="var(--ink)" stroke-width="1.5"/>`;
+      s += `<a class="pinlk" href="${esc(gmap(ploc(p)))}" target="_blank" rel="noopener"><circle cx="${x}" cy="${y}" r="11" fill="#000" fill-opacity="0"/><circle cx="${x}" cy="${y}" r="${p.kind==='minor'?3:4.5}" fill="var(--paper)" stroke="var(--ink)" stroke-width="1.5"/></a>`;
     }
     if(p.label!==false){
       const anc = p.anchor || (x > W*0.62 ? 'end' : 'start'), dx = anc==='end'?-16:(anc==='middle'?0:16);

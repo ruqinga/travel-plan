@@ -5,7 +5,8 @@ Usage:  python3 build.py            # build all trips
         python3 build.py <slug>     # build one trip (home page is always rebuilt)
 """
 import html, json, re, sys
-from datetime import date, timedelta
+from datetime import date, datetime, timedelta
+from zoneinfo import ZoneInfo
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent
@@ -36,7 +37,33 @@ def load(d: Path):
     return trip
 
 
+def ms(local: str, tz: str) -> int:
+    return int(datetime.fromisoformat(local).replace(tzinfo=ZoneInfo(tz)).timestamp() * 1000)
+
+
+def events(t):
+    """Countdown targets [[epoch_ms, title, sub], ...] sorted; needs real dates. Times are local to each item's tz."""
+    ds = t.get("dates") or {}
+    if not ds.get("start"):
+        return []
+    tz, ev = t.get("tz", "Europe/Madrid"), []
+    icon = {"train": "🚄", "bus": "🚌", "ferry": "⛴"}
+    for f in t.get("flights", []):
+        ev.append([ms(f["depart"], f["from"].get("tz", tz)), f"{f['from']['code']} {icon.get(f.get('mode'), '✈')} {f['to']['code']} 出发",
+                   " · ".join(x for x in (f.get("airline"), f.get("number"), f.get("duration"), f.get("note")) if x)])
+    for i, d in enumerate(t.get("days", [])):
+        day = d.get("date") or (date.fromisoformat(ds["start"]) + timedelta(days=i)).isoformat()
+        for it in d.get("items", []):
+            if it.get("time") and it.get("title") and not it.get("flight") and it.get("countdown", True) and re.match(r"^\d{1,2}:\d{2}$", it["time"]):
+                ev.append([ms(f"{day}T{it['time']:0>5}", it.get("tz", d.get("tz", tz))), it["title"],
+                           " · ".join(x for x in (d.get("badge") or f"Day {i + 1}", it.get("note")) if x)])
+    if not ev:
+        ev.append([ms(ds["start"] + "T00:00", tz), "出发日", ""])
+    return sorted(ev)
+
+
 def build_trip(d: Path, trip):
+    trip = dict(trip, _events=events(trip))
     data = json.dumps(trip, ensure_ascii=False, indent=1).replace("</", "<\\/")
     out = (TEMPLATE.replace("__TRIP_JSON__", data)
            .replace("__TRIP_TITLE__", html.escape(trip["title"]))
@@ -65,6 +92,7 @@ def summary(t):
         "hike": [x for x in (hk.get("distance"), ("↑" + hk["gain"]) if hk.get("gain") else None) if x],
         "nhikes": len(t.get("hikes") or []),
         "sched": day_items(t),
+        "ev": [e[:2] for e in events(t)],
     }
 
 
@@ -137,6 +165,9 @@ h1{margin:0;font:800 34px/1.2 var(--serif);letter-spacing:2px}
 .today li.past{opacity:.45}
 .today li.next{color:var(--ink);font-weight:600}.today li.next time{color:var(--accent)}
 .today li.next::after{content:"下一项";margin-left:auto;font-size:11px;font-weight:700;color:#fff;background:var(--accent);border-radius:999px;padding:0 8px;height:18px;line-height:18px;flex:none}
+.cd{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap;margin-top:8px}
+.cd span{font-size:12px;color:var(--muted)}
+.cd b{font:700 20px ui-monospace,"SF Mono",Menlo,monospace;color:var(--accent);font-variant-numeric:tabular-nums;letter-spacing:.5px}
 .big .sl{width:52px;height:52px;font-size:16px}
 .empty{text-align:center;color:var(--muted);padding:44px 16px 30px}
 .empty .zh{font:700 20px var(--serif);color:var(--ink);letter-spacing:2px;margin-bottom:4px}
@@ -167,7 +198,7 @@ const nTag = n => n===1 ? '一日' : (n<=3 ? '2–3 日' : '4 日+');
 const seal = n => n===1 ? '一日' : (CN[n]||n)+'日';
 const pinVal = t => (t.slug in pins) ? pins[t.slug] : (t.pinned ? (typeof t.pinned==='number' ? t.pinned : 1) : 0);
 const PIN = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"><path d="M9 3.5h6l-.9 5.6 3.4 3.4v1.8H6.5v-1.8l3.4-3.4z"/><path d="M12 14.3v6.2"/></svg>';
-const VIEWS = {ongoing:['ONGOING','旅途中','Ongoing'], plan:['PLAN TO GO','计划','Plan to go'], gone:['GONE','足迹','Gone']};
+const VIEWS = {ongoing:['ONGOING','在旅','Ongoing'], plan:['PLAN TO GO','计划','Plan to go'], gone:['GONE','足迹','Gone']};
 
 function card(t, big){
   const s = status(t), pv = pinVal(t);
@@ -189,6 +220,7 @@ function card(t, big){
     <div class="sl">${seal(t.n)}</div><div class="bd">
     <div class="ti">${esc(t.title)}</div>${t.subtitle?`<div class="st2">${esc(t.subtitle)}</div>`:''}
     <div class="when">${when}</div>${facts.length?`<div class="facts">${facts.map(f=>`<span>${esc(f)}</span>`).join('')}</div>`:''}
+    ${s!=='gone'&&t.ev.length?`<div class="cd" data-cd="${esc(t.slug)}"><span></span><b></b></div>`:''}
     <div class="tags">${t.distance?`<span class="tag d">${esc(t.distance)}</span>`:''}${t.types.map(x=>`<span class="tag">${esc(x)}</span>`).join('')}</div>${extra}</div>
     ${s==='plan'?`<button class="pin ${pv?'on':''}" type="button" data-pin="${esc(t.slug)}" aria-label="${pv?'取消置顶':'置顶'}" title="${pv?'取消置顶':'置顶'}">${PIN}</button>`:''}</a>`;
 }
@@ -202,7 +234,7 @@ function render(){
   let h = `<div class="eyebrow">${VIEWS[v][0]}</div><h1>${VIEWS[v][1]}</h1>`;
   if(v==='ongoing'){
     h += `<div class="sub">${on.length ? `${fd(today)} · ${on.length} 段旅程进行中` : fd(today)}</div>`;
-    h += on.length ? on.map(t=>card(t,true)).join('') : `<div class="empty"><div class="zh">此刻不在旅途中</div>下一次出发，从计划开始。<br><a href="#plan">查看 ${allPlan.length} 个计划 ›</a></div>`;
+    h += on.length ? on.map(t=>card(t,true)).join('') : `<div class="empty"><div class="zh">此刻不在旅</div>下一次出发，从计划开始。<br><a href="#plan">查看 ${allPlan.length} 个计划 ›</a></div>`;
   } else if(v==='plan'){
     const opts = {
       n: ['一日','2–3 日','4 日+'].filter(x=>allPlan.some(t=>nTag(t.n)===x)),
@@ -227,6 +259,7 @@ function render(){
   }
   h += `<footer>状态按日期自动切换${v==='plan'?' · 图钉只改这台设备，要同步请改行程数据':''}</footer>`;
   document.getElementById('page').innerHTML = h;
+  tick();
 }
 document.addEventListener('click', ev=>{
   const p = ev.target.closest('[data-pin]');
@@ -236,7 +269,17 @@ document.addEventListener('click', ev=>{
 });
 window.addEventListener('hashchange', ()=>{ render(); window.scrollTo(0,0); });
 window.addEventListener('pageshow', ()=>{ pins=get(PKEY,{}); render(); });
-render(); setInterval(()=>{ if(view()==='ongoing') render(); }, 60000);
+function tick(){
+  const now = Date.now(), p2 = n=>String(n).padStart(2,'0');
+  document.querySelectorAll('[data-cd]').forEach(el=>{
+    const t = TRIPS.find(x=>x.slug===el.dataset.cd), e = t.ev.find(e=>e[0]>now);
+    if(!e){ el.style.display='none'; return; }
+    let s = Math.floor((e[0]-now)/1000); const D = Math.floor(s/86400); s %= 86400;
+    el.querySelector('span').textContent = status(t)==='on' ? `距下一项 · ${e[1]}` : `距出发 · ${e[1]}`;
+    el.querySelector('b').textContent = `${D?D+'天 ':''}${p2(Math.floor(s/3600))}:${p2(Math.floor(s%3600/60))}:${p2(s%60)}`;
+  });
+}
+render(); setInterval(tick, 1000); setInterval(()=>{ if(view()==='ongoing') render(); }, 60000);
 })();
 </script></body></html>"""
 

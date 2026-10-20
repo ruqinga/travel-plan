@@ -55,6 +55,9 @@ h1{margin:0;font:800 34px/1.2 var(--serif);letter-spacing:2px}
 .today li.past{opacity:.45}
 .today li.next{color:var(--ink);font-weight:600}.today li.next time{color:var(--accent)}
 .today li.next::after{content:"下一项";margin-left:auto;font-size:11px;font-weight:700;color:#fff;background:var(--accent);border-radius:999px;padding:0 8px;height:18px;line-height:18px;flex:none}
+.cd{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap;margin-top:8px}
+.cd span{font-size:12px;color:var(--muted)}
+.cd b{font:700 20px ui-monospace,"SF Mono",Menlo,monospace;color:var(--accent);font-variant-numeric:tabular-nums;letter-spacing:.5px}
 .big .sl{width:52px;height:52px;font-size:16px}
 .empty{text-align:center;color:var(--muted);padding:44px 16px 30px}
 .empty .zh{font:700 20px var(--serif);color:var(--ink);letter-spacing:2px;margin-bottom:4px}
@@ -66,7 +69,7 @@ footer{margin-top:28px;text-align:center;font-size:12px;color:var(--muted)}
 <div class="nav"><div class="in"><a class="logo" href="#ongoing"><i>行</i><span>行旅</span></a>
 <nav class="seg" id="seg"></nav></div></div>
 <div class="w" id="page"></div>
-<script id="trips" type="application/json">[{"slug": "barcelona-weekend-2026", "title": "巴塞罗那周末 · 测试行程", "subtitle": "高铁往返 · 两天一夜", "c": ["#9a4a32", "#e08b6e"], "start": "2026-10-20", "end": "2026-10-21", "n": 2, "dest": "巴塞罗那", "mode": "高铁", "budget": "", "distance": "远途", "types": ["城市", "美食"], "pinned": false, "hike": [], "nhikes": 0, "sched": {"2026-10-20": [["07:30", "马德里 Atocha 高铁出发"], ["10:15", "抵达 Sants，地铁到酒店寄存"], ["11:30", "圣家堂"], ["13:30", "Eixample 午饭"], ["15:30", "哥特区 + 主教座堂"], ["17:30", "巴塞罗内塔海滩看日落"], ["20:30", "Tapas 晚饭"]], "2026-10-21": [["09:30", "桂尔公园（纪念区）"], ["11:30", "步行到 Bunkers del Carmel"], ["13:30", "Gràcia 区午饭 + 闲逛"], ["16:00", "回酒店取包，去 Sants"], ["18:00", "高铁回马德里"]]}}, {"slug": "font-roja-alcoy", "title": "Font Roja 森林 & Alcoy 小城", "subtitle": "两天一夜徒步计划", "c": ["#4f7356", "#8fb394"], "start": null, "end": null, "n": 2, "dest": "Alcoy", "mode": "大巴 + 出租车", "budget": "150–175 €", "distance": "周边", "types": ["徒步", "城市"], "pinned": false, "hike": ["8–10 km"], "nhikes": 2, "sched": {}}, {"slug": "serra-gelada-albir", "title": "Benidorm → 翻越 Serra Gelada → L'Albir", "subtitle": "海崖山脊一日徒步", "c": ["#2f5670", "#86abc4"], "start": null, "end": null, "n": 1, "dest": "Benidorm · L'Albir", "mode": "TRAM", "budget": "20–30 €", "distance": "近郊", "types": ["徒步", "海边"], "pinned": false, "hike": ["约 8.4 km", "↑约 500 m"], "nhikes": 1, "sched": {}}]</script>
+<script id="trips" type="application/json">[{"slug": "barcelona-weekend-2026", "title": "巴塞罗那周末 · 测试行程", "subtitle": "高铁往返 · 两天一夜", "c": ["#9a4a32", "#e08b6e"], "start": "2026-10-20", "end": "2026-10-21", "n": 2, "dest": "巴塞罗那", "mode": "高铁", "budget": "", "distance": "远途", "types": ["城市", "美食"], "pinned": false, "hike": [], "nhikes": 0, "sched": {"2026-10-20": [["07:30", "马德里 Atocha 高铁出发"], ["10:15", "抵达 Sants，地铁到酒店寄存"], ["11:30", "圣家堂"], ["13:30", "Eixample 午饭"], ["15:30", "哥特区 + 主教座堂"], ["17:30", "巴塞罗内塔海滩看日落"], ["20:30", "Tapas 晚饭"]], "2026-10-21": [["09:30", "桂尔公园（纪念区）"], ["11:30", "步行到 Bunkers del Carmel"], ["13:30", "Gràcia 区午饭 + 闲逛"], ["16:00", "回酒店取包，去 Sants"], ["18:00", "高铁回马德里"]]}, "ev": [[1792474200000, "MAD 🚄 BCN 出发"], [1792484100000, "抵达 Sants，地铁到酒店寄存"], [1792488600000, "圣家堂"], [1792495800000, "Eixample 午饭"], [1792503000000, "哥特区 + 主教座堂"], [1792510200000, "巴塞罗内塔海滩看日落"], [1792521000000, "Tapas 晚饭"], [1792567800000, "桂尔公园（纪念区）"], [1792575000000, "步行到 Bunkers del Carmel"], [1792582200000, "Gràcia 区午饭 + 闲逛"], [1792591200000, "回酒店取包，去 Sants"], [1792598400000, "BCN 🚄 MAD 出发"]]}, {"slug": "font-roja-alcoy", "title": "Font Roja 森林 & Alcoy 小城", "subtitle": "两天一夜徒步计划", "c": ["#4f7356", "#8fb394"], "start": null, "end": null, "n": 2, "dest": "Alcoy", "mode": "大巴 + 出租车", "budget": "150–175 €", "distance": "周边", "types": ["徒步", "城市"], "pinned": false, "hike": ["8–10 km"], "nhikes": 2, "sched": {}, "ev": []}, {"slug": "serra-gelada-albir", "title": "Benidorm → 翻越 Serra Gelada → L'Albir", "subtitle": "海崖山脊一日徒步", "c": ["#2f5670", "#86abc4"], "start": null, "end": null, "n": 1, "dest": "Benidorm · L'Albir", "mode": "TRAM", "budget": "20–30 €", "distance": "近郊", "types": ["徒步", "海边"], "pinned": false, "hike": ["约 8.4 km", "↑约 500 m"], "nhikes": 1, "sched": {}, "ev": []}]</script>
 <script>
 (function(){
 const TRIPS = JSON.parse(document.getElementById('trips').textContent);
@@ -85,7 +88,7 @@ const nTag = n => n===1 ? '一日' : (n<=3 ? '2–3 日' : '4 日+');
 const seal = n => n===1 ? '一日' : (CN[n]||n)+'日';
 const pinVal = t => (t.slug in pins) ? pins[t.slug] : (t.pinned ? (typeof t.pinned==='number' ? t.pinned : 1) : 0);
 const PIN = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"><path d="M9 3.5h6l-.9 5.6 3.4 3.4v1.8H6.5v-1.8l3.4-3.4z"/><path d="M12 14.3v6.2"/></svg>';
-const VIEWS = {ongoing:['ONGOING','旅途中','Ongoing'], plan:['PLAN TO GO','计划','Plan to go'], gone:['GONE','足迹','Gone']};
+const VIEWS = {ongoing:['ONGOING','在旅','Ongoing'], plan:['PLAN TO GO','计划','Plan to go'], gone:['GONE','足迹','Gone']};
 
 function card(t, big){
   const s = status(t), pv = pinVal(t);
@@ -107,6 +110,7 @@ function card(t, big){
     <div class="sl">${seal(t.n)}</div><div class="bd">
     <div class="ti">${esc(t.title)}</div>${t.subtitle?`<div class="st2">${esc(t.subtitle)}</div>`:''}
     <div class="when">${when}</div>${facts.length?`<div class="facts">${facts.map(f=>`<span>${esc(f)}</span>`).join('')}</div>`:''}
+    ${s!=='gone'&&t.ev.length?`<div class="cd" data-cd="${esc(t.slug)}"><span></span><b></b></div>`:''}
     <div class="tags">${t.distance?`<span class="tag d">${esc(t.distance)}</span>`:''}${t.types.map(x=>`<span class="tag">${esc(x)}</span>`).join('')}</div>${extra}</div>
     ${s==='plan'?`<button class="pin ${pv?'on':''}" type="button" data-pin="${esc(t.slug)}" aria-label="${pv?'取消置顶':'置顶'}" title="${pv?'取消置顶':'置顶'}">${PIN}</button>`:''}</a>`;
 }
@@ -120,7 +124,7 @@ function render(){
   let h = `<div class="eyebrow">${VIEWS[v][0]}</div><h1>${VIEWS[v][1]}</h1>`;
   if(v==='ongoing'){
     h += `<div class="sub">${on.length ? `${fd(today)} · ${on.length} 段旅程进行中` : fd(today)}</div>`;
-    h += on.length ? on.map(t=>card(t,true)).join('') : `<div class="empty"><div class="zh">此刻不在旅途中</div>下一次出发，从计划开始。<br><a href="#plan">查看 ${allPlan.length} 个计划 ›</a></div>`;
+    h += on.length ? on.map(t=>card(t,true)).join('') : `<div class="empty"><div class="zh">此刻不在旅</div>下一次出发，从计划开始。<br><a href="#plan">查看 ${allPlan.length} 个计划 ›</a></div>`;
   } else if(v==='plan'){
     const opts = {
       n: ['一日','2–3 日','4 日+'].filter(x=>allPlan.some(t=>nTag(t.n)===x)),
@@ -145,6 +149,7 @@ function render(){
   }
   h += `<footer>状态按日期自动切换${v==='plan'?' · 图钉只改这台设备，要同步请改行程数据':''}</footer>`;
   document.getElementById('page').innerHTML = h;
+  tick();
 }
 document.addEventListener('click', ev=>{
   const p = ev.target.closest('[data-pin]');
@@ -154,6 +159,16 @@ document.addEventListener('click', ev=>{
 });
 window.addEventListener('hashchange', ()=>{ render(); window.scrollTo(0,0); });
 window.addEventListener('pageshow', ()=>{ pins=get(PKEY,{}); render(); });
-render(); setInterval(()=>{ if(view()==='ongoing') render(); }, 60000);
+function tick(){
+  const now = Date.now(), p2 = n=>String(n).padStart(2,'0');
+  document.querySelectorAll('[data-cd]').forEach(el=>{
+    const t = TRIPS.find(x=>x.slug===el.dataset.cd), e = t.ev.find(e=>e[0]>now);
+    if(!e){ el.style.display='none'; return; }
+    let s = Math.floor((e[0]-now)/1000); const D = Math.floor(s/86400); s %= 86400;
+    el.querySelector('span').textContent = status(t)==='on' ? `距下一项 · ${e[1]}` : `距出发 · ${e[1]}`;
+    el.querySelector('b').textContent = `${D?D+'天 ':''}${p2(Math.floor(s/3600))}:${p2(Math.floor(s%3600/60))}:${p2(s%60)}`;
+  });
+}
+render(); setInterval(tick, 1000); setInterval(()=>{ if(view()==='ongoing') render(); }, 60000);
 })();
 </script></body></html>
