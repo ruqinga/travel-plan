@@ -5,7 +5,7 @@ Usage:  python3 build.py            # build all trips
         python3 build.py <slug>     # build one trip (home page is always rebuilt)
 """
 import html, json, re, sys
-from datetime import date
+from datetime import date, timedelta
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent
@@ -18,8 +18,8 @@ SECRET_PATTERNS = [  # things that must never reach a public page
     (r"(房间号|room\s*(no|number|#))\s*[:：]?\s*\d+", "房间号"),
     (r"(密码|password|门锁码|lockbox|door\s*code)\s*[:：]?\s*\S+", "密码/门锁码"),
 ]
-THEMES = {"forest": ["#3d6b3a", "#86b780"], "sea": ["#2d6a96", "#7fb0d8"], "terracotta": ["#a8492c", "#ef8f6c"],
-          "plum": ["#6e4a8a", "#b896d6"], "olive": ["#6b6a2a", "#c2c06a"]}
+THEMES = {"forest": ["#4f7356", "#8fb394"], "sea": ["#2f5670", "#86abc4"], "terracotta": ["#9a4a32", "#e08b6e"],
+          "plum": ["#5f4a6e", "#b59cc8"], "olive": ["#6d6838", "#c2bc7c"]}
 
 
 def check_secrets(slug, raw):
@@ -64,52 +64,90 @@ def summary(t):
         "distance": t.get("distance", ""), "types": t.get("types", []), "pinned": t.get("pinned", False),
         "hike": [x for x in (hk.get("distance"), ("↑" + hk["gain"]) if hk.get("gain") else None) if x],
         "nhikes": len(t.get("hikes") or []),
+        "sched": day_items(t),
     }
+
+
+def day_items(t):
+    """{date: [[time, title], ...]} for the ongoing card's 'today' list (needs real dates)."""
+    ds = t.get("dates") or {}
+    if not ds.get("start"):
+        return {}
+    out = {}
+    for i, d in enumerate(t.get("days", [])):
+        day = d.get("date") or (date.fromisoformat(ds["start"]) + timedelta(days=i)).isoformat()
+        out[day] = [[it.get("time", ""), it["title"]] for it in d.get("items", []) if it.get("title")]
+    return out
 
 
 HOME = r"""<!doctype html><html lang="zh-CN"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><meta name="robots" content="noindex">
-<title>Travel Plan</title>
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧭</text></svg>">
+<meta name="theme-color" content="#f3f0e8" media="(prefers-color-scheme: light)"><meta name="theme-color" content="#121211" media="(prefers-color-scheme: dark)">
+<title>行旅 · Travel Plan</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='18' fill='%23b0392b'/><text x='50' y='70' font-size='60' text-anchor='middle' fill='white' font-family='serif'>行</text></svg>">
 <style>
-:root{--bg:#f5efe3;--paper:#fffbf2;--ink:#2a2620;--muted:#7a6f60;--line:#eadcc0;--sand:#f2deb0;--sand-ink:#5e4515;--accent:#bf5236;--brand:#3d6b3a}
-@media (prefers-color-scheme:dark){:root{--bg:#171512;--paper:#221f1a;--ink:#eee6d8;--muted:#a69a88;--line:#3a332a;--sand:#3d3220;--sand-ink:#ecc982;--accent:#f07a5c;--brand:#86b780}}
+:root{--bg:#f3f0e8;--paper:#fbfaf6;--ink:#1e1d1a;--muted:#7d776b;--line:#e3ddcf;--hair:rgba(30,29,26,.09);--sand:#ece3cf;--sand-ink:#6f5528;--accent:#b0392b;--fill:rgba(118,110,95,.12);
+--shadow:0 1px 1px rgba(30,25,15,.03),0 8px 24px -12px rgba(30,25,15,.16);
+--serif:"Songti SC","STSong","Noto Serif CJK SC","Source Han Serif SC","Noto Serif SC",serif;
+--sans:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","Hiragino Sans GB","Noto Sans CJK SC",sans-serif}
+@media (prefers-color-scheme:dark){:root{--bg:#121211;--paper:#1c1c1a;--ink:#ecebe6;--muted:#9a958a;--line:#2e2d29;--hair:rgba(255,255,255,.08);--sand:#2c2820;--sand-ink:#d9bf8a;--accent:#e0644f;--fill:rgba(255,255,255,.08);--shadow:none}}
 *{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.6 -apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei","Noto Sans CJK SC",sans-serif}
-.w{max-width:820px;margin:0 auto;padding:26px 16px 60px}
-h1{margin:0;font-size:30px;font-weight:800;color:var(--brand);letter-spacing:.5px}
-.sub{color:var(--muted);font-size:13px;margin:2px 0 12px}
-.filters{position:sticky;top:0;z-index:5;margin:0 -16px;padding:8px 16px 6px;background:color-mix(in srgb,var(--bg) 90%,transparent);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
-.fr{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;padding:3px 0;align-items:center}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.6 var(--sans);-webkit-font-smoothing:antialiased}
+.nav{position:sticky;top:0;z-index:10;background:color-mix(in srgb,var(--bg) 82%,transparent);backdrop-filter:saturate(1.6) blur(18px);-webkit-backdrop-filter:saturate(1.6) blur(18px);border-bottom:.5px solid var(--hair)}
+.nav .in{max-width:820px;margin:0 auto;padding:10px 16px;display:flex;align-items:center;gap:10px}
+.logo{display:flex;align-items:center;gap:8px;font:700 16px var(--serif);letter-spacing:2px;text-decoration:none;color:inherit}
+.logo i{width:26px;height:26px;border-radius:6px;background:var(--accent);color:#fff;display:grid;place-items:center;font:700 15px var(--serif);font-style:normal;transform:rotate(-4deg)}
+.seg{margin-left:auto;display:flex;background:var(--fill);border-radius:10px;padding:2px}
+.seg a{position:relative;font-size:13px;font-weight:600;padding:5px 11px;border-radius:8px;color:var(--ink);text-decoration:none;white-space:nowrap;opacity:.7}
+.seg a.on{background:var(--paper);opacity:1;box-shadow:0 1px 3px rgba(0,0,0,.12),0 0 0 .5px var(--hair)}
+.seg a sup{font-size:9.5px;font-weight:700;color:var(--accent);margin-left:2px;vertical-align:6px}
+.w{max-width:820px;margin:0 auto;padding:18px 16px 60px}
+.eyebrow{font-size:12px;font-weight:600;letter-spacing:2.5px;color:var(--accent)}
+h1{margin:0;font:800 34px/1.2 var(--serif);letter-spacing:2px}
+.sub{color:var(--muted);font-size:14px;margin:4px 0 16px}
+.filters{display:flex;flex-direction:column;gap:6px;margin:0 -16px 18px;padding:0 16px}
+.fr{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;align-items:center}
 .fr::-webkit-scrollbar{display:none}
 .fr .lb{flex:none;font-size:12px;color:var(--muted);width:30px}
-.fr button{flex:none;font:inherit;font-size:13px;padding:3px 12px;border-radius:999px;border:1.5px solid var(--line);background:var(--paper);color:var(--ink);cursor:pointer}
-.fr button.on{background:var(--ink);color:var(--bg);border-color:var(--ink)}
-h2{font-size:14px;margin:22px 0 10px;color:var(--muted);letter-spacing:1.5px;font-weight:800;display:flex;gap:8px;align-items:center}
-h2 b{font-size:11px;font-weight:700;padding:0 8px;border-radius:999px;background:var(--line);color:var(--muted);letter-spacing:0}
-.card{--k:var(--c);position:relative;display:block;background:var(--paper);border:2px solid var(--line);border-left:7px solid var(--k);border-radius:18px;padding:13px 16px 12px;margin-bottom:10px;text-decoration:none;color:inherit}
+.fr button{flex:none;font:inherit;font-size:13.5px;font-weight:500;padding:4px 13px;border-radius:999px;border:0;background:var(--fill);color:var(--ink);cursor:pointer}
+.fr button.on{background:var(--ink);color:var(--bg)}
+.card{--k:var(--c);position:relative;display:flex;gap:14px;background:var(--paper);border-radius:20px;padding:16px;margin-bottom:12px;text-decoration:none;color:inherit;box-shadow:var(--shadow),inset 0 0 0 .5px var(--hair);transition:transform .15s}
+.card:active{transform:scale(.985)}
 @media (prefers-color-scheme:dark){.card{--k:var(--cd)}}
-.ti{font-weight:800;font-size:17px;line-height:1.35;color:var(--k);padding-right:42px}
-.st2{font-size:13px;color:var(--accent);font-weight:700}
-.when{font-size:12.5px;color:var(--muted);margin-top:2px}
-.when b{color:var(--ink)}
-.facts{display:flex;flex-wrap:wrap;gap:4px 14px;font-size:13px;margin-top:6px}
-.tags{display:flex;flex-wrap:wrap;gap:5px;margin-top:8px}
-.tag{font-size:11.5px;padding:0 9px;border-radius:999px;background:var(--sand);color:var(--sand-ink);font-weight:600}
-.tag.d{background:color-mix(in srgb,var(--k) 14%,var(--paper));color:var(--k)}
-.pin{position:absolute;top:9px;right:9px;width:36px;height:36px;border-radius:50%;border:1.5px solid var(--line);background:var(--paper);font-size:16px;cursor:pointer;filter:grayscale(1);opacity:.55}
-.pin.on{filter:none;opacity:1;background:var(--sand);border-color:transparent}
-.ongo{position:absolute;top:12px;right:12px;font-size:11.5px;font-weight:700;padding:1px 9px;border-radius:999px;background:var(--k);color:#fff}
-details summary{cursor:pointer;color:var(--muted);font-size:14px;margin:22px 0 10px;letter-spacing:1.5px;font-weight:800}
-.gone .card{opacity:.82}
-.empty{color:var(--muted);font-size:13.5px;border:2px dashed var(--line);border-radius:16px;padding:14px 16px}
-footer{margin-top:32px;text-align:center;font-size:12px;color:var(--muted)}
-</style></head><body><div class="w">
-<h1>Travel Plan</h1><div class="sub" id="sub"></div>
-<div class="filters" id="filters"></div>
-<div id="list"></div>
-<footer>状态按日期自动切换 · 📌 置顶跟随行程数据，点图钉只改这台设备</footer>
-</div>
+.sl{flex:none;width:44px;height:44px;border-radius:8px;background:var(--k);color:#fff;display:grid;place-items:center;font:700 14px/1.05 var(--serif);letter-spacing:1px;transform:rotate(-3deg);margin-top:2px}
+.bd{flex:1;min-width:0}
+.ti{font:700 18px/1.35 var(--serif);letter-spacing:.5px;padding-right:34px}
+.st2{font-size:13px;color:var(--k);font-weight:600;margin-top:1px}
+.when{font-size:13px;color:var(--muted);margin-top:6px}
+.when b{color:var(--ink);font-weight:600}
+.facts{font-size:13px;color:var(--muted);margin-top:2px}
+.facts span+span::before{content:"·";margin:0 6px;color:var(--line)}
+.tags{display:flex;flex-wrap:wrap;gap:5px;margin-top:9px}
+.tag{font-size:11.5px;padding:1px 9px;border-radius:999px;background:var(--fill);color:var(--muted);font-weight:500}
+.tag.d{background:color-mix(in srgb,var(--k) 13%,transparent);color:var(--k);font-weight:600}
+.pin{position:absolute;top:10px;right:10px;width:36px;height:36px;border-radius:50%;border:0;background:transparent;cursor:pointer;display:grid;place-items:center;color:var(--muted);opacity:.45}
+.pin svg{width:18px;height:18px}
+.pin.on{color:var(--accent);opacity:1}.pin.on svg{fill:currentColor}
+.prog{height:4px;border-radius:2px;background:var(--fill);margin:12px 0 4px;overflow:hidden}.prog i{display:block;height:100%;background:var(--k);border-radius:2px}
+.today{margin-top:12px;border-top:.5px solid var(--hair);padding-top:8px}
+.today .lb{font-size:11.5px;letter-spacing:2px;color:var(--muted);font-weight:600;margin-bottom:2px}
+.today ol{list-style:none;margin:0;padding:0}
+.today li{display:flex;gap:10px;font-size:14px;padding:3px 0;color:var(--muted)}
+.today li time{font:600 13px ui-monospace,"SF Mono",Menlo,monospace;width:42px;flex:none}
+.today li.past{opacity:.45}
+.today li.next{color:var(--ink);font-weight:600}.today li.next time{color:var(--accent)}
+.today li.next::after{content:"下一项";margin-left:auto;font-size:11px;font-weight:700;color:#fff;background:var(--accent);border-radius:999px;padding:0 8px;height:18px;line-height:18px;flex:none}
+.big .sl{width:52px;height:52px;font-size:16px}
+.empty{text-align:center;color:var(--muted);padding:44px 16px 30px}
+.empty .zh{font:700 20px var(--serif);color:var(--ink);letter-spacing:2px;margin-bottom:4px}
+.empty a{display:inline-block;margin-top:14px;font-size:14px;font-weight:600;color:var(--accent);text-decoration:none}
+.gone .card{filter:saturate(.6)}
+footer{margin-top:28px;text-align:center;font-size:12px;color:var(--muted)}
+@media (max-width:380px){.seg a{padding:5px 8px;font-size:12.5px}.logo span{display:none}}
+</style></head><body>
+<div class="nav"><div class="in"><a class="logo" href="#ongoing"><i>行</i><span>行旅</span></a>
+<nav class="seg" id="seg"></nav></div></div>
+<div class="w" id="page"></div>
 <script id="trips" type="application/json">__TRIPS__</script>
 <script>
 (function(){
@@ -119,55 +157,76 @@ const esc = s => String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&
 const get=(k,d)=>{try{const v=localStorage.getItem(k);return v==null?d:JSON.parse(v)}catch(e){return d}};
 const set=(k,v)=>{try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}};
 let pins = get(PKEY,{}), F = Object.assign({n:'all',dist:'all',type:'all'}, get(FKEY,{}));
-const WD=['日','一','二','三','四','五','六'];
-const fd = s => { const [Y,M,D]=s.split('-').map(Number); return `${M}/${D}（周${WD[new Date(Date.UTC(Y,M-1,D)).getUTCDay()]}）`; };
-const today = (()=>{ const p={}; new Intl.DateTimeFormat('en-CA',{timeZone:'Europe/Madrid',year:'numeric',month:'2-digit',day:'2-digit'}).formatToParts(new Date()).forEach(x=>p[x.type]=x.value); return `${p.year}-${p.month}-${p.day}`; })();
+const WD=['日','一','二','三','四','五','六'], CN=['','一','二','三','四','五','六','七','八','九','十'];
+const fd = s => { const [Y,M,D]=s.split('-').map(Number); return `${M}月${D}日 周${WD[new Date(Date.UTC(Y,M-1,D)).getUTCDay()]}`; };
+const nowParts = () => { const p={}; new Intl.DateTimeFormat('en-CA',{timeZone:'Europe/Madrid',hourCycle:'h23',year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit'}).formatToParts(new Date()).forEach(x=>p[x.type]=x.value); return {d:`${p.year}-${p.month}-${p.day}`, t:`${p.hour}:${p.minute}`}; };
+let today = nowParts().d;
 const dd = (a,b) => Math.round((Date.parse(b)-Date.parse(a))/864e5);
 const status = t => !t.start || today < t.start ? 'plan' : (today <= t.end ? 'on' : 'gone');
 const nTag = n => n===1 ? '一日' : (n<=3 ? '2–3 日' : '4 日+');
+const seal = n => n===1 ? '一日' : (CN[n]||n)+'日';
 const pinVal = t => (t.slug in pins) ? pins[t.slug] : (t.pinned ? (typeof t.pinned==='number' ? t.pinned : 1) : 0);
+const PIN = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"><path d="M9 3.5h6l-.9 5.6 3.4 3.4v1.8H6.5v-1.8l3.4-3.4z"/><path d="M12 14.3v6.2"/></svg>';
+const VIEWS = {ongoing:['ONGOING','旅途中','Ongoing'], plan:['PLAN TO GO','计划','Plan to go'], gone:['GONE','足迹','Gone']};
 
-function card(t){
+function card(t, big){
   const s = status(t), pv = pinVal(t);
   let when;
   if(!t.start) when = '日期待定';
   else if(s==='plan') when = `${fd(t.start)}${t.end!==t.start?' – '+fd(t.end):''} · <b>还有 ${dd(today,t.start)} 天</b>`;
-  else if(s==='on') when = `<b>第 ${dd(t.start,today)+1} / ${t.n} 天</b> · ${fd(t.start)} – ${fd(t.end)}`;
+  else if(s==='on') when = `<b>第 ${dd(t.start,today)+1} 天 / 共 ${t.n} 天</b> · ${fd(t.start)} 出发`;
   else when = `${fd(t.start)}${t.end!==t.start?' – '+fd(t.end):''}`;
-  const facts = [['🗓️', t.n===1?'一日':`${t.n} 天`], ['📍',t.dest], ['🚌',t.mode], ['💶',t.budget], ['🥾', t.hike.join(' ') + (t.nhikes>1?` 等 ${t.nhikes} 条`:'')]].filter(x=>x[1]);
-  return `<a class="card" href="${esc(t.slug)}/" style="--c:${t.c[0]};--cd:${t.c[1]}">
+  const facts = [t.dest, t.mode, t.budget, t.hike.length ? t.hike.join(' ').replace('↑约 ','↑') + (t.nhikes>1?` 等 ${t.nhikes} 条`:'') : ''].filter(Boolean);
+  let extra = '';
+  if(s==='on'){
+    const pct = Math.min(100, Math.round((dd(t.start,today)+1)/t.n*100));
+    let items = t.sched[today] || [], now = nowParts().t, ni = items.findIndex(x=>x[0] && x[0] >= now), lb = '今日安排';
+    const tmr = new Date(Date.parse(today)+864e5).toISOString().slice(0,10);
+    if(ni<0 && t.sched[tmr]){ items = t.sched[tmr]; ni = items.findIndex(x=>x[0]); now = ''; lb = '明日安排'; }
+    extra = `<div class="prog"><i style="width:${pct}%"></i></div>` + (items.length ? `<div class="today"><div class="lb">${lb}</div><ol>${items.map((x,i)=>`<li class="${ni<0||i<ni?(x[0]&&x[0]<now?'past':''):(i===ni?'next':'')}"><time>${esc(x[0])}</time><span>${esc(x[1])}</span></li>`).join('')}</ol></div>` : '');
+  }
+  return `<a class="card ${big?'big':''}" href="${esc(t.slug)}/" style="--c:${t.c[0]};--cd:${t.c[1]}">
+    <div class="sl">${seal(t.n)}</div><div class="bd">
     <div class="ti">${esc(t.title)}</div>${t.subtitle?`<div class="st2">${esc(t.subtitle)}</div>`:''}
-    <div class="when">${when}</div>
-    <div class="facts">${facts.map(f=>`<span>${f[0]} ${esc(f[1])}</span>`).join('')}</div>
-    <div class="tags"><span class="tag d">${nTag(t.n)}</span>${t.distance?`<span class="tag d">${esc(t.distance)}</span>`:''}${t.types.map(x=>`<span class="tag">${esc(x)}</span>`).join('')}</div>
-    ${s==='plan'?`<button class="pin ${pv?'on':''}" type="button" data-pin="${esc(t.slug)}" aria-label="${pv?'取消置顶':'置顶'}">📌</button>`:''}
-    ${s==='on'?'<span class="ongo">旅途中</span>':''}</a>`;
+    <div class="when">${when}</div>${facts.length?`<div class="facts">${facts.map(f=>`<span>${esc(f)}</span>`).join('')}</div>`:''}
+    <div class="tags">${t.distance?`<span class="tag d">${esc(t.distance)}</span>`:''}${t.types.map(x=>`<span class="tag">${esc(x)}</span>`).join('')}</div>${extra}</div>
+    ${s==='plan'?`<button class="pin ${pv?'on':''}" type="button" data-pin="${esc(t.slug)}" aria-label="${pv?'取消置顶':'置顶'}" title="${pv?'取消置顶':'置顶'}">${PIN}</button>`:''}</a>`;
 }
+function view(){ const v = location.hash.slice(1); return VIEWS[v] ? v : 'ongoing'; }
 function render(){
-  const opts = {
-    n: ['一日','2–3 日','4 日+'].filter(x=>TRIPS.some(t=>nTag(t.n)===x)),
-    dist: [...new Set(['近郊','周边','远途',...TRIPS.map(t=>t.distance)])].filter(x=>x&&TRIPS.some(t=>t.distance===x)),
-    type: [...new Set(TRIPS.flatMap(t=>t.types))],
-  };
-  for(const k in opts) if(F[k]!=='all' && !opts[k].includes(F[k])) F[k]='all';
-  const row = (k,lb) => opts[k].length ? `<div class="fr"><span class="lb">${lb}</span>${['all',...opts[k]].map(v=>`<button type="button" data-k="${k}" data-v="${esc(v)}" class="${F[k]===v?'on':''}">${v==='all'?'全部':esc(v)}</button>`).join('')}</div>` : '';
-  document.getElementById('filters').innerHTML = row('n','天数') + row('dist','距离') + row('type','类型');
-  const vis = TRIPS.filter(t=>(F.n==='all'||nTag(t.n)===F.n) && (F.dist==='all'||t.distance===F.dist) && (F.type==='all'||t.types.includes(F.type)));
-  const on = vis.filter(t=>status(t)==='on').sort((a,b)=>a.start<b.start?-1:1);
-  const plan = vis.filter(t=>status(t)==='plan').sort((a,b)=>{
-    const pa=pinVal(a), pb=pinVal(b);
-    if(!!pa!==!!pb) return pa?-1:1;
-    if(pa&&pb&&pa!==pb) return pa-pb;
-    if(!!a.start!==!!b.start) return a.start?-1:1;
-    return (a.start||'')<(b.start||'')?-1:(a.start||'')>(b.start||'')?1:a.title.localeCompare(b.title,'zh');
-  });
-  const gone = vis.filter(t=>status(t)==='gone').sort((a,b)=>a.start<b.start?1:-1);
-  document.getElementById('sub').textContent = `${TRIPS.filter(t=>status(t)==='plan').length} 个计划 · ${TRIPS.filter(t=>status(t)==='on').length} 个进行中 · ${TRIPS.filter(t=>status(t)==='gone').length} 个已完成`;
-  let h = '';
-  if(on.length) h += `<h2>ONGOING · 旅途中<b>${on.length}</b></h2>` + on.map(card).join('');
-  h += `<h2>PLAN TO GO · 计划<b>${plan.length}</b></h2>` + (plan.length ? plan.map(card).join('') : `<div class="empty">没有符合筛选的计划。</div>`);
-  if(gone.length) h += `<details class="gone" ${F.n!=='all'||F.dist!=='all'||F.type!=='all'?'open':''}><summary>GONE · 已完成（${gone.length}）</summary>${gone.map(card).join('')}</details>`;
-  document.getElementById('list').innerHTML = h;
+  today = nowParts().d;
+  const v = view(), by = k => TRIPS.filter(t=>status(t)===k);
+  const on = by('on').sort((a,b)=>a.start<b.start?-1:1), allPlan = by('plan'), gone = by('gone').sort((a,b)=>a.start<b.start?1:-1);
+  const cnt = {ongoing:on.length, plan:allPlan.length, gone:gone.length};
+  document.getElementById('seg').innerHTML = Object.entries(VIEWS).map(([k,x])=>`<a href="#${k}" class="${k===v?'on':''}" aria-current="${k===v?'page':'false'}">${x[2]}${k==='ongoing'&&cnt.ongoing?`<sup>${cnt.ongoing}</sup>`:''}</a>`).join('');
+  let h = `<div class="eyebrow">${VIEWS[v][0]}</div><h1>${VIEWS[v][1]}</h1>`;
+  if(v==='ongoing'){
+    h += `<div class="sub">${on.length ? `${fd(today)} · ${on.length} 段旅程进行中` : fd(today)}</div>`;
+    h += on.length ? on.map(t=>card(t,true)).join('') : `<div class="empty"><div class="zh">此刻不在旅途中</div>下一次出发，从计划开始。<br><a href="#plan">查看 ${allPlan.length} 个计划 ›</a></div>`;
+  } else if(v==='plan'){
+    const opts = {
+      n: ['一日','2–3 日','4 日+'].filter(x=>allPlan.some(t=>nTag(t.n)===x)),
+      dist: ['近郊','周边','远途',...new Set(allPlan.map(t=>t.distance))].filter((x,i,a)=>x&&a.indexOf(x)===i&&allPlan.some(t=>t.distance===x)),
+      type: [...new Set(allPlan.flatMap(t=>t.types))],
+    };
+    for(const k in opts) if(F[k]!=='all' && !opts[k].includes(F[k])) F[k]='all';
+    const row = (k,lb) => opts[k].length>1 ? `<div class="fr"><span class="lb">${lb}</span>${['all',...opts[k]].map(x=>`<button type="button" data-k="${k}" data-v="${esc(x)}" class="${F[k]===x?'on':''}">${x==='all'?'全部':esc(x)}</button>`).join('')}</div>` : '';
+    const plan = allPlan.filter(t=>(F.n==='all'||nTag(t.n)===F.n) && (F.dist==='all'||t.distance===F.dist) && (F.type==='all'||t.types.includes(F.type))).sort((a,b)=>{
+      const pa=pinVal(a), pb=pinVal(b);
+      if(!!pa!==!!pb) return pa?-1:1;
+      if(pa&&pb&&pa!==pb) return pa-pb;
+      if(!!a.start!==!!b.start) return a.start?-1:1;
+      return (a.start||'')<(b.start||'')?-1:(a.start||'')>(b.start||'')?1:a.title.localeCompare(b.title,'zh');
+    });
+    h += `<div class="sub">${allPlan.length} 个计划${allPlan.filter(pinVal).length?` · ${allPlan.filter(pinVal).length} 个置顶`:''}</div>`;
+    h += `<div class="filters">${row('n','天数')}${row('dist','距离')}${row('type','类型')}</div>`;
+    h += plan.length ? plan.map(t=>card(t)).join('') : `<div class="empty"><div class="zh">没有符合的计划</div>换个筛选条件试试。</div>`;
+  } else {
+    h += `<div class="sub">${gone.length ? `走过的 ${gone.length} 段路` : ''}</div>`;
+    h += gone.length ? `<div class="gone">${gone.map(t=>card(t)).join('')}</div>` : `<div class="empty"><div class="zh">还没有足迹</div>行程结束后会自动收进这里。</div>`;
+  }
+  h += `<footer>状态按日期自动切换${v==='plan'?' · 图钉只改这台设备，要同步请改行程数据':''}</footer>`;
+  document.getElementById('page').innerHTML = h;
 }
 document.addEventListener('click', ev=>{
   const p = ev.target.closest('[data-pin]');
@@ -175,8 +234,9 @@ document.addEventListener('click', ev=>{
   const f = ev.target.closest('[data-k]');
   if(f){ F[f.dataset.k] = f.dataset.v; set(FKEY,F); render(); }
 });
+window.addEventListener('hashchange', ()=>{ render(); window.scrollTo(0,0); });
 window.addEventListener('pageshow', ()=>{ pins=get(PKEY,{}); render(); });
-render();
+render(); setInterval(()=>{ if(view()==='ongoing') render(); }, 60000);
 })();
 </script></body></html>"""
 

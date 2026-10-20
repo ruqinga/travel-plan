@@ -4,9 +4,11 @@
 GitHub Pages 从 `main` 分支根目录发布：`https://ruqinga.github.io/travel-plan/<slug>/`。
 
 ## 首页逻辑
-- 三个状态全部按日期自动切换（Europe/Madrid 当天日期）：**Plan to go**（没填日期或还没出发）/ **Ongoing**（今天在行程日期内）/ **Gone**（已结束，折叠）。
-- 置顶：`pinned: true`（或数字，越小越靠前）只对 Plan to go 生效，置顶的排最前；其余按出发日期，没日期的最后。卡片上的 📌 只改当前设备（localStorage），要所有设备一致就改 trip.json。
-- 筛选：天数（自动：一日 / 2–3 日 / 4 日+）、距离 `distance`（近郊 ≤1h / 周边 1–3h / 远途 3h+，按从家出发的交通时间）、类型 `types`（徒步、海边、城市、美食、自驾、出行，可多选；沿用已有的，别造近义词）。
+- 右上角分段菜单切换三个视图（URL hash）：**Ongoing** `#ongoing`（默认首页）/ **Plan to go** `#plan` / **Gone** `#gone`。状态全部按日期自动判断（Europe/Madrid 当天）：没日期或未出发 = Plan，今天在行程内 = Ongoing，已结束 = Gone。
+- Ongoing 卡片显示第几天、进度条和「今日安排」（今天的都过了就显示「明日安排」），下一项高亮。
+- 只有 Plan to go 有筛选：天数（自动：一日 / 2–3 日 / 4 日+）、距离 `distance`（近郊 ≤1h / 周边 1–3h / 远途 3h+）、类型 `types`（徒步、海边、城市、美食、自驾、出行；沿用已有的）。
+- 置顶：`pinned: true`（或数字，越小越靠前）只对 Plan to go 生效。卡片上的图钉只改当前设备（localStorage），要所有设备一致就改 trip.json。
+- 视觉：Apple 式结构（毛玻璃导航栏、分段控件、大标题、圆角卡片、细分隔线）+ 新中式（宣纸底色、宋体标题、朱砂印章、竹青/黛蓝/赭金主题色）。行程卡片和行程页右上的印章自动显示「一日 / 二日…」，可用 `seal` 覆盖。
 
 ## 工作流程
 1. 收集信息：目的地、日期、出发地（默认 Sant Joan d'Alacant）；票据截图自己提取，不让用户打字。
@@ -25,7 +27,7 @@ GitHub Pages 从 `main` 分支根目录发布：`https://ruqinga.github.io/trave
 {
   "title": "Font Roja 森林 & Alcoy 小城", "subtitle": "两天一夜徒步计划",
   "highlights": ["亮点一", "亮点二"],          // 标题下一行，用 · 连接
-  "theme": "forest|sea|terracotta|plum|olive|#hex",
+  "theme": "forest(竹青)|sea(黛蓝)|terracotta(赭红)|plum(黛紫)|olive(橄榄)|#hex", "seal": "可选，印章文字，默认按天数",
   "from": "Sant Joan d'Alacant", "people": 2,
   "dates": {"start": "2026-11-14", "end": "2026-11-15"},   // 没定就写 null，再写 "length": 天数
   "dest": "Alcoy", "mode": "大巴 + 出租车",     // 首页卡片和自动数据条用

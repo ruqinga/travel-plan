@@ -1,11 +1,10 @@
 {
-  "title": "巴塞罗那周末 · 示例行程",
+  "title": "巴塞罗那周末 · 测试行程",
   "emoji": "🏖️",
-  "category": "周末短途",
-  "kicker": "SAMPLE · 示例页面，用来展示分类和追踪",
+  "kicker": "TEST · 用来测试 Ongoing 状态",
   "dates": {
-    "start": "2026-11-14",
-    "end": "2026-11-15"
+    "start": "2026-10-20",
+    "end": "2026-10-21"
   },
   "people": 2,
   "route": "马德里 → 巴塞罗那（高铁往返）",
@@ -177,8 +176,8 @@
         "name": "巴塞罗那 Sants",
         "tz": "Europe/Madrid"
       },
-      "depart": "2026-11-14T07:30",
-      "arrive": "2026-11-14T10:15",
+      "depart": "2026-10-20T07:30",
+      "arrive": "2026-10-20T10:15",
       "duration": "2h45",
       "stops": "高铁",
       "airline": "示例高铁",
@@ -198,8 +197,8 @@
         "name": "马德里 Atocha",
         "tz": "Europe/Madrid"
       },
-      "depart": "2026-11-15T18:00",
-      "arrive": "2026-11-15T20:45",
+      "depart": "2026-10-21T18:00",
+      "arrive": "2026-10-21T20:45",
       "duration": "2h45",
       "stops": "高铁",
       "airline": "示例高铁",
@@ -212,7 +211,7 @@
       "icon": "🏨",
       "title": "Eixample 区酒店（示例）",
       "status": "已订 1 晚",
-      "time": "11/14 15:00 入住 → 11/15 12:00 退房",
+      "time": "10/20 15:00 入住 → 10/21 12:00 退房",
       "address": "Eixample, Barcelona",
       "q": "Eixample, Barcelona",
       "note": "上午到可先寄存背包"
@@ -221,7 +220,7 @@
       "icon": "⛪",
       "title": "圣家堂门票",
       "status": "已购",
-      "time": "11/14（周六）11:30 时段 · 2 张",
+      "time": "10/20（周二）11:30 时段 · 2 张",
       "address": "C/ de Mallorca 401",
       "q": "Sagrada Família",
       "note": "含语音导览；入场时间严格"
@@ -230,7 +229,7 @@
       "icon": "🦎",
       "title": "桂尔公园时段票",
       "status": "待购",
-      "time": "11/15（周日）建议 9:30",
+      "time": "10/21（周三）建议 9:30",
       "address": "Carrer d'Olot, Barcelona",
       "q": "Park Güell",
       "note": "周末常售罄，官网提前买"
@@ -238,7 +237,7 @@
   ],
   "days": [
     {
-      "date": "2026-11-14",
+      "date": "2026-10-20",
       "title": "高铁抵达 · 圣家堂与老城",
       "subtitle": "圣家堂 · 哥特区 · 海边日落",
       "mapLabel": "圣家堂 · 老城",
@@ -297,7 +296,7 @@
       "stayQ": "Eixample, Barcelona"
     },
     {
-      "date": "2026-11-15",
+      "date": "2026-10-21",
       "title": "桂尔公园 · 观景台 · 返程",
       "subtitle": "高迪 · 俯瞰全城",
       "mapLabel": "桂尔公园 · 返程",
@@ -343,13 +342,13 @@
   ],
   "todos": [
     {
-      "text": "买桂尔公园 11/15 9:30 时段票",
+      "text": "买桂尔公园 10/21 9:30 时段票",
       "due": "尽快",
       "urgent": true
     },
     {
-      "text": "订 11/14 晚 tapas 餐厅",
-      "due": "11/10 前"
+      "text": "订 10/20 晚 tapas 餐厅",
+      "due": "10/16 前"
     },
     {
       "text": "往返高铁",
@@ -382,5 +381,21 @@
     }
   ],
   "footer": "Travel Plan · ruqinga",
-  "unlisted": true
+  "subtitle": "高铁往返 · 两天一夜",
+  "theme": "terracotta",
+  "dest": "巴塞罗那",
+  "mode": "高铁",
+  "distance": "远途",
+  "types": [
+    "城市",
+    "美食"
+  ],
+  "from": "马德里",
+  "highlights": [
+    "圣家堂",
+    "哥特区",
+    "巴塞罗内塔日落",
+    "桂尔公园",
+    "Bunkers 观景台"
+  ]
 }
