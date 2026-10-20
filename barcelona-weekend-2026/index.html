@@ -8,20 +8,20 @@
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧭</text></svg>">
 <style>
 :root,.xp{
-  --bg:#f3f0e8; --paper:#fbfaf6; --ink:#1e1d1a; --muted:#7d776b; --line:#e3ddcf; --hair:rgba(30,29,26,.09); --dash:#cfc6b2;
-  --sand:#ece3cf; --sand-ink:#6f5528; --gold:#a8833f; --accent:#b0392b; --green:#4f7356; --blue:#2f5670;
-  --map-water:#cfdcdc; --map-land:#f2ede1; --map-ink:#8a8070; --map-park:#d7e0c9;
+  --bg:#f2f2f7; --paper:#ffffff; --ink:#1c1c1e; --muted:#8a8a8e; --line:#e5e5ea; --hair:rgba(60,60,67,.12); --dash:#c7c7cc;
+  --sand:rgba(118,118,128,.12); --sand-ink:#3a3a3c; --gold:#a8833f; --accent:#b0392b; --green:#4f7356; --blue:#2f5670;
+  --map-water:#d3e5f1; --map-land:#f7f7f5; --map-ink:#8e8e93; --map-park:#dbe8d3;
   --main:var(--main-l,#4f7356);
-  --shadow:0 1px 1px rgba(30,25,15,.03),0 8px 24px -12px rgba(30,25,15,.14);
+  --shadow:0 1px 2px rgba(0,0,0,.04),0 8px 28px -14px rgba(0,0,0,.10);
   --serif:"Songti SC","STSong","Noto Serif CJK SC","Source Han Serif SC","Noto Serif SC",serif;
   --sans:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","Hiragino Sans GB","Noto Sans CJK SC",sans-serif;
   --mono:ui-monospace,"SF Mono",Menlo,monospace;
 }
 @media (prefers-color-scheme:dark){
   :root{
-    --bg:#121211; --paper:#1c1c1a; --ink:#ecebe6; --muted:#9a958a; --line:#2e2d29; --hair:rgba(255,255,255,.08); --dash:#45423b;
-    --sand:#2c2820; --sand-ink:#d9bf8a; --gold:#cfa75e; --accent:#e0644f; --green:#8fb394; --blue:#86abc4;
-    --map-water:#1a2426; --map-land:#23221e; --map-ink:#8f887a; --map-park:#283124;
+    --bg:#000000; --paper:#1c1c1e; --ink:#f2f2f7; --muted:#98989f; --line:#38383a; --hair:rgba(84,84,88,.45); --dash:#48484a;
+    --sand:rgba(118,118,128,.24); --sand-ink:#e5e5ea; --gold:#cfa75e; --accent:#e0644f; --green:#8fb394; --blue:#86abc4;
+    --map-water:#13222c; --map-land:#2c2c2e; --map-ink:#8e8e93; --map-park:#25331f;
     --main:var(--main-d,#8fb394); --shadow:none;
   }
 }
@@ -949,14 +949,14 @@ $exp.addEventListener('click', async ()=>{
   const old = $exp.textContent; $exp.textContent = '生成中…'; $exp.disabled = true;
   const box = document.createElement('div');
   box.className = 'xp';
-  box.style.cssText = 'position:absolute;left:-20000px;top:0;width:1240px;background:#f3f0e8';
+  box.style.cssText = 'position:absolute;left:-20000px;top:0;width:1240px;background:#f2f2f7';
   box.appendChild(document.getElementById('poster').cloneNode(true));
   document.body.appendChild(box);
   try{
     if(document.fonts && document.fonts.ready) await document.fonts.ready;
     const node = box.firstChild, H = node.scrollHeight;
     const pr = Math.max(1, Math.min(2, Math.sqrt(16e6/(1240*H))));
-    const opt = {pixelRatio:pr, backgroundColor:'#f3f0e8', cacheBust:true};
+    const opt = {pixelRatio:pr, backgroundColor:'#f2f2f7', cacheBust:true};
     await htmlToImage.toBlob(node, opt); // Safari needs a warm-up pass before it paints SVG/foreignObject reliably
     const blob = await htmlToImage.toBlob(node, opt);
     showResult(blob);

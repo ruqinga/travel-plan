@@ -110,15 +110,15 @@ def day_items(t):
 
 HOME = r"""<!doctype html><html lang="zh-CN"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><meta name="robots" content="noindex">
-<meta name="theme-color" content="#f3f0e8" media="(prefers-color-scheme: light)"><meta name="theme-color" content="#121211" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#f2f2f7" media="(prefers-color-scheme: light)"><meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)">
 <title>行旅 · Travel Plan</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='18' fill='%23b0392b'/><text x='50' y='70' font-size='60' text-anchor='middle' fill='white' font-family='serif'>行</text></svg>">
 <style>
-:root{--bg:#f3f0e8;--paper:#fbfaf6;--ink:#1e1d1a;--muted:#7d776b;--line:#e3ddcf;--hair:rgba(30,29,26,.09);--sand:#ece3cf;--sand-ink:#6f5528;--accent:#b0392b;--fill:rgba(118,110,95,.12);
---shadow:0 1px 1px rgba(30,25,15,.03),0 8px 24px -12px rgba(30,25,15,.16);
+:root{--bg:#f2f2f7;--paper:#ffffff;--ink:#1c1c1e;--muted:#8a8a8e;--line:#e5e5ea;--hair:rgba(60,60,67,.12);--sand:rgba(118,118,128,.12);--sand-ink:#3a3a3c;--accent:#b0392b;--fill:rgba(118,118,128,.12);
+--shadow:0 1px 2px rgba(0,0,0,.04),0 8px 28px -14px rgba(0,0,0,.10);
 --serif:"Songti SC","STSong","Noto Serif CJK SC","Source Han Serif SC","Noto Serif SC",serif;
 --sans:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","Hiragino Sans GB","Noto Sans CJK SC",sans-serif}
-@media (prefers-color-scheme:dark){:root{--bg:#121211;--paper:#1c1c1a;--ink:#ecebe6;--muted:#9a958a;--line:#2e2d29;--hair:rgba(255,255,255,.08);--sand:#2c2820;--sand-ink:#d9bf8a;--accent:#e0644f;--fill:rgba(255,255,255,.08);--shadow:none}}
+@media (prefers-color-scheme:dark){:root{--bg:#000000;--paper:#1c1c1e;--ink:#f2f2f7;--muted:#98989f;--line:#38383a;--hair:rgba(84,84,88,.45);--sand:rgba(118,118,128,.24);--sand-ink:#e5e5ea;--accent:#e0644f;--fill:rgba(118,118,128,.24);--shadow:none}}
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.7 var(--sans);-webkit-font-smoothing:antialiased}
 .nav{position:sticky;top:0;z-index:10;background:color-mix(in srgb,var(--bg) 82%,transparent);backdrop-filter:saturate(1.6) blur(18px);-webkit-backdrop-filter:saturate(1.6) blur(18px);border-bottom:.5px solid var(--hair)}
