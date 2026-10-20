@@ -31,6 +31,7 @@
 }
 .xp{--main:var(--main-l);color:var(--ink);font:17px/1.47 var(--sans)}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+[hidden]{display:none!important}
 html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
 [id]{scroll-margin-top:104px}
 body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.47 var(--sans);letter-spacing:-.2px;-webkit-font-smoothing:antialiased}
@@ -81,6 +82,7 @@ svg.i{width:1em;height:1em;flex:none;fill:none;stroke:currentColor;stroke-width:
 .row+.row::before{content:"";position:absolute;top:0;right:0;left:var(--inset,16px);border-top:.5px solid var(--sep)}
 .row.ico{--inset:58px}
 a.row:active,button.row:active{background:var(--press);transition:none}
+button.row{width:100%;margin:0;border:0;border-radius:0;background:none;text-align:left;font:inherit;color:inherit;-webkit-appearance:none;appearance:none}
 .row .lab{flex:1;min-width:0;display:flex;flex-direction:column}
 .row .val{color:var(--ink2);text-align:right;min-width:0}
 .row .t{font-size:17px;line-height:1.35}
@@ -109,6 +111,15 @@ a.row:active,button.row:active{background:var(--press);transition:none}
 .today-b{font-size:12px;font-weight:600;color:#fff;background:var(--red);border-radius:999px;padding:1px 8px;margin-left:6px}
 .alt{margin:0;font-size:15px;line-height:1.55;color:var(--ink2);padding:2px 16px 0}
 .alt b{color:var(--ink);font-weight:600}
+
+/* todos */
+.td{align-items:flex-start;--inset:52px;cursor:pointer}
+.td .ck{font-size:24px;line-height:1;margin-top:-1px;color:var(--ink3);transition:transform .25s cubic-bezier(.3,1.6,.5,1)}
+.td.urgent .ck{color:var(--red)}
+.td.done .ck{color:var(--green)}
+.td.pop .ck{transform:scale(1.25)}
+.td.done .t{color:var(--ink2);text-decoration:line-through;text-decoration-color:var(--ink3)}
+.td .t,.td .d{transition:color .2s}
 
 /* countdown card */
 .now{padding:18px 16px 4px}
@@ -736,6 +747,11 @@ const today = (()=>{ const p={}; new Intl.DateTimeFormat('en-CA',{timeZone:TZ,ye
 const D0 = T.dates && T.dates.start, D1 = T.dates && (T.dates.end || T.dates.start);
 const status = !D0 ? 'plan' : (today < D0 ? 'plan' : (today <= D1 ? 'on' : 'gone'));
 const days = T.days || [];
+/* todo check state: trip.json `done` is the shared default; taps are saved on this device */
+const TDKEY = 'travelplan.todos';
+const tdAll = (()=>{ try{ return JSON.parse(localStorage.getItem(TDKEY)||'{}'); }catch(e){ return {}; } })();
+const tdMine = tdAll[T._slug] || {};
+const isDone = t => (t.text in tdMine) ? !!tdMine[t.text] : !!t.done;
 const nDays = D0 ? Math.round((Date.parse(D1)-Date.parse(D0))/864e5)+1 : (T.length || days.length || 1);
 const dayColor = (d,i) => MARK[d.color] || d.color || (days.length===1 ? 'var(--main)' : (i%2 ? 'var(--main)' : 'var(--red)'));
 const dayDate = (d,i) => d.date || (D0 ? new Date(Date.UTC(...D0.split('-').map((v,k)=>k===1?v-1:+v)) + i*864e5).toISOString().slice(0,10) : null);
@@ -790,10 +806,10 @@ h += `<section class="sec"><div class="grp">${info.map(r=>`<div class="row ico">
 /* countdown (web only) */
 const EV = T._events || [];
 if(status!=='gone' && EV.length){
-  const ft = (T.todos||[]).find(t=>!t.done);
+  const ft = (T.todos||[]).find(t=>!isDone(t));
   h += `<section class="sec noexp" id="now"><div class="grp"><div class="now"><div class="lb"><span class="dot"></span><span id="now-lb">下一项</span></div>
     <h3 id="now-t"></h3><div class="sb" id="now-s"></div><div class="cdn" id="now-c"></div><div class="ft" id="now-f"></div></div>
-    ${ft?`<a class="row ico" href="#todos">${icon('list','var(--orange)')}<span class="lab"><span class="t">${esc(ft.text)}</span><span class="d">当前待办</span></span>${I('chev','chev')}</a>`:''}</div></section>`;
+    ${(T.todos||[]).length?`<a class="row ico" href="#todos" id="peek" ${ft?'':'hidden'}>${icon('list','var(--orange)')}<span class="lab"><span class="t" id="peek-t">${esc(ft?ft.text:'')}</span><span class="d">当前待办</span></span>${I('chev','chev')}</a>`:''}</div></section>`;
 }
 
 /* ---------- days + map ---------- */
@@ -855,10 +871,8 @@ if(trio.length) h += `<div class="cols ${trio.length>=3?'c3':trio.length===2?'c2
 
 /* todos + tips */
 if((T.todos||[]).length){
-  const done = T.todos.filter(t=>t.done).length;
-  h += `<section class="sec" id="todos"><div class="sh"><h2>待办</h2><span class="aside">${done}/${T.todos.length}</span></div><div class="grp">${T.todos.map(t=>`<div class="row" style="align-items:flex-start;--inset:50px">
-    <span style="font-size:22px;line-height:1;color:${t.done?'var(--green)':(t.urgent?'var(--red)':'var(--ink3)')}">${I(t.done?'check':'circle')}</span>
-    <span class="lab"><span class="t" style="${t.done?'color:var(--ink2);text-decoration:line-through':''}">${esc(t.text)}</span>${(t.due&&!t.done)||t.note?`<span class="d">${esc([!t.done&&t.due,t.note].filter(Boolean).join(' · '))}</span>`:''}</span></div>`).join('')}</div></section>`;
+  h += `<section class="sec" id="todos"><div class="sh"><h2>待办</h2><span class="aside" id="td-count"></span></div><div class="grp" id="td-list"></div>
+    <p class="sf">轻点即可勾选。勾选只保存在这台设备上；想让同行的人也看到，告诉 Claude「XX 办完了」来更新页面。</p></section>`;
 }
 if((T.tips||[]).length){
   h += `<section class="sec" id="tips"><div class="sh"><h2>贴士</h2></div><div class="grp">${T.tips.map(t=>`<div class="row" style="align-items:flex-start"><span class="lab"><span class="t"><b>${esc(t.title)}</b></span><span class="d">${esc(t.text)}</span></span></div>`).join('')}</div></section>`;
@@ -867,6 +881,32 @@ if(T.band) h += `<div class="band"><b>${esc(T.band.text||'')}</b>${T.band.note?`
 h += `</div>`;
 h += `<p class="upd">${T.updated?`最后更新 ${esc(T.updated)} · `:''}<a href="../">全部行程</a></p>`;
 document.getElementById('app').innerHTML = h;
+
+/* ---------- todos: tap to check ---------- */
+function renderTodos(pop){
+  const $l = document.getElementById('td-list'); if(!$l) return;
+  $l.innerHTML = T.todos.map((t,i)=>{ const d = isDone(t);
+    return `<button class="row td ${d?'done':''} ${t.urgent&&!d?'urgent':''} ${pop===i?'pop':''}" type="button" role="checkbox" aria-checked="${d}" data-td="${i}">
+      <span class="ck">${I(d?'check':'circle')}</span>
+      <span class="lab"><span class="t">${esc(t.text)}</span>${(t.due&&!d)||t.note?`<span class="d">${esc([!d&&t.due,t.note].filter(Boolean).join(' · '))}</span>`:''}</span></button>`; }).join('');
+  document.getElementById('td-count').textContent = `${T.todos.filter(isDone).length}/${T.todos.length}`;
+  const ft = T.todos.find(t=>!isDone(t)), $p = document.getElementById('peek');
+  if($p){ $p.hidden = !ft; if(ft) document.getElementById('peek-t').textContent = ft.text; }
+  if(pop!=null) setTimeout(()=>{ const b=$l.querySelector(`[data-td="${pop}"]`); if(b) b.classList.remove('pop'); }, 220);
+}
+if((T.todos||[]).length){
+  renderTodos();
+  document.getElementById('td-list').addEventListener('click', e=>{
+    const b = e.target.closest('[data-td]'); if(!b) return;
+    const i = +b.dataset.td, t = T.todos[i];
+    tdMine[t.text] = !isDone(t);
+    if(tdMine[t.text] === !!t.done) delete tdMine[t.text];     // back to the shared default
+    tdAll[T._slug] = tdMine;
+    try{ localStorage.setItem(TDKEY, JSON.stringify(tdAll)); }catch(err){}
+    if(navigator.vibrate) navigator.vibrate(8);
+    renderTodos(i);
+  });
+}
 
 /* ---------- pieces ---------- */
 function autoStats(){
