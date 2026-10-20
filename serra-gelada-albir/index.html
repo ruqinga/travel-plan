@@ -190,6 +190,8 @@ a{color:inherit}
   .dayhead .dt{width:auto}
 }
 .xp .noexp{display:none!important}
+.webhide{display:none!important}
+.xp .webhide{display:grid!important}
 
 /* export overlay */
 .ov{position:fixed;inset:0;z-index:50;background:rgba(15,14,12,.78);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);display:flex;flex-direction:column;align-items:center;padding:16px;gap:12px;overflow:auto}
@@ -744,7 +746,7 @@ if(status!=='gone' && EV.length){
 
 /* stats */
 const stats = T.stats || autoStats();
-if(stats.length) h += `<div class="stats" id="overview" style="--n:${stats.length}">${stats.map(s=>`<div class="stat"><span>${esc(s.k)}</span><b>${esc(s.v)}</b></div>`).join('')}</div>`;
+if(stats.length) h += `<div class="stats webhide" id="overview" style="--n:${stats.length}">${stats.map(s=>`<div class="stat"><span>${esc(s.k)}</span><b>${esc(s.v)}</b></div>`).join('')}</div>`;
 
 /* days (+ map beside when one day) */
 const hasMap = T.map && T.map.points;
@@ -818,7 +820,7 @@ if(T.updated) h += `<div class="upd">最后更新 ${esc(T.updated)} · <a href="
 document.getElementById('app').innerHTML = h;
 
 /* chapter nav: only sections that exist */
-const CH = [['now','此刻'],['overview','概览'],['day1','行程'],['map','地图'],['hikes','徒步'],['transport','交通'],['flights','长途交通'],['bookings','预订'],['info', T.budget?'住宿·预算':'实用信息'],['todos','待办'],['tips','贴士']]
+const CH = [['now','此刻'],['day1','行程'],['map','地图'],['hikes','徒步'],['transport','交通'],['flights','长途交通'],['bookings','预订'],['info', T.budget?'住宿·预算':'实用信息'],['todos','待办'],['tips','贴士']]
   .filter(([id])=>document.getElementById(id));
 const $ch = document.getElementById('chapters');
 $ch.innerHTML = CH.map(([id,l])=>`<a href="#${id}" data-ch="${id}">${l}</a>`).join('');
