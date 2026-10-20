@@ -176,6 +176,53 @@ a.row:active,button.row:active{background:var(--press);transition:none}
 .xp .cols.mapr #map{position:static}
 .xp .noexp{display:none!important}
 
+/* ===== export poster (phone-screen proportion, always light) ===== */
+.pp{--bg:#f2f2f7;--paper:#fff;--ink:#000;--ink2:rgba(60,60,67,.62);--ink3:rgba(60,60,67,.3);--sep:rgba(60,60,67,.16);--fill:rgba(118,118,128,.12);
+  --tint:#007aff;--red:#ff3b30;--orange:#ff9500;--green:#34c759;--indigo:#5856d6;--map-water:#d3e5f1;--map-land:#f7f7f5;--map-ink:#8e8e93;--map-park:#dbeed3;
+  --main:var(--main-l);--s:1;width:960px;padding:calc(52px*var(--s)) 48px calc(40px*var(--s));background:var(--bg);color:var(--ink);font-family:var(--sans);letter-spacing:-.2px;
+  display:flex;flex-direction:column;gap:calc(22px*var(--s))}
+.pp .phd{display:flex;gap:26px;align-items:center}
+.pp .pai{flex:none;width:calc(104px*var(--s));height:calc(104px*var(--s));border-radius:calc(23px*var(--s));display:grid;place-items:center;color:#fff;font-size:calc(30px*var(--s));font-weight:700;letter-spacing:1px;
+  background:linear-gradient(160deg,color-mix(in srgb,var(--main) 72%,#fff),var(--main))}
+.pp .pcap{font-size:calc(18px*var(--s));font-weight:600;color:var(--main)}
+.pp h1{margin:2px 0 0;font-size:calc(46px*var(--s));line-height:1.15;font-weight:700}
+.pp .psub{font-size:calc(24px*var(--s));color:var(--ink2);font-weight:500;margin-top:4px}
+.pp .phl{font-size:calc(17px*var(--s));color:var(--ink2);margin-top:6px;line-height:1.5}
+.pp .pfacts{display:grid;grid-auto-flow:column;grid-auto-columns:1fr;background:var(--paper);border-radius:18px}
+.pp .pfacts div{padding:calc(14px*var(--s)) 10px;text-align:center;position:relative}
+.pp .pfacts div+div::before{content:"";position:absolute;left:0;top:25%;bottom:25%;border-left:1px solid var(--sep)}
+.pp .pfacts span{display:block;font-size:calc(15px*var(--s));color:var(--ink2)}
+.pp .pfacts b{font-size:calc(21px*var(--s));font-weight:600;line-height:1.3}
+.pp .pc{background:var(--paper);border-radius:18px;padding:calc(18px*var(--s)) calc(22px*var(--s));min-width:0}
+.pp .pc h2{margin:0 0 calc(8px*var(--s));font-size:calc(23px*var(--s));font-weight:700;line-height:1.25}
+.pp .pc .ov{display:block;font-size:calc(14px*var(--s));color:var(--ink2);margin-bottom:2px}
+.pp .pg{display:grid;gap:calc(18px*var(--s))}
+.pp .it{display:grid;grid-template-columns:calc(54px*var(--s)) calc(26px*var(--s)) 1fr;gap:calc(10px*var(--s));align-items:start;padding:calc(7px*var(--s)) 0;border-top:1px solid var(--sep)}
+.pp .it:first-of-type{border-top:0}
+.pp .it .tm{font-size:calc(17px*var(--s));font-weight:600;font-variant-numeric:tabular-nums;line-height:calc(26px*var(--s))}
+.pp .it .num{width:calc(24px*var(--s));height:calc(24px*var(--s));margin-top:1px;border-radius:50%;color:#fff;font-size:calc(13px*var(--s));font-weight:700;display:grid;place-items:center}
+.pp .it .t{font-size:calc(18px*var(--s));line-height:calc(26px*var(--s))}
+.pp .it .d{font-size:calc(14.5px*var(--s));color:var(--ink2);line-height:1.4;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:var(--clamp,2);overflow:hidden}
+.pp .mv{font-size:calc(14px*var(--s));color:var(--ink2);padding:calc(2px*var(--s)) 0 calc(2px*var(--s)) calc(90px*var(--s))}
+.pp .mv+.it{border-top:0}
+.pp .ps{font-size:calc(15px*var(--s));color:var(--ink2);margin-top:calc(6px*var(--s))}
+.pp .pmap{padding:0;overflow:hidden}
+.pp .pmap svg{display:block;width:100%;height:auto}
+.pp .pmap .legend{font-size:calc(14px*var(--s));padding:calc(10px*var(--s)) 18px}
+.pp .kv{display:flex;justify-content:space-between;gap:12px;font-size:calc(17px*var(--s));padding:calc(5px*var(--s)) 0;border-top:1px solid var(--sep)}
+.pp .kv:first-of-type{border-top:0}
+.pp .kv span:last-child{color:var(--ink2);white-space:nowrap}
+.pp .kv.tot{font-weight:700}.pp .kv.tot span:last-child{color:var(--ink)}
+.pp .li{font-size:calc(16.5px*var(--s));line-height:1.45;padding:calc(4px*var(--s)) 0 calc(4px*var(--s)) 16px;position:relative}
+.pp .li::before{content:"";position:absolute;left:2px;top:calc(.7em);width:6px;height:6px;border-radius:50%;background:var(--main)}
+.pp .chips{padding:calc(8px*var(--s)) 0 0;gap:6px}
+.pp .chips span{font-size:calc(14px*var(--s));padding:3px 10px}
+.pp .band{padding:calc(18px*var(--s)) 22px}
+.pp .band b{font-size:calc(24px*var(--s))}
+.pp .band span{font-size:calc(15px*var(--s))}
+.pp .pft{text-align:center;font-size:calc(13px*var(--s));color:var(--ink2)}
+.pp .pill{font-size:calc(12px*var(--s))}
+
 /* ===== sheet (export) ===== */
 .scrim{position:fixed;inset:0;z-index:50;background:rgba(0,0,0,.4);opacity:0;transition:opacity .3s}
 .scrim.on{opacity:1}
@@ -1192,9 +1239,6 @@ h += `<header class="lt" id="top"><div class="appicon">${esc(T.seal || (nDays===
   <div class="cap">${esc(stLabel)}</div><h1 id="h1">${esc(T.title)}</h1>${T.subtitle?`<p class="sub">${esc(T.subtitle)}</p>`:''}
   ${(T.highlights||[]).length?`<p class="hl">${T.highlights.map(esc).join(' · ')}</p>`:''}</div></header>`;
 
-/* stats bar: export image only */
-const stats = T.stats || autoStats();
-if(stats.length) h += `<div class="stats webhide" style="--n:${stats.length}">${stats.map(s=>`<div class="stat"><span>${esc(s.k)}</span><b>${esc(s.v)}</b></div>`).join('')}</div>`;
 
 /* info rows */
 const info = [];
@@ -1259,17 +1303,17 @@ if((T.bookings||[]).length){
 
 /* stay / transport lines / budget / checklist */
 const trio = [];
-if(T.stay) trio.push(`<section class="sec"><div class="sh"><h2>住宿</h2></div><div class="grp">
+if(T.stay) trio.push(`<section class="sec" id="stay"><div class="sh"><h2>住宿</h2></div><div class="grp">
   ${T.stay.q?`<a class="row ico" href="${gmap(T.stay.q)}" target="_blank" rel="noopener">`:'<div class="row ico">'}${icon('bed','var(--indigo)')}<span class="lab"><span class="t"><b>${esc(T.stay.name)}</b></span>${T.stay.text?`<span class="d">${esc(T.stay.text)}</span>`:''}</span>${T.stay.q?I('chev','chev')+'</a>':'</div>'}</div></section>`);
-if((TR.lines||[]).length) trio.push(`<section class="sec"><div class="sh"><h2>${esc((TR.chain||[]).length?'交通细节':(TR.title||'交通'))}</h2></div><div class="grp">${TR.lines.map(l=>`<div class="row"><span class="lab"><span class="t">${l.label?`<b>${esc(l.label)}</b>　`:''}${esc(l.text)}</span></span>${l.hot?'<span class="pill no">注意</span>':''}</div>`).join('')}
+if((TR.lines||[]).length) trio.push(`<section class="sec" id="tinfo"><div class="sh"><h2>${esc((TR.chain||[]).length?'交通细节':(TR.title||'交通'))}</h2></div><div class="grp">${TR.lines.map(l=>`<div class="row"><span class="lab"><span class="t">${l.label?`<b>${esc(l.label)}</b>　`:''}${esc(l.text)}</span></span>${l.hot?'<span class="pill no">注意</span>':''}</div>`).join('')}
   ${(T.packing||[]).length?`<div class="row" style="padding:0"><div class="chips">${T.packing.map(p=>`<span>${esc(p)}</span>`).join('')}</div></div>`:''}</div></section>`);
-if(T.budget) trio.push(`<section class="sec"><div class="sh"><h2>${esc(T.budget.title||'预算（一人）')}</h2></div><div class="grp">${(T.budget.rows||[]).map(r=>`<div class="row"><span class="lab t">${esc(r.label)}</span><span class="val">${esc(r.actual||r.est)}</span></div>`).join('')}
+if(T.budget) trio.push(`<section class="sec" id="budget"><div class="sh"><h2>${esc(T.budget.title||'预算（一人）')}</h2></div><div class="grp">${(T.budget.rows||[]).map(r=>`<div class="row"><span class="lab t">${esc(r.label)}</span><span class="val">${esc(r.actual||r.est)}</span></div>`).join('')}
   ${T.budget.total?`<div class="row"><span class="lab t"><b>合计</b></span><span class="val" style="color:var(--ink);font-weight:600">${esc(T.budget.total)}</span></div>`:''}</div>${T.budget.note?`<p class="sf">${esc(T.budget.note)}</p>`:''}</section>`);
 const tipList = T.checklist || [];
 const packOnly = !(TR.lines||[]).length && (T.packing||[]).length;
-if(tipList.length || packOnly) trio.push(`<section class="sec"><div class="sh"><h2>${esc(T.checklistTitle||'行前提示')}</h2></div><div class="grp">${tipList.map(t=>`<div class="row"><span class="lab t" style="font-size:16px">${esc(t)}</span></div>`).join('')}
+if(tipList.length || packOnly) trio.push(`<section class="sec" id="checklist"><div class="sh"><h2>${esc(T.checklistTitle||'行前提示')}</h2></div><div class="grp">${tipList.map(t=>`<div class="row"><span class="lab t" style="font-size:16px">${esc(t)}</span></div>`).join('')}
   ${packOnly?`<div class="row" style="padding:0"><div class="chips">${T.packing.map(p=>`<span>${esc(p)}</span>`).join('')}</div></div>`:''}</div></section>`);
-if(trio.length) h += `<div id="info" class="cols ${trio.length>=3?'c3':trio.length===2?'c2':''}">${trio.join('')}</div>`;
+if(trio.length) h += `<div class="cols ${trio.length>=3?'c3':trio.length===2?'c2':''}">${trio.join('')}</div>`;
 
 /* todos + tips */
 if((T.todos||[]).length){
@@ -1333,13 +1377,13 @@ function routeUrl(pts, mode){
   if(!(mode==='transit' && w.length)) u += `&travelmode=${mode}`;   // Google ignores waypoints in transit mode
   return u;
 }
-function renderMap(routeLink){
+function renderMap(routeLink, o={}){
   const M = T.map, P = M.points, ids = Object.keys(P);
   let la0=Infinity,la1=-Infinity,lo0=Infinity,lo1=-Infinity;
   ids.filter(k=>!P[k].offmap).forEach(k=>{const p=P[k];la0=Math.min(la0,p.lat);la1=Math.max(la1,p.lat);lo0=Math.min(lo0,p.lon);lo1=Math.max(lo1,p.lon);});
   if(M.bounds) [la0,lo0,la1,lo1] = M.bounds;
   const k = Math.cos((la0+la1)/2*Math.PI/180), w=(lo1-lo0)*k, hg=la1-la0;
-  const W=640, pad=46, sc=Math.min((W-2*pad)/(w||1e-3), (M.maxH||560)/(hg||1e-3));
+  const W=640, pad=46, sc=Math.min((W-2*pad)/(w||1e-3), (o.maxH||M.maxH||560)/(hg||1e-3));
   const H=Math.max(300, Math.round(hg*sc+2*pad)), ox=(W-w*sc)/2, oy=(H-hg*sc)/2;
   const X=lon=>ox+(lon-lo0)*k*sc, Y=lat=>oy+(la1-lat)*sc;
   const path = (pts,close) => pts.map((p,i)=>(i?'L':'M')+X(p[1]).toFixed(1)+' '+Y(p[0]).toFixed(1)).join('') + (close?'Z':'');
@@ -1406,7 +1450,7 @@ function renderMap(routeLink){
 const $nb = document.getElementById('nb'), $h1 = document.getElementById('h1');
 const onScroll = ()=>$nb.classList.toggle('scrolled', $h1.getBoundingClientRect().bottom < $nb.offsetHeight);
 window.addEventListener('scroll', onScroll, {passive:true}); onScroll();
-const CH = [['now','此刻'],['day1','行程'],['map','地图'],['hikes','徒步'],['transport','交通'],['flights','长途交通'],['bookings','预订'],['info', T.budget?'住宿·预算':'实用信息'],['todos','待办'],['tips','贴士']]
+const CH = [['now','此刻'],['day1','行程'],['map','地图'],['hikes','徒步'],['transport','交通'],['tinfo',(TR.chain||[]).length?'交通细节':'交通'],['flights','长途交通'],['bookings','预订'],['stay','住宿'],['budget','预算'],['checklist',T.checklistTitle||'提示'],['todos','待办'],['tips','贴士']]
   .filter(([id])=>document.getElementById(id));
 const $ch = document.getElementById('chapters');
 $ch.innerHTML = CH.map(([id,l])=>`<a href="#${id}" data-ch="${id}">${l}</a>`).join('');
@@ -1434,19 +1478,86 @@ if(document.getElementById('now')){
   tick(); setInterval(tick, 1000);
 }
 
+/* ---------- export poster: own compact layout, auto-fit to a phone screen ---------- */
+const PW = 960, MAX_RATIO = 2.1;
+function posterHTML(L){
+  const take = (arr,n) => n==null ? arr : arr.slice(0,n);
+  const stats = T.stats || autoStats();
+  const ds = D0 ? (D0===D1 ? fd(D0) : `${fd(D0)} – ${fd(D1)}`) : '日期待定';
+  let p = `<div class="phd"><div class="pai">${esc(T.seal || (nDays===1?'一日':(CN[nDays]||nDays)+'日'))}</div><div style="min-width:0">
+    <div class="pcap">${esc([ds, T.from?'从 '+T.from+' 出发':'', T.people?T.people+' 人':''].filter(Boolean).join(' · '))}</div>
+    <h1>${esc(T.title)}</h1>${T.subtitle?`<div class="psub">${esc(T.subtitle)}</div>`:''}
+    ${L.hl && (T.highlights||[]).length?`<div class="phl">${T.highlights.map(esc).join(' · ')}</div>`:''}</div></div>`;
+  if(stats.length) p += `<div class="pfacts">${stats.map(x=>`<div><span>${esc(x.k)}</span><b>${esc(x.v)}</b></div>`).join('')}</div>`;
+  const dayBox = (d,i) => {
+    const c = dayColor(d,i), dt = dayDate(d,i); let n = 0;
+    const label = d.badge || (days.length===1 ? '一日行程' : `第${CN[i+1]||(' '+(i+1)+' ')}天`);
+    let q = `<div class="pc"><span class="ov">${esc(label)}${dt?' · '+fd(dt):''}</span><h2>${esc(d.title||'')}</h2>`;
+    (d.items||[]).forEach(it=>{
+      if(it.move){ if(L.moves) q += `<div class="mv">↓ ${esc(it.move)}</div>`; return; }
+      n++;
+      q += `<div class="it"><span class="tm">${esc(it.time||'')}</span><span class="num" style="background:${MARK[it.mark]||c}">${n}</span><div><div class="t">${esc(it.title)}${it.tag?`<span class="pill ${tagKind(it.tag)}">${esc(it.tag)}</span>`:''}</div>${L.notes&&it.note?`<div class="d">${esc(it.note)}</div>`:''}</div></div>`;
+    });
+    if(d.stay) q += `<div class="ps">🛏 今晚住 ${esc(d.stay)}</div>`;
+    if(L.alt && d.alt) q += `<div class="ps"><b style="color:var(--ink)">${esc(d.alt.title||'替代方案')}</b>　${esc(d.alt.text)}</div>`;
+    return q + `</div>`;
+  };
+  const mapBox = maxH => hasMap ? `<div class="pc pmap">${renderMap(null,{maxH})}</div>` : '';
+  if(days.length===1 && hasMap) p += `<div class="pg" style="grid-template-columns:1.05fr 1fr;align-items:start">${dayBox(days[0],0)}${mapBox(L.mapTall)}</div>`;
+  else {
+    if(hasMap) p += mapBox(L.mapWide);
+    if(days.length) p += `<div class="pg" style="grid-template-columns:repeat(${Math.min(days.length,3)},minmax(0,1fr))">${days.map(dayBox).join('')}</div>`;
+  }
+  // bottom cards
+  const cards = [];
+  if((T.hikes||[]).length) cards.push(`<div class="pc"><h2>徒步</h2>${T.hikes.map(k=>`<div class="li"><b>${esc(k.name)}</b><br><span style="color:var(--ink2)">${esc([k.distance,k.gain&&('↑'+k.gain.replace(/^约\s*/,'')),k.time,k.difficulty].filter(Boolean).join(' · '))}</span></div>`).join('')}</div>`);
+  const tr = [];
+  if((TR.chain||[]).length) tr.push(`<div class="li">${TR.chain.map(c=>c.via?`<span style="color:var(--ink2)"> → ${esc(c.via)} → </span>`:`<b>${esc(c.at)}</b>`).join('')}</div>`);
+  take(TR.lines||[], L.lines).forEach(l=>tr.push(`<div class="li">${l.label?`<b>${esc(l.label)}</b>　`:''}${esc(l.text)}</div>`));
+  (T.flights||[]).forEach(f=>tr.push(`<div class="li"><b>${esc(f.from.code)} ${esc(f.depart.slice(11,16))} → ${esc(f.to.code)} ${esc(f.arrive.slice(11,16))}</b>　${fd(f.depart.slice(0,10))} · ${esc([f.airline,f.number].filter(Boolean).join(' '))}</div>`));
+  if(tr.length) cards.push(`<div class="pc"><h2>${esc(TR.title||'交通')}</h2>${tr.join('')}</div>`);
+  if((T.bookings||[]).length) cards.push(`<div class="pc"><h2>预订</h2>${T.bookings.map(b=>`<div class="kv"><span>${esc(b.title)}</span><span>${esc(b.status||'')}</span></div>`).join('')}</div>`);
+  if(T.stay) cards.push(`<div class="pc"><h2>住宿</h2><div class="li"><b>${esc(T.stay.name)}</b></div>${L.notes&&T.stay.text?`<div class="li" style="color:var(--ink2)">${esc(T.stay.text)}</div>`:''}</div>`);
+  if(T.budget) cards.push(`<div class="pc"><h2>${esc(T.budget.title||'预算（一人）')}</h2>${take(T.budget.rows||[], L.budget).map(r=>`<div class="kv"><span>${esc(r.label)}</span><span>${esc(r.actual||r.est)}</span></div>`).join('')}${T.budget.total?`<div class="kv tot"><span>合计</span><span>${esc(T.budget.total)}</span></div>`:''}</div>`);
+  const tips = (T.checklist||[]).concat((T.tips||[]).map(t=>`${t.title}：${t.text}`));
+  if(tips.length || (T.packing||[]).length) cards.push(`<div class="pc"><h2>${esc(T.checklistTitle||'行前提示')}</h2>${take(tips, L.tips).map(t=>`<div class="li">${esc(t)}</div>`).join('')}
+    ${(T.packing||[]).length?`<div class="chips">${T.packing.map(x=>`<span>${esc(x)}</span>`).join('')}</div>`:''}</div>`);
+  if(cards.length) p += `<div class="pg" style="grid-template-columns:repeat(${cards.length>=3?3:cards.length},minmax(0,1fr));align-items:start">${cards.join('')}</div>`;
+  if(T.band) p += `<div class="band"><b>${esc(T.band.text||'')}</b>${T.band.note?`<span>${esc(T.band.note)}</span>`:''}</div>`;
+  p += `<div class="pft">行旅 · ruqinga.github.io/travel-plan</div>`;
+  return p;
+}
+// detail levels, tried in order until the poster fits a phone screen (height ≤ 2.1 × width)
+const LEVELS = [
+  {s:1,   notes:1, clamp:2, moves:1, hl:1, alt:1, lines:null, budget:null, tips:6, mapWide:300, mapTall:720},
+  {s:.94, notes:1, clamp:1, moves:1, hl:1, alt:1, lines:3,    budget:null, tips:5, mapWide:280, mapTall:660},
+  {s:.88, notes:1, clamp:1, moves:0, hl:1, alt:0, lines:3,    budget:5,    tips:4, mapWide:260, mapTall:620},
+  {s:.86, notes:0, clamp:1, moves:0, hl:1, alt:0, lines:2,    budget:4,    tips:4, mapWide:250, mapTall:560},
+  {s:.8,  notes:0, clamp:1, moves:0, hl:0, alt:0, lines:2,    budget:4,    tips:3, mapWide:230, mapTall:520},
+  {s:.74, notes:0, clamp:1, moves:0, hl:0, alt:0, lines:2,    budget:3,    tips:3, mapWide:210, mapTall:480},
+  {s:.68, notes:0, clamp:1, moves:0, hl:0, alt:0, lines:1,    budget:3,    tips:2, mapWide:200, mapTall:440},
+];
+function buildPoster(host){
+  const node = document.createElement('div'); node.className = 'pp'; host.appendChild(node);
+  for(const L of LEVELS){
+    node.style.setProperty('--s', L.s); node.style.setProperty('--clamp', L.clamp);
+    node.innerHTML = posterHTML(L);
+    if(node.scrollHeight <= PW*MAX_RATIO) break;
+  }
+  return node;
+}
+
 /* ---------- export to image (bottom sheet) ---------- */
 document.getElementById('exp').addEventListener('click', async ()=>{
   const sh = openSheet('<div class="busy"><span class="spin"></span>正在生成图片…</div>');
   if(!window.htmlToImage){ sh.body('<div class="busy">导出组件没有加载成功，请刷新后再试。</div>'); return; }
   const box = document.createElement('div');
-  box.className = 'xp';
-  box.style.cssText = 'position:absolute;left:-20000px;top:0;width:1240px;background:#f2f2f7';
-  box.appendChild(document.getElementById('poster').cloneNode(true));
+  box.style.cssText = `position:absolute;left:-20000px;top:0;width:${PW}px`;
   document.body.appendChild(box);
   try{
     if(document.fonts && document.fonts.ready) await document.fonts.ready;
-    const node = box.firstChild, H = node.scrollHeight;
-    const pr = Math.max(1, Math.min(2, Math.sqrt(16e6/(1240*H))));
+    const node = buildPoster(box), H = node.scrollHeight;
+    const pr = Math.max(1.5, Math.min(3, Math.sqrt(24e6/(PW*H))));
     const opt = {pixelRatio:pr, backgroundColor:'#f2f2f7', cacheBust:true};
     await htmlToImage.toBlob(node, opt); // Safari warm-up pass
     const blob = await htmlToImage.toBlob(node, opt);
